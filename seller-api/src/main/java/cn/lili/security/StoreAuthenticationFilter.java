@@ -58,7 +58,6 @@ public class StoreAuthenticationFilter extends BasicAuthenticationFilter {
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-
         chain.doFilter(request, response);
     }
 

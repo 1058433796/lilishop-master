@@ -8,6 +8,7 @@ import cn.lili.cache.CachePrefix;
 import cn.lili.common.aop.annotation.DemoSite;
 import cn.lili.common.context.ThreadContextHolder;
 import cn.lili.common.enums.ResultCode;
+import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.enums.SwitchEnum;
 import cn.lili.common.event.TransactionCommitSendMQEvent;
 import cn.lili.common.exception.ServiceException;
@@ -355,6 +356,19 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     }
 
     @Override
+    @Transactional
+    public Token storeRegister(String userName, String password, String mobilePhone) {
+        //检测会员信息
+        checkMember(userName, mobilePhone);
+        //设置会员信息
+        Member member = new Member(userName, new BCryptPasswordEncoder().encode(password), mobilePhone);
+
+        //注册成功后用户自动登录
+        registerHandler(member);
+        return memberTokenGenerate.createToken(member, false);
+    }
+
+    @Override
     public boolean changeMobile(String mobile) {
         AuthUser tokenUser = Objects.requireNonNull(UserContext.getCurrentUser());
         Member member = this.findByUsername(tokenUser.getUsername());
@@ -670,6 +684,32 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         return new MemberVO(this.getById(id));
     }
 
+    @Override
+    public Token enterpriseRegister(
+            String belonging,
+            String enterpriseName,
+            String licenseNumber,
+            String licenseLocation,
+            String licenseDetailLocation,
+            Long licenseRangeBeg,
+            Long licenseRangeEnd,
+            Boolean longPeriod) {
+        return null;
+    }
+
+    //    @Override
+//    @Transactional
+//    public Token register(String userName, String password, String mobilePhone) {
+//        //检测会员信息
+//        checkMember(userName, mobilePhone);
+//        //设置会员信息
+//        Member member = new Member(userName, new BCryptPasswordEncoder().encode(password), mobilePhone);
+//        //注册成功后用户自动登录
+//        registerHandler(member);
+//        return memberTokenGenerate.createToken(member, false);
+//    }
+
+
     /**
      * 检测会员
      *
@@ -683,3 +723,4 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         }
     }
 }
+

@@ -26,7 +26,12 @@ public enum MemberTagsEnum {
     /**
      * 会员积分变动
      */
-    MEMBER_POINT_CHANGE("会员积分变动");
+    MEMBER_POINT_CHANGE("会员积分变动"),
+
+    /**
+     * 公司注册
+     */
+    COMPANY_REGISTER("公司注册");
 
     private final String description;
 

@@ -167,4 +167,6 @@ public class AdminStoreApplyDTO {
     @ApiModelProperty(value = "结算周期")
     private String settlementCycle;
 
+
+
 }

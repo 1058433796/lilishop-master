@@ -41,6 +41,8 @@ public class RocketmqCustomProperties {
 
     private String memberGroup;
 
+    private String companyTopic;
+
     private String otherTopic;
 
     private String otherGroup;
