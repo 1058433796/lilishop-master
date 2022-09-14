@@ -10,10 +10,6 @@ import cn.lili.modules.company.entity.dos.Company;
 import cn.lili.modules.company.entity.token.CompanyTokenGenerate;
 import cn.lili.modules.company.mapper.CompanyMapper;
 import cn.lili.modules.company.service.CompanyService;
-import cn.lili.modules.member.entity.dos.Member;
-import cn.lili.modules.member.token.StoreTokenGenerate;
-import cn.lili.modules.store.entity.dos.Store;
-import cn.lili.modules.store.entity.enums.StoreStatusEnum;
 import cn.lili.rocketmq.tags.MemberTagsEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -58,7 +54,7 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
     /**
      * 根据用户名寻找是否已存在公司
      * @param username 手机号
-     * @return
+     * @return 查找到的company
      */
     @Override
     public Company findCompany(String username) {
@@ -85,7 +81,9 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
     @Override
     public Token register(Company company) {
 //        检查是否合法
-        checkCompany(company.getUsername());
+        if(!checkCompany(company.getUsername())){
+            return null;
+        }
 //        注册后自动登录
         registerHandler(company);
 //        生成token
@@ -94,12 +92,11 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
 
     /**
      * 根据username检查是否合规
-     * @param username
+     * @param username 用户名
+     * @return 是否合法
      */
 
-    private void checkCompany(String username) {
-        if (this.getCompanyCount(username) > 0) {
-            throw new ServiceException(ResultCode.USER_EXIST);
-        }
+    private Boolean checkCompany(String username) {
+        return this.getCompanyCount(username) <= 0;
     }
 }

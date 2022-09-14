@@ -1,15 +1,12 @@
 package cn.lili.modules.company.entity.dos;
 
-import cn.lili.common.enums.ClientTypeEnum;
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
+import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 @Data
@@ -18,29 +15,38 @@ import java.util.Date;
 @TableName("company")
 public class Company extends BaseEntity {
     private static final long serialVersionUID = 1L;
-
+//    营业执照信息
     private String companyType;
     private String companyName;
     private String businessNumber;
     private String businessAddress;
     private String businessDetailAddress;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date businessValidBeg;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date businessValidEnd;
     private Boolean businessLongPeriod;
+//    法人代表信息
     private String legalType;
     private String legalNumber;
     private String legalName;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date legalValidBeg;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date legalValidEnd;
     private Boolean legalLongPeriod;
     private String companyAddress;
     private String companyDetailAddress;
     private String companyEmergencyName;
     private String companyEmergencyPhoneNumber;
+//    组织机构信息
     private String code;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date codeValidBeg;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date codeValidEnd;
     private Boolean codeLongPeriod;
+//    账户信息
     private Boolean accountValid;
     private String username;
     private String password;
@@ -54,19 +60,4 @@ public class Company extends BaseEntity {
 //    头像
     private String face;
 
-//    public Company(String companyType, String companyName, String businessNumber, String businessAddress,
-//                   Boolean businessLongPeriod, String legalType, String legalNumber, String legalName,
-//                   Boolean legalLongPeriod, String companyDetailAddress, String companyEmergencyName,
-//                   String companyEmergencyPhoneNumber, String code, Boolean codeLongPeriod){
-//        this.companyType = companyType;
-//        this.companyName = companyName;
-//        this.businessNumber = businessNumber;
-//        this.businessAddress = businessAddress;
-//        this.businessLongPeriod = businessLongPeriod;
-//        this.legalType
-////        PC端
-//        this.clientEnum = ClientTypeEnum.PC.value();
-//        this.face = "";
-//        this.accountValid = true;
-//    }
 }

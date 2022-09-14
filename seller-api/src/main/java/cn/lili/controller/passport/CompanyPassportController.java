@@ -1,22 +1,14 @@
 package cn.lili.controller.passport;
-
 import cn.lili.common.enums.ClientTypeEnum;
-import cn.lili.common.enums.ResultCode;
 import cn.lili.common.enums.ResultUtil;
-import cn.lili.common.exception.ServiceException;
+import cn.lili.common.security.token.Token;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.company.entity.dos.Company;
 import cn.lili.modules.company.entity.vos.CompanyVo;
 import cn.lili.modules.company.service.CompanyService;
-import cn.lili.modules.verification.entity.enums.VerificationEnums;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.constraints.NotNull;
-import javax.xml.transform.Result;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +16,7 @@ import java.util.List;
 @RequestMapping("/company/passport")
 public class CompanyPassportController {
 
-    private String defaultPassword = "123456";
+    private final static String defaultPassword = "123456";
     @Autowired
     private CompanyService companyService;
 
@@ -42,14 +34,12 @@ public class CompanyPassportController {
 
     @PostMapping(value="/register")
     public ResultMessage<Object> register(CompanyVo companyVo) {
-        System.out.println(companyVo);
-
         Company company = new Company(companyVo.getCompanyType(), companyVo.getCompanyName(), companyVo.getLicenseRegisterNumber(),
-                "", companyVo.getLicenseDetailAddress(), null, null, companyVo.getLicenseValidLongPeriod(),
+                companyVo.getLicenseAddress(), companyVo.getLicenseDetailAddress(), null, null, companyVo.getLicenseValidLongPeriod(),
                 companyVo.getLegalRepresentLicenseType(), companyVo.getLegalRepresentLicenseNumber(), companyVo.getLegalRepresentName(),
-                null, null, companyVo.getLegalRepresentLicenseLongPeriod(), "", companyVo.getCompanyDetailAddress(),
+                null, null, companyVo.getLegalRepresentLicenseLongPeriod(), companyVo.getCompanyAddress(), companyVo.getCompanyDetailAddress(),
                 companyVo.getCompanyEmergencyName(), companyVo.getCompanyEmergencyPhoneNumber(), companyVo.getOrgCode(),
-                null, null, companyVo.getOrgCodeValidLongPeriod(), true, companyVo.getCompanyEmergencyPhoneNumber(), this.defaultPassword, ClientTypeEnum.PC.value(), new Date(), "face");
+                null, null, companyVo.getOrgCodeValidLongPeriod(), true, companyVo.getCompanyEmergencyPhoneNumber(), this.defaultPassword, ClientTypeEnum.PC.name(), new Date(), "face");
 //      如果选择长期 不设置期限
         if(companyVo.getLicenseValidLongPeriod()){
             company.setBusinessLongPeriod(true);
@@ -71,12 +61,8 @@ public class CompanyPassportController {
             company.setCodeValidBeg(companyVo.getOrgCodeValidBeg());
             company.setCodeValidEnd(companyVo.getOrgCodeValidEnd());
         }
-        return ResultUtil.data(companyService.register(company));
-//        return ResultUtil.data(companyService.register(username, password, mobilePhone));
-//        if (smsUtil.verifyCode(mobilePhone, VerificationEnums.REGISTER, uuid, code)) {
-//            return ResultUtil.data(memberService.register(username, password, mobilePhone));
-//        } else {
-//            throw new ServiceException(ResultCode.VERIFICATION_SMS_CHECKED_ERROR);
-//        }
+        Token token = companyService.register(company);
+        if(token == null)return ResultUtil.data("用户名已存在！");
+        else return ResultUtil.data(token);
     }
 }
