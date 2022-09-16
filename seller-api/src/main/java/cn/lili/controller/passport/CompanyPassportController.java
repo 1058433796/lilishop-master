@@ -1,5 +1,6 @@
 package cn.lili.controller.passport;
 import cn.lili.common.enums.ClientTypeEnum;
+import cn.lili.common.enums.ResultCode;
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.security.token.Token;
 import cn.lili.common.vo.ResultMessage;
@@ -62,7 +63,7 @@ public class CompanyPassportController {
             company.setCodeValidEnd(companyVo.getOrgCodeValidEnd());
         }
         Token token = companyService.register(company);
-        if(token == null)return ResultUtil.data("用户名已存在！");
+        if(token == null)return ResultUtil.error(ResultCode.USER_EXIST);
         else return ResultUtil.data(token);
     }
 }
