@@ -134,10 +134,10 @@ public class UploadController {
         }
         Store store = storeService.getById(member.getStoreId());
         String status = store.getStoreDisable();
-//        必须处于第二步申请状态
-        if(!status.equals(StoreStatusEnum.APPLY_SECOND_STEP.name())){
-            return ResultUtil.error(ResultCode.ERROR);
-        }
+////        必须处于第二步申请状态
+//        if(!status.equals(StoreStatusEnum.APPLY_SECOND_STEP.name())){
+//            return ResultUtil.error(ResultCode.ERROR);
+//        }
 
         ArrayList<String> results = new ArrayList<>();
         try {

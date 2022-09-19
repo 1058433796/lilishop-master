@@ -156,35 +156,46 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         if (!new BCryptPasswordEncoder().matches(password, member.getPassword())) {
             throw new ServiceException(ResultCode.USER_PASSWORD_ERROR);
         }
-        //对店铺状态的判定处理
-        if (Boolean.TRUE.equals(member.getHaveStore())) {
-            Store store = storeService.getById(member.getStoreId());
-//            对开店情况分类讨论
-            String status = store.getStoreDisable();
-//            店铺正常 允许登录
+        if(member.getHaveStore()){
+            String status = storeService.getById(member.getStoreId()).getStoreDisable();
             if(status.equals(StoreStatusEnum.OPEN.name())){
                 return storeTokenGenerate.createToken(member, false);
-            }else if(status.equals(StoreStatusEnum.APPLY_FIRST_STEP.name())){
-//                店铺处于申请第一步
-                throw new ServiceException(ResultCode.STORE_FIRST_STEP);
-            }else if(status.equals(StoreStatusEnum.APPLY_SECOND_STEP.name())){
-//                店铺处于申请第二步
-                throw new ServiceException(ResultCode.STORE_SECOND_STEP);
-            }else if(status.equals(StoreStatusEnum.APPLYING.name())){
-//                店铺正在审核
-                throw new ServiceException(ResultCode.STORE_ON_APPLYING);
-            }else if(status.equals(StoreStatusEnum.CLOSED.name())){
-//                店铺被关闭
-                throw new ServiceException(ResultCode.STORE_CLOSE_ERROR);
-            }else if(status.equals(StoreStatusEnum.REFUSED.name())){
-//                店铺审核不通过
-                throw new ServiceException(ResultCode.STORE_REFUSED);
             }else{
                 throw new ServiceException(ResultCode.ERROR);
             }
-        } else {
+        }else{
             throw new ServiceException(ResultCode.STORE_NOT_OPEN);
         }
+
+//        //对店铺状态的判定处理
+//        if (Boolean.TRUE.equals(member.getHaveStore())) {
+//            Store store = storeService.getById(member.getStoreId());
+////            对开店情况分类讨论
+//            String status = store.getStoreDisable();
+////            店铺正常 允许登录
+//            if(status.equals(StoreStatusEnum.OPEN.name())){
+//                return storeTokenGenerate.createToken(member, false);
+//            }else if(status.equals(StoreStatusEnum.APPLY_FIRST_STEP.name())){
+////                店铺处于申请第一步
+//                throw new ServiceException(ResultCode.STORE_FIRST_STEP);
+//            }else if(status.equals(StoreStatusEnum.APPLY_SECOND_STEP.name())){
+////                店铺处于申请第二步
+//                throw new ServiceException(ResultCode.STORE_SECOND_STEP);
+//            }else if(status.equals(StoreStatusEnum.APPLYING.name())){
+////                店铺正在审核
+//                throw new ServiceException(ResultCode.STORE_ON_APPLYING);
+//            }else if(status.equals(StoreStatusEnum.CLOSED.name())){
+////                店铺被关闭
+//                throw new ServiceException(ResultCode.STORE_CLOSE_ERROR);
+//            }else if(status.equals(StoreStatusEnum.REFUSED.name())){
+////                店铺审核不通过
+//                throw new ServiceException(ResultCode.STORE_REFUSED);
+//            }else{
+//                throw new ServiceException(ResultCode.ERROR);
+//            }
+//        } else {
+//            throw new ServiceException(ResultCode.STORE_NOT_OPEN);
+//        }
     }
 
     /**

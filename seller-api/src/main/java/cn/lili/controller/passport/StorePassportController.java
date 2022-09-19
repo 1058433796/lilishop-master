@@ -155,7 +155,7 @@ public class StorePassportController {
             storeService.updateById(store);
         }
 
-        //            暂时办法 注册信息自动通过
+//        //            暂时办法 注册信息自动通过
 //        store.setStoreDisable(StoreStatusEnum.OPEN.name());
 //        storeService.updateById(store);
 
@@ -186,29 +186,29 @@ public class StorePassportController {
         return ResultUtil.data(this.memberService.refreshStoreToken(refreshToken));
     }
 
-    @PostMapping("/storeStatus")
-    public ResultMessage<Object> getStoreStatus(@NotNull @RequestParam String username,
-                                                @NotNull @RequestParam String password){
-        Member member = memberService.findByUsername(username);
-        if(member == null || !new BCryptPasswordEncoder().matches(password, member.getPassword())){
-            return ResultUtil.error(ResultCode.USER_PASSWORD_ERROR);
-        }
-        if(!member.getHaveStore()){
-            return ResultUtil.error(ResultCode.STORE_NOT_OPEN);
-        }
-            Store store = storeService.getById(member.getStoreId());
-            String status = store.getStoreDisable();
-            if(status.equals(StoreStatusEnum.APPLYING.name())){
-                return ResultUtil.data(ResultCode.STORE_ON_APPLYING);
-            }else if(status.equals(StoreStatusEnum.APPLY_FIRST_STEP.name())){
-                return ResultUtil.data(ResultCode.STORE_FIRST_STEP);
-            }else if(status.equals(StoreStatusEnum.APPLY_SECOND_STEP.name())){
-                return ResultUtil.data(ResultCode.STORE_SECOND_STEP);
-            }else if(status.equals(StoreStatusEnum.REFUSED.name())){
-                return ResultUtil.data(ResultCode.STORE_REFUSED);
-            }else{
-                return ResultUtil.error(ResultCode.ERROR);
-            }
-    }
+//    @PostMapping("/storeStatus")
+//    public ResultMessage<Object> getStoreStatus(@NotNull @RequestParam String username,
+//                                                @NotNull @RequestParam String password){
+//        Member member = memberService.findByUsername(username);
+//        if(member == null || !new BCryptPasswordEncoder().matches(password, member.getPassword())){
+//            return ResultUtil.error(ResultCode.USER_PASSWORD_ERROR);
+//        }
+//        if(!member.getHaveStore()){
+//            return ResultUtil.error(ResultCode.STORE_NOT_OPEN);
+//        }
+//            Store store = storeService.getById(member.getStoreId());
+//            String status = store.getStoreDisable();
+//            if(status.equals(StoreStatusEnum.APPLYING.name())){
+//                return ResultUtil.data(ResultCode.STORE_ON_APPLYING);
+//            }else if(status.equals(StoreStatusEnum.APPLY_FIRST_STEP.name())){
+//                return ResultUtil.data(ResultCode.STORE_FIRST_STEP);
+//            }else if(status.equals(StoreStatusEnum.APPLY_SECOND_STEP.name())){
+//                return ResultUtil.data(ResultCode.STORE_SECOND_STEP);
+//            }else if(status.equals(StoreStatusEnum.REFUSED.name())){
+//                return ResultUtil.data(ResultCode.STORE_REFUSED);
+//            }else{
+//                return ResultUtil.error(ResultCode.ERROR);
+//            }
+//    }
 
 }
