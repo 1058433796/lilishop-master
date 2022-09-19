@@ -64,4 +64,11 @@ public class SchemeController {
         }
         throw new ServiceException(ResultCode.PINTUAN_ADD_ERROR);
     }
+
+    @PutMapping(value = "/check")
+    @ApiOperation(value = "确认项目方案")
+    public  ResultMessage<ItemScheme> checkItemScheme(@RequestBody ItemScheme itemScheme){
+        itemschemeService.checkItemScheme(itemScheme);
+        return ResultUtil.success();
+    }
 }
