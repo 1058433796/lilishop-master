@@ -159,11 +159,22 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         //对店铺状态的判定处理
         if (Boolean.TRUE.equals(member.getHaveStore())) {
             Store store = storeService.getById(member.getStoreId());
-            if (!store.getStoreDisable().equals(StoreStatusEnum.OPEN.name())) {
+//            对开店情况分类讨论
+            String status = store.getStoreDisable();
+            if(status.equals(StoreStatusEnum.APPLYING.name())){
+                throw new ServiceException(ResultCode.STORE_ON_APPLYING);
+            }
+            if(status.equals(StoreStatusEnum.CLOSED.name())){
                 throw new ServiceException(ResultCode.STORE_CLOSE_ERROR);
             }
+            if(status.equals(StoreStatusEnum.REFUSED.name())){
+                throw new ServiceException(ResultCode.STORE_REFUSED);
+            }
+//            if (!store.getStoreDisable().equals(StoreStatusEnum.OPEN.name())) {
+//                throw new ServiceException(ResultCode.STORE_CLOSE_ERROR);
+//            }
         } else {
-            throw new ServiceException(ResultCode.USER_NOT_EXIST);
+            throw new ServiceException(ResultCode.STORE_NOT_OPEN);
         }
 
         return storeTokenGenerate.createToken(member, false);
@@ -349,7 +360,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         //检测会员信息
         checkMember(userName, mobilePhone);
         //设置会员信息
-        Member member = new Member(userName, new BCryptPasswordEncoder().encode(password), mobilePhone);
+        Member member = new Member(userName, new BCryptPasswordEncoder().encode(password), mobilePhone, userName, "https://i.loli.net/2020/11/19/LyN6JF7zZRskdIe.png");
         //注册成功后用户自动登录
         registerHandler(member);
         return memberTokenGenerate.createToken(member, false);
@@ -362,7 +373,6 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         checkMember(userName, mobilePhone);
         //设置会员信息
         Member member = new Member(userName, new BCryptPasswordEncoder().encode(password), mobilePhone);
-
         //注册成功后用户自动登录
         registerHandler(member);
         return memberTokenGenerate.createToken(member, false);
@@ -683,32 +693,6 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
     public MemberVO getMember(String id) {
         return new MemberVO(this.getById(id));
     }
-
-    @Override
-    public Token enterpriseRegister(
-            String belonging,
-            String enterpriseName,
-            String licenseNumber,
-            String licenseLocation,
-            String licenseDetailLocation,
-            Long licenseRangeBeg,
-            Long licenseRangeEnd,
-            Boolean longPeriod) {
-        return null;
-    }
-
-    //    @Override
-//    @Transactional
-//    public Token register(String userName, String password, String mobilePhone) {
-//        //检测会员信息
-//        checkMember(userName, mobilePhone);
-//        //设置会员信息
-//        Member member = new Member(userName, new BCryptPasswordEncoder().encode(password), mobilePhone);
-//        //注册成功后用户自动登录
-//        registerHandler(member);
-//        return memberTokenGenerate.createToken(member, false);
-//    }
-
 
     /**
      * 检测会员

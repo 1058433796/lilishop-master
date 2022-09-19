@@ -76,6 +76,8 @@ public class Member extends BaseEntity {
     @ApiModelProperty(value = "是否开通店铺")
     private Boolean haveStore;
 
+
+
     @ApiModelProperty(value = "店铺ID")
     private String storeId;
 

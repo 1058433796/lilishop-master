@@ -1,7 +1,4 @@
 package cn.lili.modules.member.service;
-
-
-import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.security.enums.UserEnums;
 import cn.lili.common.security.token.Token;
 import cn.lili.common.vo.PageVO;
@@ -284,24 +281,4 @@ public interface MemberService extends IService<Member> {
      */
     MemberVO getMember(String id);
 
-    /**
-     * 企业注册
-     * @param belonging 所属行业
-     * @param enterpriseName 企业名称
-     * @param licenseNumber 营业执照注册号
-     * @param licenseLocation 执照地址
-     * @param licenseDetailLocation 执照详细地址
-     * @param licenseRangeBeg 执照期限起始日期
-     * @param licenseRangeEnd 执照期限终止日期
-     * @param longPeriod 执照期限是否为长期
-     * @return Token
-     */
-    Token enterpriseRegister(String belonging,
-                                          String enterpriseName,
-                                          String licenseNumber,
-                                          String licenseLocation,
-                                          String licenseDetailLocation,
-                                          Long licenseRangeBeg,
-                                          Long licenseRangeEnd,
-                                          Boolean longPeriod);
 }

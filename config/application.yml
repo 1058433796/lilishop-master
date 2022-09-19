@@ -124,6 +124,7 @@ ignored:
     - /common/common/slider/**
     - /common/common/sms/**
     - /common/common/site
+    - /common/common/upload/fileUpload
     - /buyer/payment/cashier/**
     - /buyer/other/pageData/**
     - /buyer/other/article/**

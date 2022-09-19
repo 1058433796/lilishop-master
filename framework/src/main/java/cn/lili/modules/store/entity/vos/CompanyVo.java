@@ -1,89 +1,91 @@
-package cn.lili.modules.company.entity.vos;
+package cn.lili.modules.store.entity.vos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
-import java.util.List;
 
 @Data
 public class CompanyVo {
 
     //所属行业
-    @NotNull
+    @NotEmpty
     private String companyType;
     // 企业名称
-    @NotNull
+    @NotEmpty
     private String companyName;
     // 营业执照注册号
-    @NotNull
-    private String licenseRegisterNumber;
+    @NotEmpty
+    private String businessNumber;
     // 营业执照所在地
-    @NotNull
-    private String licenseAddress;
+    @NotEmpty
+    private String businessAddress;
     // 营业执照详细地址
-    @NotNull
-    private String licenseDetailAddress;
+    @NotEmpty
+    private String businessDetailAddress;
     // 营业期限
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date licenseValidBeg;
+    private Date businessValidBeg;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date licenseValidEnd;
+    private Date businessValidEnd;
     // 营业期限 长期
-    @NotNull
-    private Boolean licenseValidLongPeriod;
+
+    private Boolean businessLongPeriod;
     // 法人代表证件类型
-    @NotNull
-    private String legalRepresentLicenseType;
+    @NotEmpty
+    private String legalType;
     // 法人代表证件号
-    @NotNull
-    private String legalRepresentLicenseNumber;
+    @NotEmpty
+    private String legalNumber;
     // 法人代表名称
-    @NotNull
-    private String legalRepresentName;
+    @NotEmpty
+    private String legalName;
     // 法人代表信息有效期
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date legalRepresentLicenseValidBeg;
+    private Date legalValidBeg;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date legalRepresentLicenseValidEnd;
+    private Date legalValidEnd;
     // 法人代表信息有效期 长期
-    @NotNull
-    private Boolean legalRepresentLicenseLongPeriod;
+
+    private Boolean legalLongPeriod;
     // 公司所在地
-    @NotNull
+    @NotEmpty
     private String companyAddress;
     // 公司详细地址
-    @NotNull
+    @NotEmpty
     private String companyDetailAddress;
     // 公司紧急联系人
-    @NotNull
+    @NotEmpty
     private String companyEmergencyName;
     // 公司紧急联系人电话
-    @NotNull
+    @NotEmpty
     private String companyEmergencyPhoneNumber;
     // 组织机构代码
-    @NotNull
-    private String orgCode;
+    @NotEmpty
+    private String code;
     // 组织机构代码有效期
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date orgCodeValidBeg;
+    private Date codeValidBeg;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date orgCodeValidEnd;
+    private Date codeValidEnd;
     // 组织机构代码有效期 长期
-    @NotNull
-    private Boolean orgCodeValidLongPeriod;
+
+    private Boolean codeLongPeriod;
+
+    private String username;
+
+    private String password;
+
 }
 

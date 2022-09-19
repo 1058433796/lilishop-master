@@ -6,10 +6,7 @@ import cn.lili.modules.store.entity.dos.StoreDetail;
 import cn.lili.modules.store.entity.dto.StoreAfterSaleAddressDTO;
 import cn.lili.modules.store.entity.dto.StoreSettingDTO;
 import cn.lili.modules.store.entity.dto.StoreSettlementDay;
-import cn.lili.modules.store.entity.vos.StoreBasicInfoVO;
-import cn.lili.modules.store.entity.vos.StoreDetailVO;
-import cn.lili.modules.store.entity.vos.StoreManagementCategoryVO;
-import cn.lili.modules.store.entity.vos.StoreOtherVO;
+import cn.lili.modules.store.entity.vos.*;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -138,4 +135,6 @@ public interface StoreDetailService extends IService<StoreDetail> {
      * @param dateTime 结算日
      */
     void updateSettlementDay(String storeId, DateTime dateTime);
+
+    void updateCompany(CompanyVo companyVo);
 }

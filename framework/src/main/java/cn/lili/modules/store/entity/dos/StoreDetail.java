@@ -6,6 +6,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.lili.common.validation.Mobile;
 import cn.lili.common.validation.Phone;
 import cn.lili.modules.store.entity.dto.AdminStoreApplyDTO;
+import cn.lili.modules.store.entity.vos.CompanyVo;
 import cn.lili.mybatis.BaseIdEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -42,11 +43,11 @@ public class StoreDetail extends BaseIdEntity {
     private String storeId;
 
     @Size(min = 2, max = 200, message = "店铺名称长度为2-200位")
-    @NotBlank(message = "店铺名称不能为空")
+//    @NotBlank(message = "店铺名称不能为空")
     @ApiModelProperty(value = "店铺名称")
     private String storeName;
 
-    @NotBlank(message = "公司名称不能为空")
+//    @NotBlank(message = "公司名称不能为空")
     @Size(min = 2, max = 100, message = "公司名称错误")
     @ApiModelProperty(value = "公司名称")
     private String companyName;
@@ -78,12 +79,12 @@ public class StoreDetail extends BaseIdEntity {
     @ApiModelProperty(value = "注册资金")
     private Double registeredCapital;
 
-    @NotBlank(message = "联系人姓名为空")
+//    @NotBlank(message = "联系人姓名为空")
     @Length(min = 2, max = 20, message = "联系人长度为：2-20位字符")
     @ApiModelProperty(value = "联系人姓名")
     private String linkName;
 
-    @NotBlank(message = "手机号不能为空")
+//    @NotBlank(message = "手机号不能为空")
     @Phone
     @ApiModelProperty(value = "联系人电话")
     private String linkPhone;
@@ -95,45 +96,45 @@ public class StoreDetail extends BaseIdEntity {
     @ApiModelProperty(value = "法定经营范围")
     private String scope;
 
-    @NotBlank(message = "营业执照电子版不能为空")
+//    @NotBlank(message = "营业执照电子版不能为空")
     @ApiModelProperty(value = "营业执照电子版")
     private String licencePhoto;
 
-    @NotBlank(message = "法人姓名不能为空")
+//    @NotBlank(message = "法人姓名不能为空")
     @Size(min = 2, max = 20, message = "法人姓名长度为2-20位字符")
     @ApiModelProperty(value = "法人姓名")
     private String legalName;
 
-    @NotBlank(message = "法人身份证不能为空")
+//    @NotBlank(message = "法人身份证不能为空")
     @Size(min = 18, max = 18, message = "法人身份证号长度为18位")
     @ApiModelProperty(value = "法人身份证")
     private String legalId;
 
-    @NotBlank(message = "法人身份证不能为空")
+//    @NotBlank(message = "法人身份证不能为空")
     @ApiModelProperty(value = "法人身份证照片")
     private String legalPhoto;
 
     @Size(min = 1, max = 200, message = "结算银行开户行名称长度为1-200位")
-    @NotBlank(message = "结算银行开户行名称不能为空")
+//    @NotBlank(message = "结算银行开户行名称不能为空")
     @ApiModelProperty(value = "结算银行开户行名称")
     private String settlementBankAccountName;
 
     @Size(min = 1, max = 200, message = "结算银行开户账号长度为1-200位")
-    @NotBlank(message = "结算银行开户账号不能为空")
+//    @NotBlank(message = "结算银行开户账号不能为空")
     @ApiModelProperty(value = "结算银行开户账号")
     private String settlementBankAccountNum;
 
     @Size(min = 1, max = 200, message = "结算银行开户支行名称长度为1-200位")
-    @NotBlank(message = "结算银行开户支行名称不能为空")
+//    @NotBlank(message = "结算银行开户支行名称不能为空")
     @ApiModelProperty(value = "结算银行开户支行名称")
     private String settlementBankBranchName;
 
     @Size(min = 1, max = 50, message = "结算银行支行联行号长度为1-200位")
-    @NotBlank(message = "结算银行支行联行号不能为空")
+//    @NotBlank(message = "结算银行支行联行号不能为空")
     @ApiModelProperty(value = "结算银行支行联行号")
     private String settlementBankJointName;
 
-    @NotBlank(message = "店铺经营类目不能为空")
+//    @NotBlank(message = "店铺经营类目不能为空")
     @ApiModelProperty(value = "店铺经营类目")
     private String goodsManagementCategory;
 
@@ -173,6 +174,38 @@ public class StoreDetail extends BaseIdEntity {
     @ApiModelProperty(value = "详细地址")
     private String salesConsigneeDetail;
 
+    //    营业执照信息
+    private String companyType;
+//    private String companyName;
+    private String businessNumber;
+    private String businessAddress;
+    private String businessDetailAddress;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date businessValidBeg;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date businessValidEnd;
+    private Boolean businessLongPeriod;
+    //    法人代表信息
+    private String legalType;
+    private String legalNumber;
+//    private String legalName;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date legalValidBeg;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date legalValidEnd;
+    private Boolean legalLongPeriod;
+//    private String companyAddress;
+    private String companyDetailAddress;
+    private String companyEmergencyName;
+    private String companyEmergencyPhoneNumber;
+    //    组织机构信息
+    private String code;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date codeValidBeg;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date codeValidEnd;
+    private Boolean codeLongPeriod;
+
 
     public StoreDetail(Store store, AdminStoreApplyDTO adminStoreApplyDTO) {
         this.storeId = store.getId();
@@ -180,5 +213,26 @@ public class StoreDetail extends BaseIdEntity {
         BeanUtil.copyProperties(adminStoreApplyDTO, this);
         this.settlementDay = DateUtil.date();
         this.stockWarning = 10;
+    }
+
+    public StoreDetail(String storeId, CompanyVo vo) {
+        this.storeId = storeId;
+
+        this.settlementDay = DateUtil.date();
+        this.stockWarning = 10;
+
+        BeanUtil.copyProperties(vo, this);
+        if(vo.getBusinessLongPeriod()){
+            businessValidBeg = null;
+            businessValidEnd = null;
+        }
+        if(vo.getLegalLongPeriod()){
+            legalValidBeg = null;
+            legalValidEnd = null;
+        }
+        if(vo.getCodeLongPeriod()){
+            codeValidBeg = null;
+            codeValidEnd = null;
+        }
     }
 }
