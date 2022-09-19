@@ -24,7 +24,7 @@ spring:
   boot:
     admin:
       client:
-        url: http://192.168.1.103:8000
+        url: http://127.0.0.1:8000
   cache:
     type: redis
   # Redis
@@ -60,6 +60,9 @@ spring:
       default-datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.cj.jdbc.Driver
+#        url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+#        username: root
+#        password: 123456
         url: jdbc:mysql://10.27.240.2:3306/lilishop?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
         username: root
         password: lilishop
@@ -116,10 +119,12 @@ ignored:
     - /weixin/**
     - /source/**
     - /store/passport/login/**
+    - /company/passport/**
     - /store/passport/login/refresh/**
     - /common/common/slider/**
     - /common/common/sms/**
     - /common/common/site
+    - /common/common/upload/fileUpload
     - /buyer/payment/cashier/**
     - /buyer/other/pageData/**
     - /buyer/other/article/**
@@ -291,6 +296,7 @@ lili:
       order-topic: lili_order_topic
       order-group: lili_order_group
       member-topic: lili_member_topic
+      company-topic: lili_company_topic
       member-group: lili_member_group
       other-topic: lili_other_topic
       other-group: lili_other_group

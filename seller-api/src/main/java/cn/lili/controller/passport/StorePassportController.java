@@ -5,19 +5,33 @@ import cn.lili.common.enums.ResultCode;
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.security.enums.UserEnums;
+import cn.lili.common.security.token.Token;
+import cn.lili.common.utils.BeanUtil;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.service.MemberService;
+import cn.lili.modules.store.entity.dos.Store;
+import cn.lili.modules.store.entity.dos.StoreDetail;
+import cn.lili.modules.store.entity.enums.StoreStatusEnum;
+import cn.lili.modules.store.entity.vos.CompanyVo;
+import cn.lili.modules.store.service.StoreDetailService;
+import cn.lili.modules.store.service.StoreService;
 import cn.lili.modules.verification.entity.enums.VerificationEnums;
 import cn.lili.modules.verification.service.VerificationService;
+import com.aliyuncs.policy.retry.RetryUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 店铺端,商家登录接口
@@ -38,6 +52,12 @@ public class StorePassportController {
     private MemberService memberService;
 
     @Autowired
+    private StoreService storeService;
+
+    @Autowired
+    private StoreDetailService storeDetailService;
+
+    @Autowired
     private VerificationService verificationService;
 
     @ApiOperation(value = "登录接口")
@@ -48,11 +68,75 @@ public class StorePassportController {
     @PostMapping("/userLogin")
     public ResultMessage<Object> userLogin(@NotNull(message = "用户名不能为空") @RequestParam String username,
                                            @NotNull(message = "密码不能为空") @RequestParam String password, @RequestHeader String uuid) {
-        if (verificationService.check(uuid, VerificationEnums.LOGIN)) {
-            return ResultUtil.data(this.memberService.usernameStoreLogin(username, password));
-        } else {
-            throw new ServiceException(ResultCode.VERIFICATION_ERROR);
+            try {
+                Token token = this.memberService.usernameStoreLogin(username, password);
+                return ResultUtil.data(token);
+            }catch (ServiceException e){
+                return ResultUtil.error(e.getResultCode());
+            }
+    }
+
+    @PostMapping("/userRegister")
+    public ResultMessage<Object> userRegister(@NotNull(message = "用户名不能为空") @RequestParam String username,
+                                           @NotNull(message = "密码不能为空") @RequestParam String password,
+                                              @NotNull(message = "手机号不能为空") @RequestParam String mobile,
+                                              @RequestHeader String uuid
+                                              ) {
+        return ResultUtil.data(this.memberService.register(username, password, mobile));
+    }
+    @ApiOperation(value = "店铺注册接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="companyV0", value="表格数据", required = true)
+    })
+    @PostMapping(value="/storeRegister")
+    public ResultMessage<Object> storeRegister(CompanyVo vo
+    ) {
+        System.out.println(vo);
+//        验证账户
+        Member member = memberService.findByUsername(vo.getUsername());
+        if(member == null || !new BCryptPasswordEncoder().matches(vo.getPassword(), member.getPassword())){
+            return ResultUtil.error(ResultCode.USER_PASSWORD_ERROR);
         }
+        Store store = null;
+        StoreDetail storeDetail = null;
+//        存在store
+        if(member.getHaveStore()){
+            System.out.println("当前用户存在店铺");
+            store = storeService.getById(member.getStoreId());
+            String status = store.getStoreDisable();
+
+            if(status.equals(StoreStatusEnum.OPEN.name())){
+                return ResultUtil.error(ResultCode.STORE_APPLY_DOUBLE_ERROR);
+            }else if(status.equals(StoreStatusEnum.CLOSED.name())){
+                return ResultUtil.error(ResultCode.STORE_CLOSE_ERROR);
+            }
+//            已有商店 使用新的申请材料覆盖原有信息
+//            申请材料未审核的情况？
+            storeDetail = storeDetailService.getStoreDetail(store.getId());
+            BeanUtil.copyProperties(vo, storeDetail);
+            storeDetailService.updateById(storeDetail);
+            System.out.println("存在申请材料，已覆盖");
+
+        }else{
+            //    不存在商店    注册商店
+            store = new Store(member);
+            store.setStoreDisable(StoreStatusEnum.APPLYING.name());
+            storeService.save(store);
+            member.setStoreId(store.getId());
+            member.setHaveStore(true);
+            memberService.updateById(member);
+            System.out.println("商店不存在，已注册");
+//            创建storeDetail
+            storeDetail = new StoreDetail(store.getId(),vo);
+            storeDetailService.save(storeDetail);
+            System.out.println("storeDetail已创建");
+        }
+
+        //            暂时办法 注册信息自动通过
+        store.setStoreDisable(StoreStatusEnum.OPEN.name());
+        storeService.updateById(store);
+
+        return ResultUtil.data(ResultCode.SUCCESS);
     }
 
     @ApiOperation(value = "注销接口")
@@ -78,6 +162,20 @@ public class StorePassportController {
     public ResultMessage<Object> refreshToken(@NotNull(message = "刷新token不能为空") @PathVariable String refreshToken) {
         return ResultUtil.data(this.memberService.refreshStoreToken(refreshToken));
     }
-
+//    @PostMapping("/storeStatus")
+//    public ResultMessage<Object> getStoreStatus(@NotNull @RequestParam String username,
+//                                                @RequestParam String password){
+//        Member member = memberService.findByUsername(username);
+//        if(member == null || !new BCryptPasswordEncoder().matches(password, member.getPassword())){
+//            return ResultUtil.error(ResultCode.USER_PASSWORD_ERROR);
+//        }
+//        if(member.getHaveStore()){
+//            Store store = storeService.getById(member.getStoreId());
+//            String status = store.getStoreDisable();
+//
+//        }else{
+//            return ResultUtil.error(ResultCode.STORE_NOT_OPEN);
+//        }
+//    }
 
 }

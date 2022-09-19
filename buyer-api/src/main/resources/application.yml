@@ -52,7 +52,7 @@ spring:
 
   # Redis
   redis:
-    host: 192.168.2.43
+    host: 10.27.240.2
     port: 6379
     password: lilishop
     lettuce:

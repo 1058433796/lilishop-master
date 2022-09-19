@@ -1,6 +1,4 @@
 package cn.lili.modules.member.service;
-
-
 import cn.lili.common.security.enums.UserEnums;
 import cn.lili.common.security.token.Token;
 import cn.lili.common.vo.PageVO;
@@ -129,6 +127,16 @@ public interface MemberService extends IService<Member> {
      * @return 处理结果
      */
     Token register(String userName, String password, String mobilePhone);
+
+    /**
+     * 注册商家
+     *
+     * @param userName    会员
+     * @param password    密码
+     * @param mobilePhone mobilePhone
+     * @return 处理结果
+     */
+    Token storeRegister(String userName, String password, String mobilePhone);
 
     /**
      * 修改当前会员的手机号
@@ -272,4 +280,5 @@ public interface MemberService extends IService<Member> {
      * @return 用户VO
      */
     MemberVO getMember(String id);
+
 }

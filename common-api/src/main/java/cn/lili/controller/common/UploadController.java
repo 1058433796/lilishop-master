@@ -15,6 +15,10 @@ import cn.lili.modules.file.entity.File;
 import cn.lili.modules.file.plugin.FilePlugin;
 import cn.lili.modules.file.plugin.FilePluginFactory;
 import cn.lili.modules.file.service.FileService;
+import cn.lili.modules.member.entity.dos.Member;
+import cn.lili.modules.member.service.MemberService;
+import cn.lili.modules.store.entity.dos.Store;
+import cn.lili.modules.store.service.StoreService;
 import cn.lili.modules.system.entity.dos.Setting;
 import cn.lili.modules.system.entity.enums.SettingEnum;
 import cn.lili.modules.system.service.SettingService;
@@ -22,13 +26,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -52,12 +55,17 @@ public class UploadController {
     @Autowired
     private Cache cache;
 
+    @Autowired
+    private MemberService memberService;
+
+    @Autowired
+    private StoreService storeService;
+
     @ApiOperation(value = "文件上传")
     @PostMapping(value = "/file")
-    public ResultMessage<Object> upload(MultipartFile file,
+    public ResultMessage<Object> upload(@RequestParam("file") MultipartFile file,
                                         String base64,
                                         @RequestHeader String accessToken) {
-
 
         AuthUser authUser = UserContext.getAuthUser(cache, accessToken);
         //如果用户未登录，则无法上传图片
@@ -71,7 +79,6 @@ public class UploadController {
         if (file == null || CharSequenceUtil.isEmpty(file.getContentType())) {
             throw new ServiceException(ResultCode.IMAGE_FILE_EXT_ERROR);
         }
-
 
         if (!CharSequenceUtil.containsAny(file.getContentType().toLowerCase(), "image")) {
             throw new ServiceException(ResultCode.FILE_TYPE_NOT_SUPPORT);
@@ -108,5 +115,61 @@ public class UploadController {
             throw new ServiceException(ResultCode.OSS_EXCEPTION_ERROR);
         }
         return ResultUtil.data(result);
+    }
+
+    @ApiOperation(value = "使用账号密码验证的文件上传")
+    @PostMapping(value = "/fileUpload")
+    public ResultMessage<Object> fileUpload(@RequestParam("files") MultipartFile[] files,
+                                        @RequestParam("username") String username,
+                                        @RequestParam("password") String password) {
+
+        Member member = memberService.findByUsername(username);
+        if(!new BCryptPasswordEncoder().matches(password, member.getPassword())){
+            return ResultUtil.error(ResultCode.USER_PASSWORD_ERROR);
+        }
+
+        ArrayList<String> results = new ArrayList<>();
+        try {
+            for(MultipartFile file: files){
+                String result = save(file, member);
+                results.add(result);
+            }
+        }catch (ServiceException e){
+            return ResultUtil.error(e.getResultCode());
+        }
+        return ResultUtil.data(results);
+    }
+
+    public String save(MultipartFile file, Member member){
+        if (file == null || CharSequenceUtil.isEmpty(file.getContentType())) {
+            throw new ServiceException(ResultCode.IMAGE_FILE_EXT_ERROR);
+        }
+
+        if (!CharSequenceUtil.containsAny(file.getContentType().toLowerCase(), "image")) {
+            throw new ServiceException(ResultCode.FILE_TYPE_NOT_SUPPORT);
+        }
+
+        String result;
+        String fileKey = CommonUtil.rename(Objects.requireNonNull(file.getOriginalFilename()));
+        File newFile = new File();
+        try {
+            InputStream inputStream = file.getInputStream();
+            //上传至第三方云服务或服务器
+            result = filePluginFactory.filePlugin().inputStreamUpload(inputStream, fileKey);
+            //保存数据信息至数据库
+            newFile.setName(file.getOriginalFilename());
+            newFile.setFileSize(file.getSize());
+            newFile.setFileType(file.getContentType());
+            newFile.setFileKey(fileKey);
+            newFile.setUrl(result);
+            newFile.setCreateBy(member.getUsername());
+            newFile.setUserEnums(UserEnums.STORE.name());
+            newFile.setOwnerId(member.getStoreId());
+            fileService.save(newFile);
+        } catch (Exception e) {
+            log.error("文件上传失败", e);
+            throw new ServiceException(ResultCode.OSS_EXCEPTION_ERROR);
+        }
+        return result;
     }
 }

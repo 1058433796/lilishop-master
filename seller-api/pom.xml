@@ -18,6 +18,7 @@
             <artifactId>framework</artifactId>
             <version>${revision}</version>
         </dependency>
+
     </dependencies>
 
     <build>

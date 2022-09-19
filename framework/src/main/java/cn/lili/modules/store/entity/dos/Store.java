@@ -1,5 +1,6 @@
 package cn.lili.modules.store.entity.dos;
 
+import cn.lili.modules.store.entity.vos.CompanyVo;
 import cn.lili.mybatis.BaseEntity;
 import cn.lili.common.utils.BeanUtil;
 import cn.lili.modules.member.entity.dos.Member;
@@ -102,10 +103,11 @@ public class Store extends BaseEntity {
     private String merchantEuid;
 
 
+
     public Store(Member member) {
         this.memberId = member.getId();
         this.memberName = member.getUsername();
-        storeDisable = StoreStatusEnum.APPLY.value();
+        storeDisable = StoreStatusEnum.APPLYING.value();
         selfOperated = false;
         deliveryScore = 5.0;
         serviceScore = 5.0;
@@ -113,6 +115,7 @@ public class Store extends BaseEntity {
         goodsNum = 0;
         collectionNum = 0;
     }
+
 
     public Store(Member member, AdminStoreApplyDTO adminStoreApplyDTO) {
         BeanUtil.copyProperties(adminStoreApplyDTO, this);
