@@ -395,6 +395,7 @@ public enum ResultCode {
     STORE_CLOSE_ERROR(50006, "店铺关闭，请联系管理员"),
     STORE_ON_APPLYING(50007, "店铺正在审核，请等待"),
     STORE_REFUSED(50008, "店铺审核不通过"),
+    STORE_STEP_APPLY_REPEAT(50009, "申请步骤重复"),
     FREIGHT_TEMPLATE_NOT_EXIST(50010, "当前模版不存在"),
 
     /**

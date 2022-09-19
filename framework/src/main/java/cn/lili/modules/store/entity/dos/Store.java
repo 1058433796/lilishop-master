@@ -107,7 +107,7 @@ public class Store extends BaseEntity {
     public Store(Member member) {
         this.memberId = member.getId();
         this.memberName = member.getUsername();
-        storeDisable = StoreStatusEnum.APPLYING.value();
+        storeDisable = StoreStatusEnum.APPLY_FIRST_STEP.value();
         selfOperated = false;
         deliveryScore = 5.0;
         serviceScore = 5.0;
@@ -122,7 +122,7 @@ public class Store extends BaseEntity {
 
         this.memberId = member.getId();
         this.memberName = member.getUsername();
-        storeDisable = StoreStatusEnum.APPLYING.value();
+        storeDisable = StoreStatusEnum.APPLY_FIRST_STEP.value();
         selfOperated = false;
         deliveryScore = 5.0;
         serviceScore = 5.0;
