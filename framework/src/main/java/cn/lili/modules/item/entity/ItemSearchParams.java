@@ -18,6 +18,9 @@ public class ItemSearchParams extends PageVO {
     @ApiModelProperty(value = "采购方ID")
     private String buyerId;
 
+    @ApiModelProperty(value = "项目ID")
+    private String itemId;
+
     @ApiModelProperty(value = "地点")
     private String createLocation;
 
@@ -35,9 +38,13 @@ public class ItemSearchParams extends PageVO {
         if (CharSequenceUtil.isNotEmpty(buyerId)) {
             queryWrapper.like("buyer_id", buyerId);
         }
+        if (CharSequenceUtil.isNotEmpty(itemId)) {
+            queryWrapper.like("item_id", itemId);
+        }
         if (createTime != null) {
             queryWrapper.le("create_time", createTime);
         }
+
         return queryWrapper;
     }
 
