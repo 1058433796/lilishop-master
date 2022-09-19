@@ -161,23 +161,30 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
             Store store = storeService.getById(member.getStoreId());
 //            对开店情况分类讨论
             String status = store.getStoreDisable();
-            if(status.equals(StoreStatusEnum.APPLYING.name())){
+//            店铺正常 允许登录
+            if(status.equals(StoreStatusEnum.OPEN.name())){
+                return storeTokenGenerate.createToken(member, false);
+            }else if(status.equals(StoreStatusEnum.APPLY_FIRST_STEP.name())){
+//                店铺处于申请第一步
+                throw new ServiceException(ResultCode.STORE_FIRST_STEP);
+            }else if(status.equals(StoreStatusEnum.APPLY_SECOND_STEP.name())){
+//                店铺处于申请第二步
+                throw new ServiceException(ResultCode.STORE_SECOND_STEP);
+            }else if(status.equals(StoreStatusEnum.APPLYING.name())){
+//                店铺正在审核
                 throw new ServiceException(ResultCode.STORE_ON_APPLYING);
-            }
-            if(status.equals(StoreStatusEnum.CLOSED.name())){
+            }else if(status.equals(StoreStatusEnum.CLOSED.name())){
+//                店铺被关闭
                 throw new ServiceException(ResultCode.STORE_CLOSE_ERROR);
-            }
-            if(status.equals(StoreStatusEnum.REFUSED.name())){
+            }else if(status.equals(StoreStatusEnum.REFUSED.name())){
+//                店铺审核不通过
                 throw new ServiceException(ResultCode.STORE_REFUSED);
+            }else{
+                throw new ServiceException(ResultCode.ERROR);
             }
-//            if (!store.getStoreDisable().equals(StoreStatusEnum.OPEN.name())) {
-//                throw new ServiceException(ResultCode.STORE_CLOSE_ERROR);
-//            }
         } else {
             throw new ServiceException(ResultCode.STORE_NOT_OPEN);
         }
-
-        return storeTokenGenerate.createToken(member, false);
     }
 
     /**

@@ -19,10 +19,13 @@ import cn.lili.modules.store.service.StoreService;
 import cn.lili.modules.verification.entity.enums.VerificationEnums;
 import cn.lili.modules.verification.service.VerificationService;
 import com.aliyuncs.policy.retry.RetryUtil;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.reflection.wrapper.BaseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -84,13 +87,12 @@ public class StorePassportController {
                                               ) {
         return ResultUtil.data(this.memberService.register(username, password, mobile));
     }
-    @ApiOperation(value = "店铺注册接口")
+    @ApiOperation(value = "店铺注册接口，注册第一步")
     @ApiImplicitParams({
             @ApiImplicitParam(name="companyV0", value="表格数据", required = true)
     })
     @PostMapping(value="/storeRegister")
-    public ResultMessage<Object> storeRegister(CompanyVo vo
-    ) {
+    public ResultMessage<Object> storeRegister(CompanyVo vo) {
         System.out.println(vo);
 //        验证账户
         Member member = memberService.findByUsername(vo.getUsername());
@@ -105,23 +107,41 @@ public class StorePassportController {
             store = storeService.getById(member.getStoreId());
             String status = store.getStoreDisable();
 
-            if(status.equals(StoreStatusEnum.OPEN.name())){
-                return ResultUtil.error(ResultCode.STORE_APPLY_DOUBLE_ERROR);
-            }else if(status.equals(StoreStatusEnum.CLOSED.name())){
-                return ResultUtil.error(ResultCode.STORE_CLOSE_ERROR);
+            if(!status.equals(StoreStatusEnum.REFUSED.name())){
+                return ResultUtil.error(ResultCode.ERROR);
             }
-//            已有商店 使用新的申请材料覆盖原有信息
-//            申请材料未审核的情况？
+
+//            if(status.equals(StoreStatusEnum.OPEN.name())){
+//                return ResultUtil.error(ResultCode.STORE_APPLY_DOUBLE_ERROR);
+//            }else if(status.equals(StoreStatusEnum.CLOSED.name())){
+//                return ResultUtil.error(ResultCode.STORE_CLOSE_ERROR);
+//            }else if(status.equals(StoreStatusEnum.APPLY_FIRST_STEP.name())){
+////                正常
+//            }else if(status.equals(StoreStatusEnum.APPLY_SECOND_STEP.name())){
+////                当前为第一步申请，店铺已经进行过第一步申请
+//                return ResultUtil.error(ResultCode.STORE_STEP_APPLY_REPEAT);
+//            }else if(status.equals(StoreStatusEnum.APPLYING.name())){
+////                申请信息已经提交 不允许再次申请
+//                return ResultUtil.error(ResultCode.STORE_STEP_APPLY_REPEAT);
+//            }else if(status.equals(StoreStatusEnum.REFUSED.name())){
+////                申请被拒绝，允许从第一步开始重新申请
+////                BaseWrapper<Store> baseWrapper =
+//                UpdateWrapper<Store> updateWrapper = new UpdateWrapper<>();
+//                updateWrapper.eq("id", store.getId())
+//                        .set("store_disable", StoreStatusEnum.APPLY_FIRST_STEP);
+//                storeService.update(updateWrapper);
+//            }
+//            之前申请被拒绝后重新申请 使用新的申请材料覆盖原有信息
             storeDetail = storeDetailService.getStoreDetail(store.getId());
             BeanUtil.copyProperties(vo, storeDetail);
             storeDetailService.updateById(storeDetail);
             System.out.println("存在申请材料，已覆盖");
-
         }else{
             //    不存在商店    注册商店
             store = new Store(member);
-            store.setStoreDisable(StoreStatusEnum.APPLYING.name());
+//            store.setStoreDisable(StoreStatusEnum.APPLY_SECOND_STEP.name());
             storeService.save(store);
+
             member.setStoreId(store.getId());
             member.setHaveStore(true);
             memberService.updateById(member);
@@ -130,11 +150,14 @@ public class StorePassportController {
             storeDetail = new StoreDetail(store.getId(),vo);
             storeDetailService.save(storeDetail);
             System.out.println("storeDetail已创建");
+//            第一步注册完成 修改store状态为第二步
+            store.setStoreDisable(StoreStatusEnum.APPLY_SECOND_STEP.name());
+            storeService.updateById(store);
         }
 
         //            暂时办法 注册信息自动通过
-        store.setStoreDisable(StoreStatusEnum.OPEN.name());
-        storeService.updateById(store);
+//        store.setStoreDisable(StoreStatusEnum.OPEN.name());
+//        storeService.updateById(store);
 
         return ResultUtil.data(ResultCode.SUCCESS);
     }
@@ -162,20 +185,30 @@ public class StorePassportController {
     public ResultMessage<Object> refreshToken(@NotNull(message = "刷新token不能为空") @PathVariable String refreshToken) {
         return ResultUtil.data(this.memberService.refreshStoreToken(refreshToken));
     }
-//    @PostMapping("/storeStatus")
-//    public ResultMessage<Object> getStoreStatus(@NotNull @RequestParam String username,
-//                                                @RequestParam String password){
-//        Member member = memberService.findByUsername(username);
-//        if(member == null || !new BCryptPasswordEncoder().matches(password, member.getPassword())){
-//            return ResultUtil.error(ResultCode.USER_PASSWORD_ERROR);
-//        }
-//        if(member.getHaveStore()){
-//            Store store = storeService.getById(member.getStoreId());
-//            String status = store.getStoreDisable();
-//
-//        }else{
-//            return ResultUtil.error(ResultCode.STORE_NOT_OPEN);
-//        }
-//    }
+
+    @PostMapping("/storeStatus")
+    public ResultMessage<Object> getStoreStatus(@NotNull @RequestParam String username,
+                                                @NotNull @RequestParam String password){
+        Member member = memberService.findByUsername(username);
+        if(member == null || !new BCryptPasswordEncoder().matches(password, member.getPassword())){
+            return ResultUtil.error(ResultCode.USER_PASSWORD_ERROR);
+        }
+        if(!member.getHaveStore()){
+            return ResultUtil.error(ResultCode.STORE_NOT_OPEN);
+        }
+            Store store = storeService.getById(member.getStoreId());
+            String status = store.getStoreDisable();
+            if(status.equals(StoreStatusEnum.APPLYING.name())){
+                return ResultUtil.data(ResultCode.STORE_ON_APPLYING);
+            }else if(status.equals(StoreStatusEnum.APPLY_FIRST_STEP.name())){
+                return ResultUtil.data(ResultCode.STORE_FIRST_STEP);
+            }else if(status.equals(StoreStatusEnum.APPLY_SECOND_STEP.name())){
+                return ResultUtil.data(ResultCode.STORE_SECOND_STEP);
+            }else if(status.equals(StoreStatusEnum.REFUSED.name())){
+                return ResultUtil.data(ResultCode.STORE_REFUSED);
+            }else{
+                return ResultUtil.error(ResultCode.ERROR);
+            }
+    }
 
 }

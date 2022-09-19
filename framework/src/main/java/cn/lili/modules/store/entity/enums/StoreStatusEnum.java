@@ -16,17 +16,21 @@ public enum StoreStatusEnum {
      */
     CLOSED("店铺关闭"),
     /**
-     * 申请开店
+     * 尚未完成第一步申请
      */
-    APPLY("申请开店,只要完成第一步骤就是申请"),
+    APPLY_FIRST_STEP("正在申请第一步"),
+    /**
+     * 完成第一步申请，尚未完成第二步申请
+     */
+    APPLY_SECOND_STEP("正在申请第二步"),
     /**
      * 审核拒绝
      */
     REFUSED("审核拒绝"),
     /**
-     * 申请中
+     * 已经完成申请，资料审核中
      */
-    APPLYING("申请中，提交审核");
+    APPLYING("已申请，正在提交审核");
 
     private final String description;
 
