@@ -18,6 +18,7 @@ import cn.lili.modules.file.service.FileService;
 import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.service.MemberService;
 import cn.lili.modules.store.entity.dos.Store;
+import cn.lili.modules.store.entity.enums.StoreStatusEnum;
 import cn.lili.modules.store.service.StoreService;
 import cn.lili.modules.system.entity.dos.Setting;
 import cn.lili.modules.system.entity.enums.SettingEnum;
@@ -127,6 +128,7 @@ public class UploadController {
         if(!new BCryptPasswordEncoder().matches(password, member.getPassword())){
             return ResultUtil.error(ResultCode.USER_PASSWORD_ERROR);
         }
+        if(!member.getHaveStore())return ResultUtil.error(ResultCode.STORE_NOT_OPEN);
 
         ArrayList<String> results = new ArrayList<>();
         try {
@@ -137,6 +139,12 @@ public class UploadController {
         }catch (ServiceException e){
             return ResultUtil.error(e.getResultCode());
         }
+
+//        临时办法 自动通过审核
+        Store store = storeService.getById(member.getStoreId());
+        store.setStoreDisable(StoreStatusEnum.OPEN.name());
+        storeService.updateById(store);
+
         return ResultUtil.data(results);
     }
 
