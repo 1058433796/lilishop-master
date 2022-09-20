@@ -18,7 +18,6 @@ import cn.lili.modules.file.service.FileService;
 import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.service.MemberService;
 import cn.lili.modules.store.entity.dos.Store;
-import cn.lili.modules.store.entity.enums.StoreStatusEnum;
 import cn.lili.modules.store.service.StoreService;
 import cn.lili.modules.system.entity.dos.Setting;
 import cn.lili.modules.system.entity.enums.SettingEnum;
@@ -118,7 +117,7 @@ public class UploadController {
         return ResultUtil.data(result);
     }
 
-    @ApiOperation(value = "使用账号密码验证的文件上传，申请店铺的第二步")
+    @ApiOperation(value = "使用账号密码验证的文件上传")
     @PostMapping(value = "/fileUpload")
     public ResultMessage<Object> fileUpload(@RequestParam("files") MultipartFile[] files,
                                         @RequestParam("username") String username,
@@ -128,16 +127,6 @@ public class UploadController {
         if(!new BCryptPasswordEncoder().matches(password, member.getPassword())){
             return ResultUtil.error(ResultCode.USER_PASSWORD_ERROR);
         }
-//        必须拥有店铺
-        if(!member.getHaveStore()){
-            return ResultUtil.error(ResultCode.STORE_NOT_OPEN);
-        }
-        Store store = storeService.getById(member.getStoreId());
-        String status = store.getStoreDisable();
-////        必须处于第二步申请状态
-//        if(!status.equals(StoreStatusEnum.APPLY_SECOND_STEP.name())){
-//            return ResultUtil.error(ResultCode.ERROR);
-//        }
 
         ArrayList<String> results = new ArrayList<>();
         try {
@@ -148,14 +137,6 @@ public class UploadController {
         }catch (ServiceException e){
             return ResultUtil.error(e.getResultCode());
         }
-//        上传成功 更新商店状态
-        store.setStoreDisable(StoreStatusEnum.APPLYING.name());
-        storeService.updateById(store);
-
-//        暂时自动通过审核
-        store.setStoreDisable(StoreStatusEnum.OPEN.name());
-        storeService.updateById(store);
-
         return ResultUtil.data(results);
     }
 
