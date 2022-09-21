@@ -9,13 +9,17 @@ import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.member.entity.dto.MemberAddressDTO;
 import cn.lili.modules.member.service.StoreLogisticsService;
+import cn.lili.modules.order.order.entity.dos.ItemOrder;
+import cn.lili.modules.order.order.entity.dto.ItemOrderSearchParams;
 import cn.lili.modules.order.order.entity.dto.OrderExportDTO;
 import cn.lili.modules.order.order.entity.dto.OrderSearchParams;
-import cn.lili.modules.order.order.entity.vo.OrderDetailVO;
-import cn.lili.modules.order.order.entity.vo.OrderSimpleVO;
+import cn.lili.modules.order.order.entity.vo.ItemOrderSimpleVO;
+import cn.lili.modules.order.order.entity.vo.OrderGoodDetailVO;
+import cn.lili.modules.order.order.service.ItemOrderService;
 import cn.lili.modules.order.order.service.OrderPriceService;
 import cn.lili.modules.order.order.service.OrderService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.minio.messages.Item;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -50,6 +54,9 @@ public class OrderStoreController {
      */
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private ItemOrderService itemOrderService;
     /**
      * 订单价格
      */
@@ -64,20 +71,29 @@ public class OrderStoreController {
 
     @ApiOperation(value = "查询订单列表")
     @GetMapping
-    public ResultMessage<IPage<OrderSimpleVO>> queryMineOrder(OrderSearchParams orderSearchParams) {
-        return ResultUtil.data(orderService.queryByParams(orderSearchParams));
+    public ResultMessage<IPage<ItemOrderSimpleVO>> queryMineOrder(ItemOrderSearchParams itemOrderSearchParams) {
+        return ResultUtil.data(itemOrderService.queryByParams(itemOrderSearchParams));
     }
-
 
     @ApiOperation(value = "订单明细")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path")
+            @ApiImplicitParam(name = "orderId", value = "订单编号", required = true, dataType = "String", paramType = "path")
     })
-    @GetMapping(value = "/{orderSn}")
-    public ResultMessage<OrderDetailVO> detail(@NotNull @PathVariable String orderSn) {
-        OperationalJudgment.judgment(orderService.getBySn(orderSn));
-        return ResultUtil.data(orderService.queryDetail(orderSn));
+    @GetMapping(value = "/{orderId}")
+    public ResultMessage<OrderGoodDetailVO> detail(@NotNull @PathVariable String orderId) {
+        OperationalJudgment.judgment(itemOrderService.getByOrderId(orderId));
+        System.out.println(itemOrderService.queryDetail(orderId).toString());
+        return ResultUtil.data(itemOrderService.queryDetail(orderId));
     }
+//    @ApiOperation(value = "订单明细")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path")
+//    })
+//    @GetMapping(value = "/{orderSn}")
+//    public ResultMessage<OrderDetailVO> detail(@NotNull @PathVariable String orderSn) {
+//        OperationalJudgment.judgment(orderService.getBySn(orderSn));
+//        return ResultUtil.data(orderService.queryDetail(orderSn));
+//    }
 
     @ApiOperation(value = "修改收货人信息")
     @ApiImplicitParam(name = "orderSn", value = "订单sn", required = true, dataType = "String", paramType = "path")
