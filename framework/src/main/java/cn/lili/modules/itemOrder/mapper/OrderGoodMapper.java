@@ -1,7 +1,6 @@
-package cn.lili.modules.order.order.mapper;
+package cn.lili.modules.itemOrder.mapper;
 
-import cn.lili.modules.order.order.entity.dos.OrderGood;
-import cn.lili.modules.order.order.entity.dos.OrderItem;
+import cn.lili.modules.itemOrder.entity.dos.OrderGood;
 import cn.lili.modules.order.order.entity.vo.OrderSimpleVO;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
