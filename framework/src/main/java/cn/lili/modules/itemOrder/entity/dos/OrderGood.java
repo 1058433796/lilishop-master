@@ -1,4 +1,4 @@
-package cn.lili.modules.order.order.entity.dos;
+package cn.lili.modules.itemOrder.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;

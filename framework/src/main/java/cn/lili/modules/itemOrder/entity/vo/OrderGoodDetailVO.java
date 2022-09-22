@@ -1,8 +1,7 @@
-package cn.lili.modules.order.order.entity.vo;
+package cn.lili.modules.itemOrder.entity.vo;
 
-import cn.lili.modules.order.order.entity.dos.*;
-import cn.lili.modules.order.trade.entity.dos.OrderLog;
-import io.minio.messages.Item;
+import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
+import cn.lili.modules.itemOrder.entity.dos.OrderGood;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

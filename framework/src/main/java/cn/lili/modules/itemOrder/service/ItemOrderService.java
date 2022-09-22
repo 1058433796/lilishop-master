@@ -1,13 +1,9 @@
-package cn.lili.modules.order.order.service;
+package cn.lili.modules.itemOrder.service;
 
-import cn.lili.modules.order.order.entity.dos.ItemOrder;
-import cn.lili.modules.order.order.entity.dos.Order;
-import cn.lili.modules.order.order.entity.dos.OrderGood;
-import cn.lili.modules.order.order.entity.dto.ItemOrderSearchParams;
-import cn.lili.modules.order.order.entity.dto.OrderSearchParams;
-import cn.lili.modules.order.order.entity.vo.ItemOrderSimpleVO;
-import cn.lili.modules.order.order.entity.vo.OrderDetailVO;
-import cn.lili.modules.order.order.entity.vo.OrderGoodDetailVO;
+import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
+import cn.lili.modules.itemOrder.entity.dto.ItemOrderSearchParams;
+import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
+import cn.lili.modules.itemOrder.entity.vo.OrderGoodDetailVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.stereotype.Service;

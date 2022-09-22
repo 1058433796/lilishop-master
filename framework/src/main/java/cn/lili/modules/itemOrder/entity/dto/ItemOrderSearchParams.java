@@ -1,4 +1,4 @@
-package cn.lili.modules.order.order.entity.dto;
+package cn.lili.modules.itemOrder.entity.dto;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.lili.common.security.AuthUser;
