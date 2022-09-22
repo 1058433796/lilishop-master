@@ -1,4 +1,4 @@
-package cn.lili.controller.ItemOrder;
+package cn.lili.controller.itemOrder;
 
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.security.OperationalJudgment;
@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
  **/
 @Slf4j
 @RestController
-@RequestMapping("/store/orderitem/itemorder")
+@RequestMapping("/store/itemorder/itemorder")
 @Api(tags = "店铺端,订单接口")
 public class ItemOrderStoreController {
 
