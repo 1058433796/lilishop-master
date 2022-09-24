@@ -1,6 +1,7 @@
 package cn.lili.modules.goods.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -55,38 +56,6 @@ public class Category extends BaseEntity {
 
     @ApiModelProperty(value = "是否支持频道")
     private Boolean supportChannel;
-
-    private String goodsOrigin;
-
-    private String goodsBrand;
-
-    private Number goodsWeight;
-
-    private Number goodsDisplayPrice;
-
-    private Number goodsMarketPrice;
-
-    private String ANSICert;
-
-    private String ENCert;
-
-    private String GBCert;
-
-    private String fireProofCert;
-
-    private String AuxCert;
-
-    private String material;
-
-    private String decoration;
-
-    private String size;
-
-    private String loadBearing;
-
-    private String forceLevel;
-
-    private String adjustParam;
 
 
 

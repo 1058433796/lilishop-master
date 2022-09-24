@@ -13,6 +13,7 @@ import cn.lili.modules.goods.entity.enums.GoodsSalesModeEnum;
 import cn.lili.modules.goods.entity.enums.GoodsStatusEnum;
 import cn.lili.modules.goods.entity.enums.GoodsTypeEnum;
 import cn.lili.mybatis.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.xkcoding.http.util.StringUtil;
 import io.swagger.annotations.ApiModel;
@@ -149,7 +150,38 @@ public class Goods extends BaseEntity {
 
     @ApiModelProperty(value = "商品参数json", hidden = true)
     private String params;
+    private String goodsOrigin;
 
+    private String goodsBrand;
+
+    private Number goodsWeight;
+
+    private Number goodsDisplayPrice;
+
+    private Number goodsMarketPrice;
+
+    @TableField("ANSI_cert")
+    private String ANSICert;
+    @TableField("EN_cert")
+    private String ENCert;
+    @TableField("GB_cert")
+    private String GBCert;
+
+    private String fireProofCert;
+
+    private String auxCert;
+
+    private String material;
+
+    private String decoration;
+
+    private String size;
+
+    private String loadBearing;
+
+    private String forceLevel;
+
+    private String adjustParam;
 
     public Goods() {
     }
