@@ -167,15 +167,15 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         this.checkGoods(goods);
         //向goods加入图片
         this.setGoodsGalleryParam(goodsOperationDTO.getGoodsGalleryList().get(0), goods);
-        //添加商品参数
-        if (goodsOperationDTO.getGoodsParamsDTOList() != null && !goodsOperationDTO.getGoodsParamsDTOList().isEmpty()) {
-            //给商品参数填充值
-            goods.setParams(JSONUtil.toJsonStr(goodsOperationDTO.getGoodsParamsDTOList()));
-        }
+//        //添加商品参数
+//        if (goodsOperationDTO.getGoodsParamsDTOList() != null && !goodsOperationDTO.getGoodsParamsDTOList().isEmpty()) {
+//            //给商品参数填充值
+//            goods.setParams(JSONUtil.toJsonStr(goodsOperationDTO.getGoodsParamsDTOList()));
+//        }
         //添加商品
         this.save(goods);
-        //添加商品sku信息
-        this.goodsSkuService.add(goods, goodsOperationDTO);
+//        //添加商品sku信息
+//        this.goodsSkuService.add(goods, goodsOperationDTO);
         //添加相册
         if (goodsOperationDTO.getGoodsGalleryList() != null && !goodsOperationDTO.getGoodsGalleryList().isEmpty()) {
             this.goodsGalleryService.add(goodsOperationDTO.getGoodsGalleryList(), goods.getId());

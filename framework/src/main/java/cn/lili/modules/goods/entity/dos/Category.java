@@ -56,6 +56,40 @@ public class Category extends BaseEntity {
     @ApiModelProperty(value = "是否支持频道")
     private Boolean supportChannel;
 
+    private String goodsOrigin;
+
+    private String goodsBrand;
+
+    private Number goodsWeight;
+
+    private Number goodsDisplayPrice;
+
+    private Number goodsMarketPrice;
+
+    private String ANSICert;
+
+    private String ENCert;
+
+    private String GBCert;
+
+    private String fireProofCert;
+
+    private String AuxCert;
+
+    private String material;
+
+    private String decoration;
+
+    private String size;
+
+    private String loadBearing;
+
+    private String forceLevel;
+
+    private String adjustParam;
+
+
+
     public Category(String id, String createBy, Date createTime, String updateBy, Date updateTime, Boolean deleteFlag, String name, String parentId, Integer level, BigDecimal sortOrder, Double commissionRate, String image, Boolean supportChannel) {
         super(id, createBy, createTime, updateBy, updateTime, deleteFlag);
         this.name = name;

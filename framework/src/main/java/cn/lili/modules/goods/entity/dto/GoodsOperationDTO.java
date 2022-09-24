@@ -28,7 +28,7 @@ public class GoodsOperationDTO implements Serializable {
     private String goodsId;
 
     @ApiModelProperty(value = "商品价格", required = true)
-    @NotNull(message = "商品价格不能为空")
+//    @NotNull(message = "商品价格不能为空")
     @Min(value = 0, message = "商品价格不能为负数")
     @Max(value = 99999999, message = "商品价格不能超过99999999")
     private Double price;
@@ -121,6 +121,39 @@ public class GoodsOperationDTO implements Serializable {
      */
     @ApiModelProperty(value = "批发商品规则")
     private List<WholesaleDTO> wholesaleList;
+
+    private String goodsOrigin;
+
+    private String goodsBrand;
+
+    private Number goodsWeight;
+
+    private Number goodsDisplayPrice;
+
+    private Number goodsMarketPrice;
+
+    private String ANSICert;
+
+    private String ENCert;
+
+    private String GBCert;
+
+    private String fireProofCert;
+
+    private String AuxCert;
+
+    private String material;
+
+    private String decoration;
+
+    private String size;
+
+    private String loadBearing;
+
+    private String forceLevel;
+
+    private String adjustParam;
+
 
     public String getGoodsName() {
         //对商品对名称做一个极限处理。这里没有用xss过滤是因为xss过滤为全局过滤，影响很大。
