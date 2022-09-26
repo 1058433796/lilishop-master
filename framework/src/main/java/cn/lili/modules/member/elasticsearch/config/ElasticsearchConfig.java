@@ -1,4 +1,4 @@
-package cn.lili.elasticsearch.config;
+package cn.lili.modules.member.elasticsearch.config;
 
 import cn.hutool.core.convert.Convert;
 import lombok.extern.slf4j.Slf4j;

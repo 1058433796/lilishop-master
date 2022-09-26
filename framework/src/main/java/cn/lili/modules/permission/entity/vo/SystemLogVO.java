@@ -1,7 +1,7 @@
 package cn.lili.modules.permission.entity.vo;
 
 import cn.lili.common.utils.ObjectUtil;
-import cn.lili.elasticsearch.EsSuffix;
+import cn.lili.modules.member.elasticsearch.EsSuffix;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

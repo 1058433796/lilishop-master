@@ -6,16 +6,14 @@ import cn.lili.common.exception.ServiceException;
 import cn.lili.common.security.AuthUser;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.ResultMessage;
-import cn.lili.modules.goods.entity.dto.GoodsSearchParams;
-import cn.lili.modules.item.entity.Item;
-import cn.lili.modules.item.entity.ItemSearchParams;
-import cn.lili.modules.item.entity.ItemVO;
+import cn.lili.modules.item.entity.*;
+import cn.lili.modules.item.service.ItemGuarantyService;
 import cn.lili.modules.item.service.ItemService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
+import cn.lili.modules.item.entity.ItemSearchParams;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +23,8 @@ import java.util.Objects;
 public class ItemController {
     @Resource
     private ItemService itemService;
-
+    @Resource
+    private ItemGuarantyService itemGuarantyService;
     //    @ApiOperation(value = "测试获取项目列表")
 //    @GetMapping("/test")
 //    public List<Item> findAll(){
@@ -57,4 +56,6 @@ public class ItemController {
         ItemVO item = itemService.getItemVO(id);
         return ResultUtil.data(item);
     }
+
+
 }

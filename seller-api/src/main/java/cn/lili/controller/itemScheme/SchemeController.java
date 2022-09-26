@@ -7,12 +7,15 @@ import cn.lili.common.security.AuthUser;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.item.entity.*;
+import cn.lili.modules.item.service.ItemGuarantyService;
 import cn.lili.modules.item.service.ItemSchemeService;
 import cn.lili.modules.scheme.entity.Scheme;
 import cn.lili.modules.scheme.entity.SchemeSearchParams;
 import cn.lili.modules.scheme.entity.SchemeVO;
 import cn.lili.modules.scheme.service.SchemeService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +29,8 @@ import java.util.Objects;
 public class SchemeController {
     @Resource
     private SchemeService schemeService;
-
+    @Resource
+    private ItemGuarantyService itemGuarantyService;
     @Resource
     private ItemSchemeService itemschemeService;
 
@@ -65,10 +69,10 @@ public class SchemeController {
         throw new ServiceException(ResultCode.PINTUAN_ADD_ERROR);
     }
 
-    @PutMapping(value = "/check")
+    @PostMapping(value = "/{id}/check")
     @ApiOperation(value = "确认项目方案")
-    public  ResultMessage<ItemScheme> checkItemScheme(@RequestBody ItemScheme itemScheme){
-        itemschemeService.checkItemScheme(itemScheme);
-        return ResultUtil.success();
-    }
+    public  ResultMessage<ItemScheme> checkItemScheme(@PathVariable String id){
+        itemschemeService.checkItemScheme(id);
+        return ResultUtil.success(ResultCode.SUCCESS);}
+
 }

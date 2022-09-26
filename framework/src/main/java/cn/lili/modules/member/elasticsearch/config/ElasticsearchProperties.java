@@ -1,4 +1,4 @@
-package cn.lili.elasticsearch.config;
+package cn.lili.modules.member.elasticsearch.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
