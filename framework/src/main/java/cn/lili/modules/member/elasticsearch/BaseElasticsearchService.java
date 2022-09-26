@@ -1,7 +1,7 @@
-package cn.lili.elasticsearch;
+package cn.lili.modules.member.elasticsearch;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.lili.elasticsearch.config.ElasticsearchProperties;
+import cn.lili.modules.member.elasticsearch.config.ElasticsearchProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.ActionListener;
