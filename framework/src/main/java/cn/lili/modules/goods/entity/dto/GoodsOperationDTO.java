@@ -28,7 +28,7 @@ public class GoodsOperationDTO implements Serializable {
     private String goodsId;
 
     @ApiModelProperty(value = "商品价格", required = true)
-    @NotNull(message = "商品价格不能为空")
+//    @NotNull(message = "商品价格不能为空")
     @Min(value = 0, message = "商品价格不能为负数")
     @Max(value = 99999999, message = "商品价格不能超过99999999")
     private Double price;
@@ -45,7 +45,7 @@ public class GoodsOperationDTO implements Serializable {
     private String brandId;
 
     @ApiModelProperty(value = "商品名称", required = true)
-    @NotEmpty(message = "商品名称不能为空")
+//    @NotEmpty(message = "商品名称不能为空")
     @Length(max = 50, message = "商品名称不能超过50个字符")
     private String goodsName;
 
@@ -72,8 +72,8 @@ public class GoodsOperationDTO implements Serializable {
     @ApiModelProperty(value = "商品图片")
     private List<String> goodsGalleryList;
 
-    @ApiModelProperty(value = "运费模板id,不需要运费模板时值是0", required = true)
-    @NotNull(message = "运费模板不能为空，没有运费模板时，传值0")
+    @ApiModelProperty(value = "运费模板id,不需要运费模板时值是0")
+//    @NotNull(message = "运费模板不能为空，没有运费模板时，传值0")
     @Min(value = 0, message = "运费模板值不正确")
     private String templateId;
 
@@ -83,13 +83,13 @@ public class GoodsOperationDTO implements Serializable {
     /**
      * @see cn.lili.modules.goods.entity.enums.GoodsSalesModeEnum
      */
-    @ApiModelProperty(value = "销售模式", required = true)
+    @ApiModelProperty(value = "销售模式")
     private String salesModel;
 
     @ApiModelProperty(value = "是否有规格", hidden = true)
     private String haveSpec;
 
-    @ApiModelProperty(value = "销售模式", required = true)
+    @ApiModelProperty(value = "销售模式")
     private String goodsUnit;
 
     @ApiModelProperty(value = "商品描述")
@@ -121,6 +121,42 @@ public class GoodsOperationDTO implements Serializable {
      */
     @ApiModelProperty(value = "批发商品规则")
     private List<WholesaleDTO> wholesaleList;
+
+    private String goodsOrigin;
+
+    private String goodsBrand;
+
+    private Float goodsWeight;
+
+    private Float goodsDisplayPrice;
+
+    private Float goodsMarketPrice;
+
+    private String ANSICert;
+
+    private String ENCert;
+
+    private String GBCert;
+
+    private String fireProofCert;
+
+    private String AuxCert;
+
+    private String material;
+
+    private String decoration;
+
+    private String size;
+
+    private String loadBearing;
+
+    private String forceLevel;
+
+    private String adjustParam;
+//    模型文件urlList
+    private List<String> modelList;
+//  材料文件urlList
+    private List<String> materialList;
 
     public String getGoodsName() {
         //对商品对名称做一个极限处理。这里没有用xss过滤是因为xss过滤为全局过滤，影响很大。
