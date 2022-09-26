@@ -8,7 +8,7 @@ target
 *.log
 .settings/
 .factorypath
-
+application.yml
 log/
 logs/
 *.factorypath
