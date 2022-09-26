@@ -57,19 +57,16 @@ public class ItemOrder
     private String buyerPhone;
 
     @ApiModelProperty(value = "收货人姓名")
-    private String consigneeName;
-
-    @ApiModelProperty(value = "收货人地址")
-    private String buyerAddress;
+    private String buyerName;
 
     @ApiModelProperty(value = "订单金额")
     private Double orderAmount;
 
+    @ApiModelProperty(value = "收货人地址")
+    private String buyerAddress;
+
     @ApiModelProperty(value = "供应商响应状态")
     private String storeReply;
-
-    @ApiModelProperty(value = "采购方响应状态")
-    private String buyerReply;
 
     @ApiModelProperty(value = "合同合同签署状态")
     private String contractStatus;
@@ -91,14 +88,9 @@ public class ItemOrder
     @ApiModelProperty(value = "采购方ID")
     private String buyerId;
 
-    @ApiModelProperty(value = "采购商名称")
-    private String buyerName;
-
     @ApiModelProperty(value = "供应商ID")
     private String storeId;
 
-    @ApiModelProperty(value = "供应商名称")
-    private String storeName;
 
 
 

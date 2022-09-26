@@ -22,9 +22,6 @@ public class OrderGood
     @ApiModelProperty("订单编号")
     private String orderId;
 
-    @ApiModelProperty("子订单编号")
-    private String subId;
-
     @ApiModelProperty(value = "品名")
     private String goodName;
 
