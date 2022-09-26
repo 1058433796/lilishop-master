@@ -1,8 +1,11 @@
 package cn.lili.modules.itemOrder.mapper;
 
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
+import cn.lili.modules.itemOrder.entity.dto.ItemOrderExportDTO;
 import cn.lili.modules.order.order.entity.dos.Order;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
+import cn.lili.modules.order.order.entity.dto.OrderExportDTO;
+import cn.lili.modules.order.order.entity.vo.OrderSimpleVO;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -34,4 +37,14 @@ public interface ItemOrderMapper extends BaseMapper<ItemOrder> {
     @Select("select o.* " +
             " FROM li_order o INNER JOIN li_order_item AS oi on o.sn = oi.order_sn ${ew.customSqlSegment} ")
     List<Order> queryListByParams(@Param(Constants.WRAPPER) Wrapper<Order> queryWrapper);
+
+
+    /**
+     * 查询导出订单DTO列表
+     *
+     * @param queryWrapper 查询条件
+     * @return 导出订单DTO列表
+     */
+    @Select("SELECT o.* from item_order o ${ew.customSqlSegment}")
+    List<ItemOrderExportDTO> queryExportOrder(@Param(Constants.WRAPPER) Wrapper<ItemOrderSimpleVO> queryWrapper);
 }

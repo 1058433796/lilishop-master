@@ -1,31 +1,25 @@
-package cn.lili.modules.itemOrder.entity.dos;
+package cn.lili.modules.itemOrder.entity.dto;
 
 import cn.lili.modules.order.cart.entity.enums.DeliveryMethodEnum;
-import cn.lili.modules.order.order.entity.enums.*;
+import cn.lili.modules.order.order.entity.enums.DeliverStatusEnum;
+import cn.lili.modules.order.order.entity.enums.OrderStatusEnum;
+import cn.lili.modules.order.order.entity.enums.PayStatusEnum;
 import cn.lili.modules.payment.entity.enums.PaymentMethodEnum;
-import cn.lili.mybatis.BaseEntity;
-import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.serializer.ToStringSerializer;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-//@EqualsAndHashCode(callSuper = true)
+/**
+ * 订单导出DTO
+ * @author Bulbasaur
+ * @since 2021/6/3 6:36 下午
+ *
+ */
 @Data
-@TableName("item_order")
-@ApiModel(value = "订单")
-@NoArgsConstructor
-public class ItemOrder
-        //extends BaseEntity
-{
-    private static final long serialVersionUID = 2233811628066468683L;
+public class ItemOrderExportDTO {
 
     @ApiModelProperty("订单编号")
     private String orderId;
@@ -99,8 +93,5 @@ public class ItemOrder
 
     @ApiModelProperty(value = "供应商名称")
     private String storeName;
-
-
-
 
 }

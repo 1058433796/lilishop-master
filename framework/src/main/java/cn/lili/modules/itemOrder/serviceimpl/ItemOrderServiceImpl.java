@@ -4,12 +4,15 @@ import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.dos.OrderGood;
+import cn.lili.modules.itemOrder.entity.dto.ItemOrderExportDTO;
 import cn.lili.modules.itemOrder.entity.dto.ItemOrderSearchParams;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
 import cn.lili.modules.itemOrder.entity.vo.OrderGoodDetailVO;
 import cn.lili.modules.itemOrder.mapper.ItemOrderMapper;
 import cn.lili.modules.itemOrder.mapper.OrderGoodMapper;
 import cn.lili.modules.itemOrder.service.ItemOrderService;
+import cn.lili.modules.order.order.entity.dto.OrderExportDTO;
+import cn.lili.modules.order.order.entity.dto.OrderSearchParams;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -72,4 +75,10 @@ public class ItemOrderServiceImpl extends ServiceImpl<ItemOrderMapper, ItemOrder
         System.out.println(orderGoodDetailVO);
         return  orderGoodDetailVO;
     }
+
+    @Override
+    public List<ItemOrderExportDTO> queryExportOrder(ItemOrderSearchParams itemOrderSearchParams) {
+        return this.baseMapper.queryExportOrder(itemOrderSearchParams.queryWrapper());
+    }
+
 }

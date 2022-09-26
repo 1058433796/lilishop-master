@@ -54,7 +54,7 @@ public class ItemOrderSearchParams extends PageVO {
     private String buyerPhone;
 
     @ApiModelProperty(value = "收货人姓名")
-    private String buyerName;
+    private String consigneeName;
 
     @ApiModelProperty(value = "订单金额")
     private Double orderAmount;
@@ -64,6 +64,9 @@ public class ItemOrderSearchParams extends PageVO {
 
     @ApiModelProperty(value = "供应商响应状态")
     private String storeReply;
+
+    @ApiModelProperty(value = "采购方响应状态")
+    private String buyerReply;
 
     @ApiModelProperty(value = "合同合同签署状态")
     private String contractStatus;
@@ -85,10 +88,16 @@ public class ItemOrderSearchParams extends PageVO {
     @ApiModelProperty(value = "采购方ID")
     private String buyerId;
 
+    @ApiModelProperty(value = "采购商名称")
+    private String buyerName;
+
     @ApiModelProperty(value = "供应商ID")
     private String storeId;
 
-    //old
+    @ApiModelProperty(value = "供应商名称")
+    private String storeName;
+
+
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "下单开始时间")
@@ -107,20 +116,20 @@ public class ItemOrderSearchParams extends PageVO {
     private String keywords;
 
 
-    /**
-     * @see CommentStatusEnum
-     */
-    @ApiModelProperty(value = "评论状态:未评论(UNFINISHED),待追评(WAIT_CHASE),评论完成(FINISHED)，")
-    private String commentStatus;
-
-    @ApiModelProperty(value = "是否为其他订单下的订单，如果是则为依赖订单的sn，否则为空")
-    private String parentOrderSn;
-
-    @ApiModelProperty(value = "是否为某订单类型的订单，如果是则为订单类型的id，否则为空")
-    private String promotionId;
-
-    @ApiModelProperty(value = "总价格,可以为范围，如10_1000")
-    private String flowPrice;
+//    /**
+//     * @see CommentStatusEnum
+//     */
+//    @ApiModelProperty(value = "评论状态:未评论(UNFINISHED),待追评(WAIT_CHASE),评论完成(FINISHED)，")
+//    private String commentStatus;
+//
+//    @ApiModelProperty(value = "是否为其他订单下的订单，如果是则为依赖订单的sn，否则为空")
+//    private String parentOrderSn;
+//
+//    @ApiModelProperty(value = "是否为某订单类型的订单，如果是则为订单类型的id，否则为空")
+//    private String promotionId;
+//
+//    @ApiModelProperty(value = "总价格,可以为范围，如10_1000")
+//    private String flowPrice;
 
     /**
      * @see OrderPromotionTypeEnum
@@ -135,7 +144,7 @@ public class ItemOrderSearchParams extends PageVO {
         //关键字查询
 //        if (CharSequenceUtil.isNotEmpty(keywords)) {
 //            wrapper.and(keyWrapper -> keyWrapper.like("o.order_id", keywords).or().like("oi.goods_name", keywords));
-//        }
+//       }
         if (currentUser != null) {
             //按卖家查询
             wrapper.eq(CharSequenceUtil.equals(currentUser.getRole().name(), UserEnums.STORE.name()), "o.store_id", currentUser.getStoreId());
@@ -145,21 +154,21 @@ public class ItemOrderSearchParams extends PageVO {
                     && CharSequenceUtil.isNotEmpty(storeId), "o.store_id", storeId);
 
             //按买家查询
-            wrapper.eq(CharSequenceUtil.equals(currentUser.getRole().name(), UserEnums.MEMBER.name()) && buyerId == null, "o.member_id", currentUser.getId());
+            wrapper.eq(CharSequenceUtil.equals(currentUser.getRole().name(), UserEnums.MEMBER.name()) && buyerId == null, "o.buyer_id", currentUser.getId());
 
         }
         //按照买家查询
-        wrapper.like(CharSequenceUtil.isNotEmpty(buyerId), "o.member_id", buyerId);
+        wrapper.like(CharSequenceUtil.isNotEmpty(buyerId), "o.buyer_id", buyerId);
 
         //按订单编号查询
-        wrapper.like(CharSequenceUtil.isNotEmpty(orderId), "o.sn", orderId);
+        wrapper.like(CharSequenceUtil.isNotEmpty(orderId), "o.order_id", orderId);
 
         //按时间查询
         wrapper.ge(startDate != null, "o.create_time", startDate);
 
         wrapper.le(endDate != null, "o.create_time", DateUtil.endOfDate(endDate));
         //按购买人用户名
-        wrapper.like(CharSequenceUtil.isNotEmpty(buyerName), "o.member_name", buyerName);
+        wrapper.like(CharSequenceUtil.isNotEmpty(buyerName), "o.buyer_name", buyerName);
 
         //按订单类型
         //wrapper.eq(CharSequenceUtil.isNotEmpty(orderType), "o.order_type", orderType);
@@ -168,7 +177,7 @@ public class ItemOrderSearchParams extends PageVO {
         //wrapper.like(CharSequenceUtil.isNotEmpty(shipName), "o.consignee_name", shipName);
 
         //按商品名称查询
-        wrapper.like(CharSequenceUtil.isNotEmpty(goodsName), "oi.goods_name", goodsName);
+        //wrapper.like(CharSequenceUtil.isNotEmpty(goodsName), "oi.goods_name", goodsName);
 
         //付款方式
         wrapper.like(CharSequenceUtil.isNotEmpty(payMode), "o.pay_mode", payMode);
@@ -182,11 +191,20 @@ public class ItemOrderSearchParams extends PageVO {
         //付款状态
         wrapper.eq(CharSequenceUtil.isNotEmpty(payStatus), "o.pay_status", payStatus);
 
+        //响应状态
+        wrapper.eq(CharSequenceUtil.isNotEmpty(replyStatus), "o.reply_status", replyStatus);
+
+        //发货状态
+        wrapper.eq(CharSequenceUtil.isNotEmpty(distributionStatus), "o.distribution_status", distributionStatus);
+
+        //采购方响应状态
+        wrapper.eq(CharSequenceUtil.isNotEmpty(buyerReply), "o.buyer_reply", buyerReply);
+
         //订单来源
         //wrapper.like(CharSequenceUtil.isNotEmpty(clientType), "o.client_type", clientType);
 
         //按评价状态
-        wrapper.eq(CharSequenceUtil.isNotEmpty(commentStatus), "oi.comment_status", commentStatus);
+       // wrapper.eq(CharSequenceUtil.isNotEmpty(commentStatus), "oi.comment_status", commentStatus);
 
         //按标签查询
 //        if (CharSequenceUtil.isNotEmpty(tag)) {
@@ -219,20 +237,20 @@ public class ItemOrderSearchParams extends PageVO {
 //        }
 
         // 依赖订单
-        wrapper.eq(parentOrderSn != null, "o.parent_order_sn", parentOrderSn);
+        //wrapper.eq(parentOrderSn != null, "o.parent_order_sn", parentOrderSn);
         // 促销活动id
-        wrapper.eq(CharSequenceUtil.isNotEmpty(promotionId), "o.promotion_id", promotionId);
+        //wrapper.eq(CharSequenceUtil.isNotEmpty(promotionId), "o.promotion_id", promotionId);
 
-        wrapper.eq(CharSequenceUtil.isNotEmpty(orderPromotionType), "o.order_promotion_type", orderPromotionType);
+        //wrapper.eq(CharSequenceUtil.isNotEmpty(orderPromotionType), "o.order_promotion_type", orderPromotionType);
 
-        if (CharSequenceUtil.isNotEmpty(flowPrice)) {
-            String[] s = flowPrice.split("_");
-            if (s.length > 1) {
-                wrapper.between("o.flow_price", s[0], s[1]);
-            } else {
-                wrapper.ge("o.flow_price", s[0]);
-            }
-        }
+//        if (CharSequenceUtil.isNotEmpty(flowPrice)) {
+//            String[] s = flowPrice.split("_");
+//            if (s.length > 1) {
+//                wrapper.between("o.flow_price", s[0], s[1]);
+//            } else {
+//                wrapper.ge("o.flow_price", s[0]);
+//            }
+//        }
         //wrapper.eq("o.delete_flag", false);
         return wrapper;
     }

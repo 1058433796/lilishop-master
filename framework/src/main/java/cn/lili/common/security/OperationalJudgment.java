@@ -24,7 +24,7 @@ public class OperationalJudgment {
      * @return 处理结果
      */
     public static <T> T judgment(T object) {
-        return judgment(object, "memberId", "storeId");
+        return judgment(object, "buyerId", "storeId");
     }
 
     /**

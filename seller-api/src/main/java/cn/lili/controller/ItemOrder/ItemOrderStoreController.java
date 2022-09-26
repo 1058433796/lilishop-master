@@ -3,6 +3,7 @@ package cn.lili.controller.itemOrder;
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.security.OperationalJudgment;
 import cn.lili.common.vo.ResultMessage;
+import cn.lili.modules.itemOrder.entity.dto.ItemOrderExportDTO;
 import cn.lili.modules.itemOrder.entity.dto.ItemOrderSearchParams;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
 import cn.lili.modules.itemOrder.entity.vo.OrderGoodDetailVO;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 店铺端,订单接口
@@ -26,7 +28,7 @@ import javax.validation.constraints.NotNull;
  **/
 @Slf4j
 @RestController
-@RequestMapping("/store/itemorder/itemorder")
+@RequestMapping("/store/itemOrder/itemOrder")
 @Api(tags = "店铺端,订单接口")
 public class ItemOrderStoreController {
 
@@ -49,19 +51,18 @@ public class ItemOrderStoreController {
     })
     @GetMapping(value = "/{orderId}")
     public ResultMessage<OrderGoodDetailVO> detail(@NotNull @PathVariable String orderId) {
+        System.out.println(itemOrderService.getByOrderId(orderId));
         OperationalJudgment.judgment(itemOrderService.getByOrderId(orderId));
         System.out.println(itemOrderService.queryDetail(orderId).toString());
         return ResultUtil.data(itemOrderService.queryDetail(orderId));
     }
-//    @ApiOperation(value = "订单明细")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path")
-//    })
-//    @GetMapping(value = "/{orderSn}")
-//    public ResultMessage<OrderDetailVO> detail(@NotNull @PathVariable String orderSn) {
-//        OperationalJudgment.judgment(orderService.getBySn(orderSn));
-//        return ResultUtil.data(orderService.queryDetail(orderSn));
-//    }
+
+
+    @ApiOperation(value = "查询订单导出列表")
+    @GetMapping("/queryExportOrder")
+    public ResultMessage<List<ItemOrderExportDTO>> queryExportOrder(ItemOrderSearchParams itemOrderSearchParams) {
+        return ResultUtil.data(itemOrderService.queryExportOrder(itemOrderSearchParams));
+    }
 
 
 }
