@@ -151,6 +151,8 @@ public class Goods extends BaseEntity {
 
     @ApiModelProperty(value = "商品参数json", hidden = true)
     private String params;
+//    goodsId不是表的索引id 而是用户填写的一个属性
+    private String goodsId;
     private String goodsOrigin;
 
     private String goodsBrand;
