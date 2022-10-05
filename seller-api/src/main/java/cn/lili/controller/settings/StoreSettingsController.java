@@ -44,7 +44,8 @@ public class StoreSettingsController {
     @ApiOperation(value = "获取商家设置")
     @GetMapping
     public ResultMessage<StoreVO> get() {
-        //获取当前登录商家内容
+        // 获取当前登录商家内容
+        StoreVO s = storeService.getStoreDetail();
         return ResultUtil.data(storeService.getStoreDetail());
     }
 
@@ -87,4 +88,5 @@ public class StoreSettingsController {
         boolean result = storeDetailService.editStoreAfterSaleAddressDTO(storeAfterSaleAddressDTO);
         return ResultUtil.data(result);
     }
+
 }

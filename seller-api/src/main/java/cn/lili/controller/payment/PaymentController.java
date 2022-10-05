@@ -50,6 +50,7 @@ public class PaymentController {
         //money是float
         //id是Int
         //把dona_id项目id 放在session中
+        System.out.println("支付宝支付");
         session.setAttribute("dona_id",Integer.parseInt(dona_id));
 
         //生成订单号（支付宝的要求？）
@@ -85,6 +86,7 @@ public class PaymentController {
     @RequestMapping("/returnUrl")
     public String returnUrlMethod(HttpServletRequest request, HttpSession session) throws AlipayApiException, UnsupportedEncodingException {
         // 获取支付宝GET过来反馈信息
+        System.out.println("支付宝支付回调接口");
         Map<String, String> params = new HashMap<String, String>();
         Map<String, String[]> requestParams = request.getParameterMap();
         for (Iterator<String> iter = requestParams.keySet().iterator(); iter.hasNext();) {
@@ -102,7 +104,7 @@ public class PaymentController {
         //验证签名（支付宝公钥）
         boolean signVerified = AlipaySignature.rsaCheckV1(params, ALIPAY_PUBLIC_KEY, CHARSET, SIGN_TYPE); // 调用SDK验证签名
         //验证签名通过
-        if(signVerified){
+        if(signVerified) {
             // 商户订单号
             String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
 
