@@ -129,37 +129,18 @@ public class UploadController {
         return ResultUtil.data(result);
     }
 
-    @ApiOperation(value = "使用账号密码验证的文件上传")
+    @ApiOperation(value = "无需验证的文件上传")
     @PostMapping(value = "/fileUpload")
-    public ResultMessage<Object> fileUpload(@RequestParam("files") MultipartFile[] files,
-                                        @RequestParam("username") String username,
-                                        @RequestParam("password") String password) {
-
-        Member member = memberService.findByUsername(username);
-        if(!new BCryptPasswordEncoder().matches(password, member.getPassword())){
-            return ResultUtil.error(ResultCode.USER_PASSWORD_ERROR);
-        }
-        if(!member.getHaveStore())return ResultUtil.error(ResultCode.STORE_NOT_OPEN);
-
-        ArrayList<String> results = new ArrayList<>();
-        try {
-            for(MultipartFile file: files){
-                String result = save(file, member);
-                results.add(result);
-            }
-        }catch (ServiceException e){
-            return ResultUtil.error(e.getResultCode());
-        }
-
-//        临时办法 自动通过审核
-        Store store = storeService.getById(member.getStoreId());
-        store.setStoreDisable(StoreStatusEnum.OPEN.name());
-        storeService.updateById(store);
-
-        return ResultUtil.data(results);
+    public ResultMessage<Object> fileUpload(@RequestParam("file") MultipartFile file) {
+        String result = save(file);
+////        临时办法 自动通过审核
+//        Store store = storeService.getById(member.getStoreId());
+//        store.setStoreDisable(StoreStatusEnum.OPEN.name());
+//        storeService.updateById(store);
+        return ResultUtil.data(result);
     }
 
-    public String save(MultipartFile file, Member member){
+    public String save(MultipartFile file){
         if (file == null || CharSequenceUtil.isEmpty(file.getContentType())) {
             throw new ServiceException(ResultCode.IMAGE_FILE_EXT_ERROR);
         }
@@ -172,7 +153,7 @@ public class UploadController {
         String fileKey = CommonUtil.rename(Objects.requireNonNull(file.getOriginalFilename()));
         File newFile = new File();
         try {
-            InputStream inputStream = file.getInputStream();
+//            InputStream inputStream = file.getInputStream();
             //上传至第三方云服务或服务器
 //            result = filePluginFactory.filePlugin().inputStreamUpload(inputStream, fileKey);
             result = executeUpload(uploadUrl, file);
@@ -182,9 +163,9 @@ public class UploadController {
             newFile.setFileType(file.getContentType());
             newFile.setFileKey(fileKey);
             newFile.setUrl(result);
-            newFile.setCreateBy(member.getUsername());
+            newFile.setCreateBy(null);
             newFile.setUserEnums(UserEnums.STORE.name());
-            newFile.setOwnerId(member.getStoreId());
+            newFile.setOwnerId(null);
             fileService.save(newFile);
         } catch (Exception e) {
             log.error("文件上传失败", e);
