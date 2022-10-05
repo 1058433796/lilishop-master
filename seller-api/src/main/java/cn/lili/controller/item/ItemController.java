@@ -20,6 +20,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/store/item/item")
+@CrossOrigin(origins = "http://10.27.219.66:10002", maxAge = 3600)
 public class ItemController {
     @Resource
     private ItemService itemService;
@@ -37,6 +38,7 @@ public class ItemController {
         //获取当前登录商家账号
 //        String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
 //        itemSearchParams.setBuyerId(storeId);
+        System.out.println(itemSearchParams);
         return ResultUtil.data(itemService.queryByParams(itemSearchParams));
     }
     @PostMapping(consumes = "application/json", produces = "application/json")

@@ -57,6 +57,19 @@ public class SchemeController {
             String schemeid= schemelist.get(i).getSchemeId();
             itemScheme.setSchemeId(schemeid);
             itemScheme.setItemId(id);
+            itemScheme.setDoorId(schemelist.get(i).getDoorId());
+            itemScheme.setLocation(schemelist.get(i).getLocation());
+            itemScheme.setOpenMethod(schemelist.get(i).getOpenMethod());
+            itemScheme.setOpenDirection(schemelist.get(i).getOpenDirection());
+            itemScheme.setHeight(schemelist.get(i).getHeight());
+            itemScheme.setWidth(schemelist.get(i).getWidth());
+            itemScheme.setThickness(schemelist.get(i).getThickness());
+            itemScheme.setGuard(schemelist.get(i).getGuard());
+            itemScheme.setTexture(schemelist.get(i).getTexture());
+            itemScheme.setHandle(schemelist.get(i).getHandle());
+            itemScheme.setFirerating(schemelist.get(i).getFirerating());
+            itemScheme.setWjgroup(schemelist.get(i).getWjgroup());
+            itemScheme.setUpdateTime(schemelist.get(i).getUpdateTime());
             if (itemschemeService.saveItemScheme(itemScheme)) {
                 finish++;
                 System.out.println(finish);
