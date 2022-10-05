@@ -48,7 +48,7 @@ public class ItemOrderSimpleVO {
     private String buyerPhone;
 
     @ApiModelProperty(value = "收货人姓名")
-    private String buyerName;
+    private String consigneeName;
 
     @ApiModelProperty(value = "订单金额")
     private Double orderAmount;
@@ -58,6 +58,9 @@ public class ItemOrderSimpleVO {
 
     @ApiModelProperty(value = "供应商响应状态")
     private String storeReply;
+
+    @ApiModelProperty(value = "采购方响应状态")
+    private String buyerReply;
 
     @ApiModelProperty(value = "合同合同签署状态")
     private String contractStatus;
@@ -76,11 +79,17 @@ public class ItemOrderSimpleVO {
     @ApiModelProperty(value = "响应状态")
     private String replyStatus;
 
+
+
     @ApiModelProperty(value = "采购方ID")
     private String buyerId;
+
+    @ApiModelProperty(value = "采购商名称")
+    private String buyerName;
 
     @ApiModelProperty(value = "供应商ID")
     private String storeId;
 
-
+    @ApiModelProperty(value = "供应商名称")
+    private String storeName;
 }
