@@ -1,6 +1,7 @@
 package cn.lili.modules.goods.entity.dto;
 
 import cn.lili.common.validation.EnumValue;
+import cn.lili.modules.goods.entity.dos.GoodsMaterial;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
@@ -157,6 +158,8 @@ public class GoodsOperationDTO implements Serializable {
     private List<String> modelList;
 //  材料文件urlList
     private List<String> materialList;
+
+    private List<GoodsMaterial> materialFileList;
 
     public String getGoodsName() {
         //对商品对名称做一个极限处理。这里没有用xss过滤是因为xss过滤为全局过滤，影响很大。
