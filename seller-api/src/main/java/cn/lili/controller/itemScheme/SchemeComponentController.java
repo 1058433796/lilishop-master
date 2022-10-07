@@ -9,6 +9,7 @@ import cn.lili.modules.item.entity.Item;
 import cn.lili.modules.item.entity.ItemScheme;
 import cn.lili.modules.item.entity.ItemSearchParams;
 import cn.lili.modules.item.entity.ItemVO;
+import cn.lili.modules.item.service.ItemSchemeService;
 import cn.lili.modules.item.service.ItemService;
 import cn.lili.modules.itemOrder.entity.ItemOrder;
 import cn.lili.modules.itemOrder.service.ItemOrderService;
@@ -56,7 +57,8 @@ public class SchemeComponentController {
 
     @Autowired
     StoreDetailService storeDetailService;
-
+    @Autowired
+    ItemSchemeService itemSchemeService;
     Logger logger = LoggerFactory.getLogger(SchemeComponentController.class);
 
     @ApiOperation(value = "分页获取方案零件列表")
@@ -67,8 +69,10 @@ public class SchemeComponentController {
 
     @PostMapping(value = "/{id}/supplier")
     @ApiOperation(value = "通过方案编号创建订单")
-    public  ResultMessage<Object> getSchemeSupplier(@PathVariable("id") String schemeId) {
+    public  ResultMessage<Object> getSchemeSupplier(@PathVariable("id") String schemePrimaryId) {
         System.out.println("建立订单");
+        ItemScheme itemScheme  = itemSchemeService.getById(schemePrimaryId);
+        String schemeId = itemScheme.getSchemeId();
         List<IdTotal> supplierList = SchemeComponentService.getOrderBy(schemeId);
         StoreVO buyerStore = storeService.getStoreDetail();
         StoreAfterSaleAddressDTO storep = storeDetailService.getStoreAfterSaleAddressDTO();
@@ -83,7 +87,7 @@ public class SchemeComponentController {
                 itemOrder.setStoreName(supplierStore.getStoreName());
                 itemOrder.setStoreId(idTotal.getId());
                 itemOrder.setCreateTime(DateTime.now());
-                itemOrder.setSchemeId(schemeId);
+                itemOrder.setSchemeId(schemePrimaryId);
                 itemOrder.setBuyerPhone(storep.getSalesConsigneeMobile());
                 itemOrder.setBuyerName(storep.getSalesConsigneeName());
                 itemOrder.setBuyerAddress(buyerStore.getStoreAddressPath() + buyerStore.getStoreAddressDetail());

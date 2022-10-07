@@ -1,6 +1,7 @@
 package cn.lili.modules.store.mapper;
 
 import cn.lili.modules.store.entity.dos.Store;
+import cn.lili.modules.store.entity.vos.CustomerStoreVO;
 import cn.lili.modules.store.entity.vos.StoreVO;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -47,4 +48,31 @@ public interface StoreMapper extends BaseMapper<Store> {
     @Update("update li_store set collection_num = collection_num + #{num} where id = #{storeId}")
     void updateCollection(String storeId, Integer num);
 
+//    @Select("SELECT * FROM " +
+//            "(SELECT id,store_name as buyer_name,store_address_detail,store_address_id_path,store_address_path FROM li_store)AS s " +
+//            "NATURAL JOIN " +
+//            "(SELECT buyer_id AS id,store_id,buyer_phone,MAX(create_time) AS latestTime,SUM(order_amount) AS tradeAmount FROM item_order GROUP BY buyer_id,store_id,buyer_phone) AS o ${ew.customSqlSegment}"
+//    )
+
+//    @Select("SELECT * FROM " +
+//            "(SELECT id, store_name as buyer_name, store_address_detail,store_address_id_path, store_address_path FROM li_store)AS s " +
+//            "NATURAL JOIN " +
+//            "(SELECT store_id AS id, buyer_id, MAX(create_time) AS latestTime,SUM(order_amount) AS tradeAmount FROM item_order GROUP BY buyer_id, store_id) AS o ${ew.customSqlSegment}"
+//    )
+@Select("SELECT * FROM " +
+        "(SELECT id, store_name as buyer_name, store_address_detail,store_address_id_path, store_address_path FROM li_store)AS s " +
+        "NATURAL JOIN " +
+        "(SELECT store_id AS id, buyer_id, MAX(create_time) AS latestTime,SUM(order_amount) AS tradeAmount FROM item_order GROUP BY buyer_id, store_id) AS o " +
+        " NATURAL JOIN " +
+        "(SELECT store_id AS id, sales_consignee_mobile as buyer_phone FROM li_store_detail) AS sd "+
+        "${ew.customSqlSegment}"
+)
+    IPage<CustomerStoreVO> queryByParams(IPage<CustomerStoreVO> page, @Param(Constants.WRAPPER) Wrapper<CustomerStoreVO> queryWrapper);
+//    @Select("SELECT * FROM " +
+//            "((SELECT id, store_name as buyer_name, store_address_detail ,store_address_id_path, store_address_path FROM li_store)AS s " +
+//            "NATURAL JOIN " +
+//            "(SELECT store_id AS id, buyer_id, MAX(create_time) AS latestTime,SUM(order_amount) AS tradeAmount FROM item_order GROUP BY buyer_id, store_id) As o)" +
+//            "NATURAL JOIN (SELECT id, sales_consignee_mobile as buyer_phone FROM li_store_detail) AS sd"  +
+//            " AS o ${ew.customSqlSegment}"
+//    )
 }

@@ -17,6 +17,7 @@ public class ContractSearchParams extends PageVO {
     @ApiModelProperty(value = "合同号")
     private String contractId;
 
+    private String storeId;
     @ApiModelProperty(value = "供应商店铺名")
     private String storeName;
 
@@ -30,6 +31,7 @@ public class ContractSearchParams extends PageVO {
     private String startDate;
     private String endDate;
 
+    private String schemeId;
 
     public <T> QueryWrapper<T> queryWrapper() {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
@@ -58,6 +60,15 @@ public class ContractSearchParams extends PageVO {
             endDate += " 23:59:59";
             queryWrapper.le("time_start", endDate);
         }
+
+        if (CharSequenceUtil.isNotEmpty(schemeId)) {
+            queryWrapper.eq("o.scheme_id", schemeId);
+        }
+
+        if (CharSequenceUtil.isNotEmpty(storeId)) {
+            queryWrapper.eq("store_id", storeId);
+        }
+
 
         return queryWrapper;
     }

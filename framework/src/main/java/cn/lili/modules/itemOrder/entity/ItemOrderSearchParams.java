@@ -28,6 +28,7 @@ public class ItemOrderSearchParams extends PageVO {
     private String payStatus;
     private String replyStatus;
 
+    private String schemeId;
     public <T> QueryWrapper<T> queryWrapper() {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         if (CharSequenceUtil.isNotEmpty(buyerId)) {
@@ -61,6 +62,11 @@ public class ItemOrderSearchParams extends PageVO {
         if (CharSequenceUtil.isNotEmpty(replyStatus)) {
             queryWrapper.like("reply_status", replyStatus);
         }
+
+        if (CharSequenceUtil.isNotEmpty(schemeId)) {
+            queryWrapper.like("o.scheme_id", schemeId);
+        }
+
         return queryWrapper;
     }
 

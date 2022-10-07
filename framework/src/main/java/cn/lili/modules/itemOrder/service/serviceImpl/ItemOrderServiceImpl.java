@@ -2,6 +2,7 @@ package cn.lili.modules.itemOrder.service.serviceImpl;
 
 import cn.lili.modules.itemOrder.entity.ItemOrder;
 import cn.lili.modules.itemOrder.entity.ItemOrderSearchParams;
+import cn.lili.modules.itemOrder.entity.OrderWithContractSimpleV0;
 import cn.lili.modules.itemOrder.mapper.ItemOrderMapper;
 import cn.lili.modules.itemOrder.service.ItemOrderService;
 import cn.lili.modules.schemeComponent.entity.SchemeComponent;
@@ -23,4 +24,20 @@ public class ItemOrderServiceImpl extends ServiceImpl<ItemOrderMapper, ItemOrder
     public List<SchemeComponent> queryOrderComponent(String oid, String storeId) {
         return this.baseMapper.queryOrderComponent(oid, storeId);
     }
+    @Override
+    public List<ItemOrder> getAssociatedOrders(String oid){
+        return this.baseMapper.getAssociatedOrders(oid);
+
+    }
+
+    @Override
+    public IPage<OrderWithContractSimpleV0> queryAssociatedContractOrders(ItemOrderSearchParams itemOrderSearchParams) {
+        return this.baseMapper.queryAssociatedContractOrders(PageUtil.initPage(itemOrderSearchParams), itemOrderSearchParams.queryWrapper());
+    }
+
+    @Override
+    public void payOrder(String oid) {
+        this.baseMapper.payOrder(oid);
+    }
+
 }

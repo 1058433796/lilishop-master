@@ -6,6 +6,8 @@ import cn.lili.modules.contract.mapper.ContractMapper;
 import cn.lili.modules.contract.service.ContractService;
 import cn.lili.modules.itemOrder.entity.ItemOrder;
 import cn.lili.mybatis.util.PageUtil;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -20,4 +22,12 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, Contract> i
     public void buyerSign(String id) {
         this.baseMapper.buyerSign(id);
     }
+
+    @Override
+    public IPage<Contract> queryAssociated(ContractSearchParams contractSearchParams) {
+        QueryWrapper queryWrapper = contractSearchParams.queryWrapper();
+        return this.baseMapper.queryAssociated(PageUtil.initPage(contractSearchParams), queryWrapper);
+
+    }
+
 }

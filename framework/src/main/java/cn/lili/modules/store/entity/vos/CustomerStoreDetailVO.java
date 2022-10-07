@@ -1,20 +1,11 @@
-package cn.lili.modules.store.entity.dos;
+package cn.lili.modules.store.entity.vos;
 
-
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.date.DateUtil;
 import cn.lili.common.validation.Mobile;
 import cn.lili.common.validation.Phone;
-import cn.lili.modules.store.entity.dto.AdminStoreApplyDTO;
-import cn.lili.modules.store.entity.vos.CompanyVo;
-import cn.lili.mybatis.BaseIdEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -23,20 +14,11 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
-
-/**
- * 店铺详细
- *
- * @author pikachu
- * @since 2020-02-18 15:18:56
- */
 @Data
-@TableName("li_store_detail")
-@ApiModel(value = "店铺详细")
-@NoArgsConstructor
-public class StoreDetail extends BaseIdEntity {
+public class CustomerStoreDetailVO {
 
-    private static final long serialVersionUID = 4949782642253898816L;
+
+
 
     @NotBlank(message = "店铺不能为空")
     @ApiModelProperty(value = "店铺id")
@@ -47,7 +29,7 @@ public class StoreDetail extends BaseIdEntity {
     @ApiModelProperty(value = "店铺名称")
     private String storeName;
 
-//    @NotBlank(message = "公司名称不能为空")
+    //    @NotBlank(message = "公司名称不能为空")
     @Size(min = 2, max = 100, message = "公司名称错误")
     @ApiModelProperty(value = "公司名称")
     private String companyName;
@@ -79,12 +61,12 @@ public class StoreDetail extends BaseIdEntity {
     @ApiModelProperty(value = "注册资金")
     private Double registeredCapital;
 
-//    @NotBlank(message = "联系人姓名为空")
+    //    @NotBlank(message = "联系人姓名为空")
     @Length(min = 2, max = 20, message = "联系人长度为：2-20位字符")
     @ApiModelProperty(value = "联系人姓名")
     private String linkName;
 
-//    @NotBlank(message = "手机号不能为空")
+    //    @NotBlank(message = "手机号不能为空")
     @Phone
     @ApiModelProperty(value = "联系人电话")
     private String linkPhone;
@@ -96,21 +78,21 @@ public class StoreDetail extends BaseIdEntity {
     @ApiModelProperty(value = "法定经营范围")
     private String scope;
 
-//    @NotBlank(message = "营业执照电子版不能为空")
+    //    @NotBlank(message = "营业执照电子版不能为空")
     @ApiModelProperty(value = "营业执照电子版")
     private String licencePhoto;
 
-//    @NotBlank(message = "法人姓名不能为空")
+    //    @NotBlank(message = "法人姓名不能为空")
     @Size(min = 2, max = 20, message = "法人姓名长度为2-20位字符")
     @ApiModelProperty(value = "法人姓名")
     private String legalName;
 
-//    @NotBlank(message = "法人身份证不能为空")
+    //    @NotBlank(message = "法人身份证不能为空")
     @Size(min = 18, max = 18, message = "法人身份证号长度为18位")
     @ApiModelProperty(value = "法人身份证")
     private String legalId;
 
-//    @NotBlank(message = "法人身份证不能为空")
+    //    @NotBlank(message = "法人身份证不能为空")
     @ApiModelProperty(value = "法人身份证照片")
     private String legalPhoto;
 
@@ -134,7 +116,7 @@ public class StoreDetail extends BaseIdEntity {
     @ApiModelProperty(value = "结算银行支行联行号")
     private String settlementBankJointName;
 
-//    @NotBlank(message = "店铺经营类目不能为空")
+    //    @NotBlank(message = "店铺经营类目不能为空")
     @ApiModelProperty(value = "店铺经营类目")
     private String goodsManagementCategory;
 
@@ -175,64 +157,34 @@ public class StoreDetail extends BaseIdEntity {
     private String salesConsigneeDetail;
 
     //    营业执照信息
-//    private String companyType;
-//    private String companyName;
-//    private String businessNumber;
-//    private String businessAddress;
-//    private String businessDetailAddress;
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private Date businessValidBeg;
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private Date businessValidEnd;
-//    private Boolean businessLongPeriod;
-//    //    法人代表信息
-//    private String legalType;
-//    private String legalNumber;
-////    private String legalName;
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private Date legalValidBeg;
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private Date legalValidEnd;
-//    private Boolean legalLongPeriod;
-////    private String companyAddress;
-//    private String companyDetailAddress;
-//    private String companyEmergencyName;
-//    private String companyEmergencyPhoneNumber;
-//    //    组织机构信息
-//    private String code;
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private Date codeValidBeg;
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private Date codeValidEnd;
-//    private Boolean codeLongPeriod;
-
-
-    public StoreDetail(Store store, AdminStoreApplyDTO adminStoreApplyDTO) {
-        this.storeId = store.getId();
-        //设置店铺公司信息、设置店铺银行信息、设置店铺其他信息
-        BeanUtil.copyProperties(adminStoreApplyDTO, this);
-        this.settlementDay = DateUtil.date();
-        this.stockWarning = 10;
-    }
-
-    public StoreDetail(String storeId, CompanyVo vo) {
-        this.storeId = storeId;
-
-        this.settlementDay = DateUtil.date();
-        this.stockWarning = 10;
-
-        BeanUtil.copyProperties(vo, this);
-//        if(vo.getBusinessLongPeriod()){
-//            businessValidBeg = null;
-//            businessValidEnd = null;
-//        }
-//        if(vo.getLegalLongPeriod()){
-//            legalValidBeg = null;
-//            legalValidEnd = null;
-//        }
-//        if(vo.getCodeLongPeriod()){
-//            codeValidBeg = null;
-//            codeValidEnd = null;
-//        }
-    }
+    private String companyType;
+    //    private String companyName;
+    private String businessNumber;
+    private String businessAddress;
+    private String businessDetailAddress;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date businessValidBeg;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date businessValidEnd;
+    private Boolean businessLongPeriod;
+    //    法人代表信息
+    private String legalType;
+    private String legalNumber;
+    //    private String legalName;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date legalValidBeg;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date legalValidEnd;
+    private Boolean legalLongPeriod;
+    //    private String companyAddress;
+    private String companyDetailAddress;
+    private String companyEmergencyName;
+    private String companyEmergencyPhoneNumber;
+    //    组织机构信息
+    private String code;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date codeValidBeg;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date codeValidEnd;
+    private Boolean codeLongPeriod;
 }

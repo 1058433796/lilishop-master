@@ -8,6 +8,8 @@ import cn.lili.modules.contract.entity.ContractSearchParams;
 import cn.lili.modules.contract.service.ContractService;
 import cn.lili.modules.itemOrder.entity.ItemOrder;
 import cn.lili.modules.itemOrder.service.ItemOrderService;
+import cn.lili.modules.store.entity.vos.StoreVO;
+import cn.lili.modules.store.service.StoreService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/store/contract/contract")
@@ -29,10 +32,14 @@ public class ContractController {
     @Autowired
     ItemOrderService itemOrderService;
 
+    @Autowired
+    StoreService storeService;
 
     @ApiOperation(value = "分页获取合同列表")
     @GetMapping("/list")
     public ResultMessage<IPage<Contract>> getByPage(ContractSearchParams contractSearchParams) {
+        StoreVO buyerStore = storeService.getStoreDetail();
+        contractSearchParams.setBuyerId(buyerStore.getId());
         return ResultUtil.data(contractService.queryByParams(contractSearchParams));
     }
 
@@ -41,32 +48,39 @@ public class ContractController {
     public ResultMessage<Object> createContract(@PathVariable("orderId") String id) {
         System.out.println("create contract:"  + id);
         Contract contract = contractService.getById(prefix+id);
+        ItemOrder order = itemOrderService.getById(id);
         if(contract!=null) {
-            ItemOrder itemOrder = itemOrderService.getById(id);
-            ContractBrief contractBrief = new ContractBrief(contract.getId(), itemOrder.getStoreName(), contract.getTimeStart(), contract.getBuyerState(), contract.getProviderState());
-            ArrayList<Object> arrayList = new ArrayList<>();
-            arrayList.add(contractBrief);
-            return ResultUtil.data(arrayList);
+//            ArrayList<Object> arrayList = new ArrayList<>();
+//            arrayList.add(contract);
+            ContractSearchParams contractSearchParams = new ContractSearchParams();
+            contractSearchParams.setSchemeId(order.getSchemeId());
+            IPage<Contract> iPage = contractService.queryAssociated(contractSearchParams);
+            List<Contract> list = iPage.getRecords();
+            return ResultUtil.data(contractService.queryAssociated(contractSearchParams));
         }
         Contract newContract = new Contract();
         newContract.setId(prefix+id);
+        newContract.setOrderId(id);
         newContract.setTimeStart(DateTime.now());
         ItemOrder itemOrder = itemOrderService.getById(id);
-
+        newContract.setAmount(Long.parseLong(itemOrder.getOrderAmount()));
         newContract.setBuyerId(itemOrder.getBuyerId());
         newContract.setStoreName(itemOrder.getStoreName());
         newContract.setStoreId(itemOrder.getStoreId());
-        ContractBrief contractBrief = new ContractBrief(newContract.getId(), itemOrder.getStoreName(), newContract.getTimeStart(), newContract.getBuyerState(), newContract.getProviderState());
+//        ContractBrief contractBrief = new ContractBrief(newContract.getId(), itemOrder.getStoreName(), newContract.getTimeStart(), newContract.getBuyerState(), newContract.getProviderState());
         contractService.save(newContract);
-        ArrayList<Object> arrayList = new ArrayList<>();
-        arrayList.add(contractBrief);
-        return ResultUtil.data(arrayList);
+        ContractSearchParams contractSearchParams = new ContractSearchParams();
+        contractSearchParams.setSchemeId(order.getSchemeId());
+        return ResultUtil.data(contractService.queryAssociated(contractSearchParams));
+//        ArrayList<Object> arrayList = new ArrayList<>();
+//        arrayList.add(contractBrief);
+//        return ResultUtil.data(arrayList);
     }
 
     @ApiOperation(value = "采购方签署合同")
     @PutMapping("/{contractId}/sign")
     public ResultMessage<Object> signContract(@PathVariable("contractId") String id) {
-        System.out.println("签署合同");
+        System.out.println("sign contract:" + id);
         contractService.buyerSign(id);
         return ResultUtil.data(true);
     }

@@ -32,4 +32,8 @@ public class Contract {
 
     private String buyerState = "未签署";
 
+    private long amount;
+
+    private String orderId;
+
 }

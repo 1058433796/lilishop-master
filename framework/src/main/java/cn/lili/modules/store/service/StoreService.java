@@ -4,6 +4,8 @@ import cn.lili.common.vo.PageVO;
 import cn.lili.modules.member.entity.dto.CollectionDTO;
 import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.dto.*;
+import cn.lili.modules.store.entity.vos.CustomerStoreDetailVO;
+import cn.lili.modules.store.entity.vos.CustomerStoreVO;
 import cn.lili.modules.store.entity.vos.StoreSearchParams;
 import cn.lili.modules.store.entity.vos.StoreVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -16,7 +18,17 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020/11/18 11:45 上午
  */
 public interface StoreService extends IService<Store> {
+    /**
+     * 查询客户
+     *
+     */
+    IPage<CustomerStoreVO> queryByParams(StoreSearchParams storeSearchParams);
 
+    /**
+     * 查询客户详细信息
+     *
+     */
+    CustomerStoreDetailVO queryDetail(String buyerId);
     /**
      * 分页条件查询
      * 用于展示店铺列表

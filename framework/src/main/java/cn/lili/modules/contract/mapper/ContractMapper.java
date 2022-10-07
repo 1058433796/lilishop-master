@@ -17,4 +17,11 @@ public interface ContractMapper extends BaseMapper<Contract> {
 
     @Select("select g.* from order as g")
     IPage<Contract> queryByParams(IPage<Contract> page, @Param(Constants.WRAPPER) Wrapper<Contract> queryWrapper);
+
+    @Select("SELECT * FROM " +
+            "(SELECT * from contract) AS s " +
+            "NATURAL JOIN " +
+            "(SELECT order_id , scheme_id FROM item_order) AS o ${ew.customSqlSegment}")
+    IPage<Contract> queryAssociated(IPage<Contract> page, @Param(Constants.WRAPPER) Wrapper<Contract> queryWrapper);
+
 }

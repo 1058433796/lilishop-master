@@ -2,6 +2,7 @@ package cn.lili.modules.itemOrder.service;
 
 import cn.lili.modules.itemOrder.entity.ItemOrder;
 import cn.lili.modules.itemOrder.entity.ItemOrderSearchParams;
+import cn.lili.modules.itemOrder.entity.OrderWithContractSimpleV0;
 import cn.lili.modules.schemeComponent.entity.SchemeComponent;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -20,5 +21,9 @@ public interface ItemOrderService extends IService<ItemOrder> {
      */
     IPage<ItemOrder> queryByParams(ItemOrderSearchParams itemOrderSearchParams);
     List<SchemeComponent> queryOrderComponent(String oid, String storeId);
+    List<ItemOrder> getAssociatedOrders(String oid);
 
+    IPage<OrderWithContractSimpleV0> queryAssociatedContractOrders(ItemOrderSearchParams ItemOrderSearchParams);
+
+    void payOrder(String oid);
 }

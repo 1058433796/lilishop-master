@@ -15,7 +15,9 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.sql.Array;
 import java.sql.Wrapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,6 +53,32 @@ public class itemOrderController {
         ItemOrder item = itemOrderService.getById(oid);
         item.setReplyStatus("已响应");
         itemOrderService.updateById(item);
+        return ResultUtil.data(true);
+    }
+
+    @ApiOperation("根据订单号寻找关联订单")
+    @GetMapping("/associated/{oid}")
+    public ResultMessage<Object> associatedOrders(@PathVariable("oid") String oid) {
+        ItemOrder itemOrder = itemOrderService.getById(oid);
+        String schemePrimaryId = itemOrder.getSchemeId();
+        List<ItemOrder> itemOrders =  itemOrderService.getAssociatedOrders(schemePrimaryId);
+        return  ResultUtil.data(itemOrders);
+    }
+
+
+    @ApiOperation("根据订单号寻找已经生成合同的关联订单")
+    @GetMapping("/contract/{oid}")
+    public ResultMessage<Object> associatedContractOrders(@PathVariable("oid") String oid) {
+        ItemOrder itemOrder = itemOrderService.getById(oid);
+        String schemePrimaryId = itemOrder.getSchemeId();
+        ItemOrderSearchParams itemOrderSearchParams = new ItemOrderSearchParams();
+        itemOrderSearchParams.setSchemeId(schemePrimaryId);
+        return ResultUtil.data(itemOrderService.queryAssociatedContractOrders(itemOrderSearchParams));
+    }
+    @ApiOperation("支付订单")
+    @PutMapping("/pay/{oid}")
+    public ResultMessage<Boolean> payOrder(@PathVariable("oid") String oid){
+        itemOrderService.payOrder(oid);
         return ResultUtil.data(true);
     }
 }

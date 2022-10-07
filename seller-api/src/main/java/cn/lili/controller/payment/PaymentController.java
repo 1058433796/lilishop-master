@@ -38,9 +38,9 @@ public class PaymentController {
     //签名方式
     private final String SIGN_TYPE = "RSA2";
     //支付宝异步通知路径,付款完毕后会异步调用本项目的方法,必须为公网地址
-    private final String NOTIFY_URL = "http://localhost:8889/store/payMent/payMent/returnUrl";
+    private final String NOTIFY_URL = "http://localhost:8889/store/payMent/payMent/returnUrl123";
     //支付宝同步通知路径,也就是当付款完毕后跳转本项目的页面,可以不是公网地址
-    private final String RETURN_URL = "http://localhost:8889/store/payMent/payMent/returnUrl";
+    private final String RETURN_URL = "http://172.19.64.1:8889/store/payMent/payMent/returnUrl";
 
     @ResponseBody
     @RequestMapping("/pay/{zongji}/{ordersn}")
@@ -50,7 +50,7 @@ public class PaymentController {
         //money是float
         //id是Int
         //把dona_id项目id 放在session中
-        System.out.println("支付宝支付");
+        System.out.println("zhifubao zhifu");
         session.setAttribute("dona_id",Integer.parseInt(dona_id));
 
         //生成订单号（支付宝的要求？）
@@ -83,10 +83,13 @@ public class PaymentController {
         String result = alipayClient.pageExecute(alipayRequest).getBody();
         return result;
     }
+
+
+
     @RequestMapping("/returnUrl")
     public String returnUrlMethod(HttpServletRequest request, HttpSession session) throws AlipayApiException, UnsupportedEncodingException {
         // 获取支付宝GET过来反馈信息
-        System.out.println("支付宝支付回调接口");
+        System.out.println("ssd asd as  asd as d   aaaaaaaaaaaaaaaaaaaaa");
         Map<String, String> params = new HashMap<String, String>();
         Map<String, String[]> requestParams = request.getParameterMap();
         for (Iterator<String> iter = requestParams.keySet().iterator(); iter.hasNext();) {
@@ -113,7 +116,6 @@ public class PaymentController {
 
             // 付款金额
             float money = Float.parseFloat(new String(request.getParameter("total_amount").getBytes("ISO-8859-1"), "UTF-8"));
-
             System.out.println("商户订单号="+out_trade_no);
             System.out.println("支付宝交易号="+trade_no);
             System.out.println("付款金额="+money);
@@ -134,4 +136,5 @@ public class PaymentController {
 
         }
         return "ResultUtil.success(ResultCode.SUCCESS)";
-}}
+    }
+}
