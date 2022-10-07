@@ -6,7 +6,7 @@ import cn.lili.modules.member.entity.vo.StoreRatingVO;
 import cn.lili.modules.member.mapper.MemberEvaluationMapper;
 import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.enums.StoreStatusEnum;
-import cn.lili.modules.store.service.StoreServiceZy;
+import cn.lili.modules.store.service.StoreService;
 import cn.lili.timetask.handler.EveryDayExecute;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -29,7 +29,7 @@ public class StoreRatingExecute implements EveryDayExecute {
      * 店铺
      */
     @Autowired
-    private StoreServiceZy storeServiceZy;
+    private StoreService storeService;
     /**
      * 会员评价
      */
@@ -40,7 +40,7 @@ public class StoreRatingExecute implements EveryDayExecute {
     @Override
     public void execute() {
         //获取所有开启的店铺
-        List<Store> storeList = storeServiceZy.list(new LambdaQueryWrapper<Store>().eq(Store::getStoreDisable, StoreStatusEnum.OPEN.name()));
+        List<Store> storeList = storeService.list(new LambdaQueryWrapper<Store>().eq(Store::getStoreDisable, StoreStatusEnum.OPEN.name()));
         for (Store store : storeList) {
             //店铺所有开启的评价
             LambdaQueryWrapper<MemberEvaluation> lambdaQueryWrapper = Wrappers.lambdaQuery();
@@ -55,7 +55,7 @@ public class StoreRatingExecute implements EveryDayExecute {
                 lambdaUpdateWrapper.set(Store::getDescriptionScore, storeRatingVO.getDescriptionScore());
                 lambdaUpdateWrapper.set(Store::getDeliveryScore, storeRatingVO.getDeliveryScore());
                 lambdaUpdateWrapper.set(Store::getServiceScore, storeRatingVO.getServiceScore());
-                storeServiceZy.update(lambdaUpdateWrapper);
+                storeService.update(lambdaUpdateWrapper);
             }
 
         }

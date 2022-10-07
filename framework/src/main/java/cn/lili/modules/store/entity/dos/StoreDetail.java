@@ -175,36 +175,36 @@ public class StoreDetail extends BaseIdEntity {
     private String salesConsigneeDetail;
 
     //    营业执照信息
-//    private String companyType;
+    private String companyType;
 //    private String companyName;
-//    private String businessNumber;
-//    private String businessAddress;
-//    private String businessDetailAddress;
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private Date businessValidBeg;
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private Date businessValidEnd;
-//    private Boolean businessLongPeriod;
-//    //    法人代表信息
-//    private String legalType;
-//    private String legalNumber;
-////    private String legalName;
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private Date legalValidBeg;
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private Date legalValidEnd;
-//    private Boolean legalLongPeriod;
-////    private String companyAddress;
-//    private String companyDetailAddress;
-//    private String companyEmergencyName;
-//    private String companyEmergencyPhoneNumber;
-//    //    组织机构信息
-//    private String code;
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private Date codeValidBeg;
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private Date codeValidEnd;
-//    private Boolean codeLongPeriod;
+    private String businessNumber;
+    private String businessAddress;
+    private String businessDetailAddress;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date businessValidBeg;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date businessValidEnd;
+    private Boolean businessLongPeriod;
+    //    法人代表信息
+    private String legalType;
+    private String legalNumber;
+//    private String legalName;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date legalValidBeg;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date legalValidEnd;
+    private Boolean legalLongPeriod;
+//    private String companyAddress;
+    private String companyDetailAddress;
+    private String companyEmergencyName;
+    private String companyEmergencyPhoneNumber;
+    //    组织机构信息
+    private String code;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date codeValidBeg;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date codeValidEnd;
+    private Boolean codeLongPeriod;
 
 
     public StoreDetail(Store store, AdminStoreApplyDTO adminStoreApplyDTO) {
@@ -222,17 +222,17 @@ public class StoreDetail extends BaseIdEntity {
         this.stockWarning = 10;
 
         BeanUtil.copyProperties(vo, this);
-//        if(vo.getBusinessLongPeriod()){
-//            businessValidBeg = null;
-//            businessValidEnd = null;
-//        }
-//        if(vo.getLegalLongPeriod()){
-//            legalValidBeg = null;
-//            legalValidEnd = null;
-//        }
-//        if(vo.getCodeLongPeriod()){
-//            codeValidBeg = null;
-//            codeValidEnd = null;
-//        }
+        if(vo.getBusinessLongPeriod()){
+            businessValidBeg = null;
+            businessValidEnd = null;
+        }
+        if(vo.getLegalLongPeriod()){
+            legalValidBeg = null;
+            legalValidEnd = null;
+        }
+        if(vo.getCodeLongPeriod()){
+            codeValidBeg = null;
+            codeValidEnd = null;
+        }
     }
 }

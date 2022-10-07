@@ -9,10 +9,10 @@ import cn.lili.modules.store.entity.dto.AdminStoreApplyDTO;
 import cn.lili.modules.store.entity.dto.StoreEditDTO;
 import cn.lili.modules.store.entity.vos.StoreDetailVO;
 import cn.lili.modules.store.entity.vos.StoreManagementCategoryVO;
-import cn.lili.modules.store.entity.vos.StoreSearchParamsZy;
+import cn.lili.modules.store.entity.vos.StoreSearchParams;
 import cn.lili.modules.store.entity.vos.StoreVO;
 import cn.lili.modules.store.service.StoreDetailService;
-import cn.lili.modules.store.service.StoreServiceZy;
+import cn.lili.modules.store.service.StoreService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
@@ -40,7 +40,7 @@ public class StoreManagerController {
      * 店铺
      */
     @Autowired
-    private StoreServiceZy storeServiceZy;
+    private StoreService storeService;
     /**
      * 店铺详情
      */
@@ -50,13 +50,13 @@ public class StoreManagerController {
     @ApiOperation(value = "获取店铺分页列表")
     @GetMapping("/all")
     public ResultMessage<List<Store>> getAll() {
-        return ResultUtil.data(storeServiceZy.list(new QueryWrapper<Store>().eq("store_disable", "OPEN")));
+        return ResultUtil.data(storeService.list(new QueryWrapper<Store>().eq("store_disable", "OPEN")));
     }
 
     @ApiOperation(value = "获取店铺分页列表")
     @GetMapping
-    public ResultMessage<IPage<StoreVO>> getByPage(StoreSearchParamsZy entity, PageVO page) {
-        return ResultUtil.data(storeServiceZy.findByConditionPage(entity, page));
+    public ResultMessage<IPage<StoreVO>> getByPage(StoreSearchParams entity, PageVO page) {
+        return ResultUtil.data(storeService.findByConditionPage(entity, page));
     }
 
     @ApiOperation(value = "获取店铺详情")
@@ -69,7 +69,7 @@ public class StoreManagerController {
     @ApiOperation(value = "添加店铺")
     @PostMapping(value = "/add")
     public ResultMessage<Store> add(@Valid AdminStoreApplyDTO adminStoreApplyDTO) {
-        return ResultUtil.data(storeServiceZy.add(adminStoreApplyDTO));
+        return ResultUtil.data(storeService.add(adminStoreApplyDTO));
     }
 
     @ApiOperation(value = "编辑店铺")
@@ -77,7 +77,7 @@ public class StoreManagerController {
     @PutMapping(value = "/edit/{id}")
     public ResultMessage<Store> edit(@PathVariable String id, @Valid StoreEditDTO storeEditDTO) {
         storeEditDTO.setStoreId(id);
-        return ResultUtil.data(storeServiceZy.edit(storeEditDTO));
+        return ResultUtil.data(storeService.edit(storeEditDTO));
     }
 
     @ApiOperation(value = "审核店铺申请")
@@ -87,7 +87,7 @@ public class StoreManagerController {
     })
     @PutMapping(value = "/audit/{id}/{passed}")
     public ResultMessage<Object> audit(@PathVariable String id, @PathVariable Integer passed) {
-        storeServiceZy.audit(id, passed);
+        storeService.audit(id, passed);
         return ResultUtil.success();
     }
 
@@ -97,7 +97,7 @@ public class StoreManagerController {
     @ApiImplicitParam(name = "id", value = "店铺id", required = true, dataType = "String", paramType = "path")
     @PutMapping(value = "/disable/{id}")
     public ResultMessage<Store> disable(@PathVariable String id) {
-        storeServiceZy.disable(id);
+        storeService.disable(id);
         return ResultUtil.success();
     }
 
@@ -105,7 +105,7 @@ public class StoreManagerController {
     @ApiImplicitParam(name = "id", value = "店铺id", required = true, dataType = "String", paramType = "path")
     @PutMapping(value = "/enable/{id}")
     public ResultMessage<Store> enable(@PathVariable String id) {
-        storeServiceZy.enable(id);
+        storeService.enable(id);
         return ResultUtil.success();
     }
 
@@ -120,7 +120,7 @@ public class StoreManagerController {
     @ApiOperation(value = "根据会员id查询店铺信息")
     @GetMapping("/{memberId}/member")
     public ResultMessage<Store> getByMemberId(@Valid @PathVariable String memberId) {
-        List<Store> list = storeServiceZy.list(new QueryWrapper<Store>().eq("member_id", memberId));
+        List<Store> list = storeService.list(new QueryWrapper<Store>().eq("member_id", memberId));
         if (list.size() > 0) {
             return ResultUtil.data(list.get(0));
         }

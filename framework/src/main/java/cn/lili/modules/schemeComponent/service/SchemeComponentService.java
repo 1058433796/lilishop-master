@@ -4,15 +4,9 @@ import cn.lili.modules.item.entity.Item;
 import cn.lili.modules.item.entity.ItemSearchParams;
 import cn.lili.modules.schemeComponent.entity.SchemeComponent;
 import cn.lili.modules.schemeComponent.entity.SchemeComponentSearchParams;
-import cn.lili.modules.schemeComponent.mapper.IdTotal;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
 
 @Service
 public interface SchemeComponentService extends IService<SchemeComponent> {
@@ -23,10 +17,4 @@ public interface SchemeComponentService extends IService<SchemeComponent> {
      * @return 分页
      */
     IPage<SchemeComponent> queryByParams(SchemeComponentSearchParams schemeComponentSearchParams);
-
-    List<String > getSchemeSuppliers(@Param("schemeId") String schemeId);
-    List<SchemeComponent> getSchemeComponentBySchemeIdAndStore(@Param("schemeId") String schemeId, @Param("storeId") String storeId);
-    List<IdTotal> getOrderBy(@Param("schemeId") String schemeId);
-
-
 }

@@ -9,7 +9,7 @@ import cn.lili.common.security.token.TokenUtil;
 import cn.lili.common.security.token.base.AbstractTokenGenerate;
 import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.store.entity.dos.Store;
-import cn.lili.modules.store.service.StoreServiceZy;
+import cn.lili.modules.store.service.StoreService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class StoreTokenGenerate extends AbstractTokenGenerate<Member> {
     @Autowired
-    private StoreServiceZy storeServiceZy;
+    private StoreService storeService;
     @Autowired
     private TokenUtil tokenUtil;
 
@@ -35,7 +35,7 @@ public class StoreTokenGenerate extends AbstractTokenGenerate<Member> {
         }
         LambdaQueryWrapper<Store> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Store::getMemberId, member.getId());
-        Store store = storeServiceZy.getOne(queryWrapper);
+        Store store = storeService.getOne(queryWrapper);
         AuthUser authUser = new AuthUser(member.getUsername(), member.getId(), member.getNickName(), store.getStoreLogo(), UserEnums.STORE);
 
         authUser.setStoreId(store.getId());

@@ -14,7 +14,7 @@ public class SchemeComponentSearchParams extends PageVO {
     public <T> QueryWrapper<T> queryWrapper() {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         if (CharSequenceUtil.isNotEmpty(schemeId)) {
-            queryWrapper.eq("scheme_id", schemeId);
+            queryWrapper.like("scheme_id", schemeId);
         }
         return queryWrapper;
     }

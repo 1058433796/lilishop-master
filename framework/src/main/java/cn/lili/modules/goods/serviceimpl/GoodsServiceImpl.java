@@ -31,7 +31,7 @@ import cn.lili.modules.store.entity.dos.FreightTemplate;
 import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.vos.StoreVO;
 import cn.lili.modules.store.service.FreightTemplateService;
-import cn.lili.modules.store.service.StoreServiceZy;
+import cn.lili.modules.store.service.StoreService;
 import cn.lili.modules.system.entity.dos.Setting;
 import cn.lili.modules.system.entity.dto.GoodsSetting;
 import cn.lili.modules.system.entity.enums.SettingEnum;
@@ -89,7 +89,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
      * 店铺详情
      */
     @Autowired
-    private StoreServiceZy storeServiceZy;
+    private StoreService storeService;
     /**
      * 会员评价
      */
@@ -624,7 +624,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         goods.setAuthFlag(Boolean.TRUE.equals(goodsSetting.getGoodsCheck()) ? GoodsAuthEnum.TOBEAUDITED.name() : GoodsAuthEnum.PASS.name());
         //判断当前用户是否为店铺
         if (Objects.requireNonNull(UserContext.getCurrentUser()).getRole().equals(UserEnums.STORE)) {
-            StoreVO storeDetail = this.storeServiceZy.getStoreDetail();
+            StoreVO storeDetail = this.storeService.getStoreDetail();
             if (storeDetail.getSelfOperated() != null) {
                 goods.setSelfOperated(storeDetail.getSelfOperated());
             }

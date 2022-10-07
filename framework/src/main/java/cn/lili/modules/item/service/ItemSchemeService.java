@@ -22,6 +22,4 @@ public interface ItemSchemeService extends IService<ItemScheme> {
      * @param id    项目方案编号 primary_id
      */
     void checkItemScheme(String id);
-
-
 }

@@ -8,6 +8,7 @@ import cn.lili.cache.CachePrefix;
 import cn.lili.common.aop.annotation.DemoSite;
 import cn.lili.common.context.ThreadContextHolder;
 import cn.lili.common.enums.ResultCode;
+import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.enums.SwitchEnum;
 import cn.lili.common.event.TransactionCommitSendMQEvent;
 import cn.lili.common.exception.ServiceException;
@@ -33,8 +34,9 @@ import cn.lili.modules.member.mapper.MemberMapper;
 import cn.lili.modules.member.service.MemberService;
 import cn.lili.modules.member.token.MemberTokenGenerate;
 import cn.lili.modules.member.token.StoreTokenGenerate;
+import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.enums.StoreStatusEnum;
-import cn.lili.modules.store.service.StoreServiceZy;
+import cn.lili.modules.store.service.StoreService;
 import cn.lili.mybatis.util.PageUtil;
 import cn.lili.rocketmq.tags.MemberTagsEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -82,7 +84,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
      * 店铺
      */
     @Autowired
-    private StoreServiceZy storeServiceZy;
+    private StoreService storeService;
     /**
      * RocketMQ 配置
      */
@@ -155,7 +157,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
             throw new ServiceException(ResultCode.USER_PASSWORD_ERROR);
         }
         if(member.getHaveStore()){
-            String status = storeServiceZy.getById(member.getStoreId()).getStoreDisable();
+            String status = storeService.getById(member.getStoreId()).getStoreDisable();
             if(status.equals(StoreStatusEnum.OPEN.name())){
                 return storeTokenGenerate.createToken(member, false);
             }else{

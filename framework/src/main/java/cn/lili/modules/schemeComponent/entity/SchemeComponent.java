@@ -18,6 +18,4 @@ public class SchemeComponent {
 
     private String schemeId;
 
-    private String supplierId;
-
 }

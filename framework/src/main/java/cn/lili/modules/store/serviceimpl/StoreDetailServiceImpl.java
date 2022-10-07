@@ -21,7 +21,7 @@ import cn.lili.modules.store.entity.dto.StoreSettlementDay;
 import cn.lili.modules.store.entity.vos.*;
 import cn.lili.modules.store.mapper.StoreDetailMapper;
 import cn.lili.modules.store.service.StoreDetailService;
-import cn.lili.modules.store.service.StoreServiceZy;
+import cn.lili.modules.store.service.StoreService;
 import cn.lili.rocketmq.RocketmqSendCallbackBuilder;
 import cn.lili.rocketmq.tags.GoodsTagsEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -47,7 +47,7 @@ public class StoreDetailServiceImpl extends ServiceImpl<StoreDetailMapper, Store
      * 店铺
      */
     @Autowired
-    private StoreServiceZy storeServiceZy;
+    private StoreService storeService;
     /**
      * 分类
      */
@@ -92,9 +92,9 @@ public class StoreDetailServiceImpl extends ServiceImpl<StoreDetailMapper, Store
     public Boolean editStoreSetting(StoreSettingDTO storeSettingDTO) {
         AuthUser tokenUser = Objects.requireNonNull(UserContext.getCurrentUser());
         //修改店铺
-        Store store = storeServiceZy.getById(tokenUser.getStoreId());
+        Store store = storeService.getById(tokenUser.getStoreId());
         BeanUtil.copyProperties(storeSettingDTO, store);
-        boolean result = storeServiceZy.updateById(store);
+        boolean result = storeService.updateById(store);
         if (result) {
             this.updateStoreGoodsInfo(store);
         }
@@ -117,9 +117,9 @@ public class StoreDetailServiceImpl extends ServiceImpl<StoreDetailMapper, Store
     @Override
     public Boolean editMerchantEuid(String merchantEuid) {
         AuthUser tokenUser = Objects.requireNonNull(UserContext.getCurrentUser());
-        Store store = storeServiceZy.getById(tokenUser.getStoreId());
+        Store store = storeService.getById(tokenUser.getStoreId());
         store.setMerchantEuid(merchantEuid);
-        return storeServiceZy.updateById(store);
+        return storeService.updateById(store);
     }
 
     /**
