@@ -9,7 +9,7 @@ import cn.lili.modules.member.entity.dto.CollectionDTO;
 import cn.lili.modules.member.entity.vo.StoreCollectionVO;
 import cn.lili.modules.member.mapper.StoreCollectionMapper;
 import cn.lili.modules.member.service.StoreCollectionService;
-import cn.lili.modules.store.service.StoreService;
+import cn.lili.modules.store.service.StoreServiceZy;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -32,7 +32,7 @@ public class StoreCollectionServiceImpl extends ServiceImpl<StoreCollectionMappe
 
 
     @Autowired
-    private StoreService storeService;
+    private StoreServiceZy storeServiceZy;
 
     @Override
     public IPage<StoreCollectionVO> storeCollection(PageVO pageVo) {
@@ -58,7 +58,7 @@ public class StoreCollectionServiceImpl extends ServiceImpl<StoreCollectionMappe
                 .eq(StoreCollection::getStoreId, storeId)) == null) {
             StoreCollection storeCollection = new StoreCollection(UserContext.getCurrentUser().getId(), storeId);
             this.save(storeCollection);
-            storeService.updateStoreCollectionNum(new CollectionDTO(storeId, 1));
+            storeServiceZy.updateStoreCollectionNum(new CollectionDTO(storeId, 1));
             return storeCollection;
         }
         throw new ServiceException(ResultCode.USER_COLLECTION_EXIST);
@@ -70,7 +70,7 @@ public class StoreCollectionServiceImpl extends ServiceImpl<StoreCollectionMappe
         QueryWrapper<StoreCollection> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("member_id", UserContext.getCurrentUser().getId());
         queryWrapper.eq("store_id", storeId);
-        storeService.updateStoreCollectionNum(new CollectionDTO(storeId, -1));
+        storeServiceZy.updateStoreCollectionNum(new CollectionDTO(storeId, -1));
         return this.remove(queryWrapper);
     }
 }

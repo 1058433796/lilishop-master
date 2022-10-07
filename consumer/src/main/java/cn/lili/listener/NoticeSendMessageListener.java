@@ -17,7 +17,7 @@ import cn.lili.modules.message.service.StoreMessageService;
 import cn.lili.modules.sms.SmsUtil;
 import cn.lili.modules.sms.entity.dto.SmsReachDTO;
 import cn.lili.modules.store.entity.dos.Store;
-import cn.lili.modules.store.service.StoreService;
+import cn.lili.modules.store.service.StoreServiceZy;
 import cn.lili.rocketmq.tags.OtherTagsEnum;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -59,7 +59,7 @@ public class NoticeSendMessageListener implements RocketMQListener<MessageExt> {
      * 店铺
      */
     @Autowired
-    private StoreService storeService;
+    private StoreServiceZy storeServiceZy;
     /**
      * 会员
      */
@@ -107,7 +107,7 @@ public class NoticeSendMessageListener implements RocketMQListener<MessageExt> {
         List<StoreMessage> list = new ArrayList<>();
         //发送全部商家情况
         if ("ALL".equals(message.getMessageRange())) {
-            List<Store> storeList = storeService.list(new QueryWrapper<Store>().eq("store_disable", "OPEN"));
+            List<Store> storeList = storeServiceZy.list(new QueryWrapper<Store>().eq("store_disable", "OPEN"));
             storeList.forEach(item -> {
                 StoreMessage storeMessage = new StoreMessage();
                 storeMessage.setMessageId(message.getId());

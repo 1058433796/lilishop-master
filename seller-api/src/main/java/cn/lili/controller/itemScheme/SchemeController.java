@@ -86,6 +86,8 @@ public class SchemeController {
     @ApiOperation(value = "确认项目方案")
     public  ResultMessage<ItemScheme> checkItemScheme(@PathVariable String id){
         itemschemeService.checkItemScheme(id);
-        return ResultUtil.success(ResultCode.SUCCESS);}
+        return ResultUtil.success(ResultCode.SUCCESS);
+    }
+
 
 }
