@@ -69,6 +69,13 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         return this.getById(id);
     }
 
+    @Override
+    public List<Category> getCommonCategoryList() {
+        QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("common", true);
+        return this.baseMapper.selectList(queryWrapper);
+    }
+
     /**
      * 根据分类id集合获取所有分类根据层级排序
      *

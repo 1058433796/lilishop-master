@@ -2,7 +2,7 @@ package cn.lili.modules.search.entity.dos;
 
 import cn.hutool.json.JSONUtil;
 import cn.lili.common.enums.PromotionTypeEnum;
-import cn.lili.elasticsearch.EsSuffix;
+import cn.lili.modules.member.elasticsearch.EsSuffix;
 import cn.lili.modules.goods.entity.dos.GoodsSku;
 import cn.lili.modules.goods.entity.dto.GoodsParamsDTO;
 import cn.lili.modules.promotion.tools.PromotionTools;

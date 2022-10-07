@@ -27,6 +27,7 @@ public class Item {
 
     private String createLocation;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     private Integer itemStatus;

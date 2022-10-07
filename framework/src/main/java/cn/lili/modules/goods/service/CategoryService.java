@@ -33,6 +33,8 @@ public interface CategoryService extends IService<Category> {
      */
     Category getCategoryById(String id);
 
+
+    List<Category> getCommonCategoryList();
     /**
      * 根据分类id集合获取所有分类根据层级排序
      *

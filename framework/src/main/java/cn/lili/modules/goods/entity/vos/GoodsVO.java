@@ -1,6 +1,7 @@
 package cn.lili.modules.goods.entity.vos;
 
 import cn.lili.modules.goods.entity.dos.Goods;
+import cn.lili.modules.goods.entity.dos.GoodsMaterial;
 import cn.lili.modules.goods.entity.dos.Wholesale;
 import cn.lili.modules.goods.entity.dto.GoodsParamsDTO;
 import io.swagger.annotations.ApiModelProperty;
@@ -35,4 +36,13 @@ public class GoodsVO extends Goods {
 
     @ApiModelProperty(value = "批发商品消费规则列表")
     private List<Wholesale> wholesaleList;
+
+    //    模型文件urlList
+    private List<String> modelList;
+    //  材料文件urlList
+    private List<String> materialList;
+
+    private List<GoodsMaterial> materialFileList;
+
+
 }

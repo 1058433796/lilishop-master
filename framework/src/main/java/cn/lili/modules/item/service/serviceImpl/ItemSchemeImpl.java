@@ -5,7 +5,9 @@ import cn.lili.modules.item.entity.ItemSchemeSearchParams;
 import cn.lili.modules.item.mapper.ItemSchemeMapper;
 import cn.lili.modules.item.service.ItemSchemeService;
 import cn.lili.mybatis.util.PageUtil;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +26,10 @@ public class ItemSchemeImpl extends ServiceImpl<ItemSchemeMapper, ItemScheme> im
     }
 
     @Override
-    public void checkItemScheme(ItemScheme itemScheme){
-        this.updateById(itemScheme);
+    public void checkItemScheme(String id){
+        this.updateByPrimaryId(id);
+    }
+    private void updateByPrimaryId(String id){
+        this.baseMapper.updateByPrimaryId(id);
     }
 }

@@ -3,10 +3,12 @@ package cn.lili.modules.item.entity;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.lili.common.vo.PageVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @EqualsAndHashCode(callSuper = true)

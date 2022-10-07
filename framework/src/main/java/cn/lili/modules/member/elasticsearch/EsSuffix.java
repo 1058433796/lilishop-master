@@ -1,4 +1,4 @@
-package cn.lili.elasticsearch;
+package cn.lili.modules.member.elasticsearch;
 
 /**
  * elasticsearch 索引后缀

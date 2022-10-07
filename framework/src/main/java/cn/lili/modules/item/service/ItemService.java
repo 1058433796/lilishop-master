@@ -3,8 +3,6 @@ package cn.lili.modules.item.service;
 import cn.lili.modules.item.entity.Item;
 import cn.lili.modules.item.entity.ItemSearchParams;
 import cn.lili.modules.item.entity.ItemVO;
-import cn.lili.modules.promotion.entity.dos.PromotionGoods;
-import cn.lili.modules.promotion.entity.dto.search.PromotionGoodsSearchParams;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.stereotype.Service;

@@ -20,4 +20,30 @@ public class ItemScheme {
     private Integer checkFlag;
 
     private String schemeSum;
+    private String doorId;
+
+    private String location;
+
+    private String openMethod;
+
+    private String openDirection;
+
+    private String height;
+
+    private String width;
+
+    private String thickness;
+
+    private String texture;
+
+    private String handle;
+
+    private String guard;
+
+    private String firerating;
+
+    private String wjgroup;
+
+    private String updateTime;
+
 }
