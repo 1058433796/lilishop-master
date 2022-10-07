@@ -7,7 +7,7 @@ import cn.lili.modules.store.entity.dto.StoreAfterSaleAddressDTO;
 import cn.lili.modules.store.entity.dto.StoreSettingDTO;
 import cn.lili.modules.store.entity.vos.StoreVO;
 import cn.lili.modules.store.service.StoreDetailService;
-import cn.lili.modules.store.service.StoreService;
+import cn.lili.modules.store.service.StoreServiceZy;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -34,7 +34,7 @@ public class StoreSettingsController {
      * 店铺
      */
     @Autowired
-    private StoreService storeService;
+    private StoreServiceZy storeServiceZy;
     /**
      * 店铺详情
      */
@@ -45,8 +45,8 @@ public class StoreSettingsController {
     @GetMapping
     public ResultMessage<StoreVO> get() {
         // 获取当前登录商家内容
-        StoreVO s = storeService.getStoreDetail();
-        return ResultUtil.data(storeService.getStoreDetail());
+        StoreVO s = storeServiceZy.getStoreDetail();
+        return ResultUtil.data(storeServiceZy.getStoreDetail());
     }
 
     @ApiOperation(value = "修改商家设置")

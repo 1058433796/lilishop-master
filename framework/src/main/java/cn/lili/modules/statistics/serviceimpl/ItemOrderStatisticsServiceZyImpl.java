@@ -13,8 +13,8 @@ import cn.lili.modules.order.order.entity.vo.OrderSimpleVO;
 import cn.lili.modules.statistics.entity.dto.StatisticsQueryParam;
 import cn.lili.modules.statistics.entity.vo.OrderOverviewVO;
 import cn.lili.modules.statistics.entity.vo.OrderStatisticsDataVO;
-import cn.lili.modules.statistics.mapper.ItemOrderStatisticsMapper;
-import cn.lili.modules.statistics.service.ItemOrderStatisticsService;
+import cn.lili.modules.statistics.mapper.ItemOrderStatisticsMapperZy;
+import cn.lili.modules.statistics.service.ItemOrderStatisticsServiceZy;
 import cn.lili.modules.statistics.service.PlatformViewService;
 import cn.lili.modules.statistics.service.StoreFlowStatisticsService;
 import cn.lili.modules.statistics.util.StatisticsDateUtil;
@@ -36,7 +36,7 @@ import java.util.*;
  * @since 2020/12/9 17:16
  */
 @Service
-public class ItemOrderStatisticsServiceImpl extends ServiceImpl<ItemOrderStatisticsMapper, ItemOrder> implements ItemOrderStatisticsService {
+public class ItemOrderStatisticsServiceZyImpl extends ServiceImpl<ItemOrderStatisticsMapperZy, ItemOrder> implements ItemOrderStatisticsServiceZy {
 
     /**
      * 平台PV统计

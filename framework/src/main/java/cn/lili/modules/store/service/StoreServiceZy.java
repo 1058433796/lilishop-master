@@ -6,7 +6,7 @@ import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.dto.*;
 import cn.lili.modules.store.entity.vos.CustomerStoreDetailVO;
 import cn.lili.modules.store.entity.vos.CustomerStoreVO;
-import cn.lili.modules.store.entity.vos.StoreSearchParams;
+import cn.lili.modules.store.entity.vos.StoreSearchParamsZy;
 import cn.lili.modules.store.entity.vos.StoreVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -17,12 +17,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author pikachu
  * @since 2020/11/18 11:45 上午
  */
-public interface StoreService extends IService<Store> {
+public interface StoreServiceZy extends IService<Store> {
     /**
      * 查询客户
      *
      */
-    IPage<CustomerStoreVO> queryByParams(StoreSearchParams storeSearchParams);
+    IPage<CustomerStoreVO> queryByParams(StoreSearchParamsZy storeSearchParamsZy);
 
     /**
      * 查询客户详细信息
@@ -36,7 +36,7 @@ public interface StoreService extends IService<Store> {
      * @param entity
      * @return
      */
-    IPage<StoreVO> findByConditionPage(StoreSearchParams entity, PageVO page);
+    IPage<StoreVO> findByConditionPage(StoreSearchParamsZy entity, PageVO page);
 
     /**
      * 获取当前登录店铺信息

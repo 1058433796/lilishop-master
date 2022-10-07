@@ -10,7 +10,7 @@ import cn.lili.modules.statistics.entity.dto.StatisticsQueryParam;
 import cn.lili.modules.statistics.entity.vo.OrderOverviewVO;
 import cn.lili.modules.statistics.entity.vo.OrderStatisticsDataVO;
 import cn.lili.modules.statistics.service.AfterSaleStatisticsService;
-import cn.lili.modules.statistics.service.ItemOrderStatisticsService;
+import cn.lili.modules.statistics.service.ItemOrderStatisticsServiceZy;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +33,7 @@ import java.util.Objects;
 @Api(tags = "店铺端,订单统计接口")
 @RestController
 @RequestMapping("/store/statistics/order")
-public class OrderStatisticsStoreController {
+public class ProviderOrderStatisticsStoreController {
 
     /**
      * 售后
@@ -44,7 +44,7 @@ public class OrderStatisticsStoreController {
      * 订单统计
      */
     @Autowired
-    private ItemOrderStatisticsService itemOrderStatisticsService;
+    private ItemOrderStatisticsServiceZy itemOrderStatisticsServiceZy;
 
     @ApiOperation(value = "订单概览统计")
     @GetMapping("/overview")
@@ -52,8 +52,8 @@ public class OrderStatisticsStoreController {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         try {
             statisticsQueryParam.setStoreId(storeId);
-            OrderOverviewVO item = itemOrderStatisticsService.overview(statisticsQueryParam);
-            return ResultUtil.data(itemOrderStatisticsService.overview(statisticsQueryParam));
+            OrderOverviewVO item = itemOrderStatisticsServiceZy.overview(statisticsQueryParam);
+            return ResultUtil.data(itemOrderStatisticsServiceZy.overview(statisticsQueryParam));
         } catch (Exception e) {
             log.error("订单概览统计错误", e);
         }
@@ -66,7 +66,7 @@ public class OrderStatisticsStoreController {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         try {
             statisticsQueryParam.setStoreId(storeId);
-            return ResultUtil.data(itemOrderStatisticsService.statisticsChart(statisticsQueryParam));
+            return ResultUtil.data(itemOrderStatisticsServiceZy.statisticsChart(statisticsQueryParam));
         } catch (Exception e) {
             log.error("订单图表统计错误", e);
         }
@@ -80,7 +80,7 @@ public class OrderStatisticsStoreController {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         try {
             statisticsQueryParam.setStoreId(storeId);
-            return ResultUtil.data(itemOrderStatisticsService.getStatistics(statisticsQueryParam, pageVO));
+            return ResultUtil.data(itemOrderStatisticsServiceZy.getStatistics(statisticsQueryParam, pageVO));
         } catch (Exception e) {
             log.error("订单统计错误", e);
         }

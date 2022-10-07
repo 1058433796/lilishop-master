@@ -3,8 +3,6 @@ package cn.lili.modules.statistics.service;
 import cn.lili.common.vo.PageVO;
 import cn.lili.modules.itemOrder.entity.ItemOrder;
 import cn.lili.modules.itemOrder.entity.ItemOrderSimpleVO;
-import cn.lili.modules.order.order.entity.dos.Order;
-import cn.lili.modules.order.order.entity.vo.OrderSimpleVO;
 import cn.lili.modules.statistics.entity.dto.StatisticsQueryParam;
 import cn.lili.modules.statistics.entity.vo.OrderOverviewVO;
 import cn.lili.modules.statistics.entity.vo.OrderStatisticsDataVO;
@@ -19,7 +17,7 @@ import java.util.List;
  * @author Bulbasaur
  * @since 2020/12/9 11:06
  */
-public interface ItemOrderStatisticsService extends IService<ItemOrder> {
+public interface ItemOrderStatisticsServiceZy extends IService<ItemOrder> {
 
     /**
      * 订单统计概览

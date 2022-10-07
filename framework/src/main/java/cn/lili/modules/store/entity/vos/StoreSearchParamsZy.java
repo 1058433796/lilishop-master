@@ -1,6 +1,5 @@
 package cn.lili.modules.store.entity.vos;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.lili.common.security.AuthUser;
 import cn.lili.common.security.context.UserContext;
@@ -21,7 +20,7 @@ import java.io.Serializable;
  * @since 2020-03-07 17:02:05
  */
 @Data
-public class StoreSearchParams extends PageVO implements Serializable {
+public class StoreSearchParamsZy extends PageVO implements Serializable {
 
     private static final long serialVersionUID = 6916054310764833369L;
 

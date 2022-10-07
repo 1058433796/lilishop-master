@@ -15,26 +15,17 @@ import cn.lili.modules.store.entity.dos.StoreDetail;
 import cn.lili.modules.store.entity.enums.StoreStatusEnum;
 import cn.lili.modules.store.entity.vos.CompanyVo;
 import cn.lili.modules.store.service.StoreDetailService;
-import cn.lili.modules.store.service.StoreService;
-import cn.lili.modules.verification.entity.enums.VerificationEnums;
+import cn.lili.modules.store.service.StoreServiceZy;
 import cn.lili.modules.verification.service.VerificationService;
-import com.aliyuncs.policy.retry.RetryUtil;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.ibatis.reflection.wrapper.BaseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 店铺端,商家登录接口
@@ -55,7 +46,7 @@ public class StorePassportController {
     private MemberService memberService;
 
     @Autowired
-    private StoreService storeService;
+    private StoreServiceZy storeServiceZy;
 
     @Autowired
     private StoreDetailService storeDetailService;
@@ -104,7 +95,7 @@ public class StorePassportController {
 //        存在store
         if(member.getHaveStore()){
             System.out.println("当前用户存在店铺");
-            store = storeService.getById(member.getStoreId());
+            store = storeServiceZy.getById(member.getStoreId());
             String status = store.getStoreDisable();
 
             if(!status.equals(StoreStatusEnum.REFUSED.name())){
@@ -140,7 +131,7 @@ public class StorePassportController {
             //    不存在商店    注册商店
             store = new Store(member);
 //            store.setStoreDisable(StoreStatusEnum.APPLY_SECOND_STEP.name());
-            storeService.save(store);
+            storeServiceZy.save(store);
 
             member.setStoreId(store.getId());
             member.setHaveStore(true);
@@ -152,7 +143,7 @@ public class StorePassportController {
             System.out.println("storeDetail已创建");
 //            第一步注册完成 修改store状态为第二步
             store.setStoreDisable(StoreStatusEnum.APPLY_SECOND_STEP.name());
-            storeService.updateById(store);
+            storeServiceZy.updateById(store);
         }
 
 //        //            暂时办法 注册信息自动通过

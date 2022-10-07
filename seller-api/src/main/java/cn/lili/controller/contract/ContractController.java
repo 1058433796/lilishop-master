@@ -9,15 +9,13 @@ import cn.lili.modules.contract.service.ContractService;
 import cn.lili.modules.itemOrder.entity.ItemOrder;
 import cn.lili.modules.itemOrder.service.ItemOrderService;
 import cn.lili.modules.store.entity.vos.StoreVO;
-import cn.lili.modules.store.service.StoreService;
+import cn.lili.modules.store.service.StoreServiceZy;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,12 +31,12 @@ public class ContractController {
     ItemOrderService itemOrderService;
 
     @Autowired
-    StoreService storeService;
+    StoreServiceZy storeServiceZy;
 
     @ApiOperation(value = "分页获取合同列表")
     @GetMapping("/list")
     public ResultMessage<IPage<Contract>> getByPage(ContractSearchParams contractSearchParams) {
-        StoreVO buyerStore = storeService.getStoreDetail();
+        StoreVO buyerStore = storeServiceZy.getStoreDetail();
         contractSearchParams.setBuyerId(buyerStore.getId());
         return ResultUtil.data(contractService.queryByParams(contractSearchParams));
     }

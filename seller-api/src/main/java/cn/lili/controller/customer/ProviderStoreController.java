@@ -1,16 +1,12 @@
 package cn.lili.controller.customer;
 
 import cn.lili.common.enums.ResultUtil;
-import cn.lili.common.security.OperationalJudgment;
 import cn.lili.common.vo.ResultMessage;
-import cn.lili.modules.itemOrder.service.ItemOrderService;
 import cn.lili.modules.store.entity.dos.StoreDetail;
-import cn.lili.modules.store.entity.vos.CustomerStoreDetailVO;
 import cn.lili.modules.store.entity.vos.CustomerStoreVO;
-import cn.lili.modules.store.entity.vos.StoreDetailVO;
-import cn.lili.modules.store.entity.vos.StoreSearchParams;
+import cn.lili.modules.store.entity.vos.StoreSearchParamsZy;
 import cn.lili.modules.store.service.StoreDetailService;
-import cn.lili.modules.store.service.StoreService;
+import cn.lili.modules.store.service.StoreServiceZy;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -29,14 +25,14 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequestMapping("/store/customer/customer")
 @Api(tags = "店铺端,客户接口")
-public class CustomerStoreController {
+public class ProviderStoreController {
 
 
     /**
      * 企业（店铺）
      */
     @Autowired
-    private StoreService storeService;
+    private StoreServiceZy storeServiceZy;
 
     /**
      * 企业（店铺）详细信息
@@ -46,8 +42,8 @@ public class CustomerStoreController {
 
     @ApiOperation(value = "查询采购方(客户)列表")
     @GetMapping
-    public ResultMessage<IPage<CustomerStoreVO>> queryMineCustomer(StoreSearchParams storeSearchParams) {
-        return ResultUtil.data(storeService.queryByParams(storeSearchParams));
+    public ResultMessage<IPage<CustomerStoreVO>> queryMineCustomer(StoreSearchParamsZy storeSearchParamsZy) {
+        return ResultUtil.data(storeServiceZy.queryByParams(storeSearchParamsZy));
     }
 
     @ApiOperation(value = "客户明细")

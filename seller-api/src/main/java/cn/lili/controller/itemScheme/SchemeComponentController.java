@@ -2,36 +2,23 @@ package cn.lili.controller.itemScheme;
 
 import cn.hutool.core.date.DateTime;
 import cn.lili.Snowflake;
-import cn.lili.common.enums.ResultCode;
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.vo.ResultMessage;
-import cn.lili.modules.item.entity.Item;
 import cn.lili.modules.item.entity.ItemScheme;
-import cn.lili.modules.item.entity.ItemSearchParams;
-import cn.lili.modules.item.entity.ItemVO;
 import cn.lili.modules.item.service.ItemSchemeService;
-import cn.lili.modules.item.service.ItemService;
 import cn.lili.modules.itemOrder.entity.ItemOrder;
 import cn.lili.modules.itemOrder.service.ItemOrderService;
-import cn.lili.modules.order.order.entity.dos.Order;
-import cn.lili.modules.order.order.service.OrderService;
 import cn.lili.modules.schemeComponent.entity.SchemeComponent;
 import cn.lili.modules.schemeComponent.entity.SchemeComponentSearchParams;
 import cn.lili.modules.schemeComponent.mapper.IdTotal;
 import cn.lili.modules.schemeComponent.service.SchemeComponentService;
 import cn.lili.modules.store.entity.dos.Store;
-import cn.lili.modules.store.entity.dos.StoreDetail;
 import cn.lili.modules.store.entity.dto.StoreAfterSaleAddressDTO;
 import cn.lili.modules.store.entity.vos.StoreVO;
 import cn.lili.modules.store.service.StoreDetailService;
-import cn.lili.modules.store.service.StoreService;
-import com.alipay.api.domain.ItemOrderVO;
+import cn.lili.modules.store.service.StoreServiceZy;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.ApiOperation;
-import org.apache.ibatis.annotations.Param;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/store/schemeComponent/schemeComponent")
@@ -50,7 +35,7 @@ public class SchemeComponentController {
     private SchemeComponentService SchemeComponentService;
 
     @Autowired
-    StoreService storeService;
+    StoreServiceZy storeServiceZy;
 
     @Autowired
     ItemOrderService itemOrderService;
@@ -74,7 +59,7 @@ public class SchemeComponentController {
         ItemScheme itemScheme  = itemSchemeService.getById(schemePrimaryId);
         String schemeId = itemScheme.getSchemeId();
         List<IdTotal> supplierList = SchemeComponentService.getOrderBy(schemeId);
-        StoreVO buyerStore = storeService.getStoreDetail();
+        StoreVO buyerStore = storeServiceZy.getStoreDetail();
         StoreAfterSaleAddressDTO storep = storeDetailService.getStoreAfterSaleAddressDTO();
         Snowflake snowflake = Snowflake.getInstanceSnowflake();
         ArrayList<Object> arrayList = new ArrayList<>();
@@ -83,7 +68,7 @@ public class SchemeComponentController {
                 ItemOrder itemOrder = new ItemOrder();
                 itemOrder.setOrderId(snowflake.nextId() + "");
                 itemOrder.setOrderAmount(idTotal.getTotal()+"");
-                Store supplierStore = storeService.getById(idTotal.getId());
+                Store supplierStore = storeServiceZy.getById(idTotal.getId());
                 itemOrder.setStoreName(supplierStore.getStoreName());
                 itemOrder.setStoreId(idTotal.getId());
                 itemOrder.setCreateTime(DateTime.now());

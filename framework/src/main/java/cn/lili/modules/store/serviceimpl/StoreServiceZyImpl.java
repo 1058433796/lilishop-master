@@ -20,11 +20,11 @@ import cn.lili.modules.store.entity.dto.*;
 import cn.lili.modules.store.entity.enums.StoreStatusEnum;
 import cn.lili.modules.store.entity.vos.CustomerStoreDetailVO;
 import cn.lili.modules.store.entity.vos.CustomerStoreVO;
-import cn.lili.modules.store.entity.vos.StoreSearchParams;
+import cn.lili.modules.store.entity.vos.StoreSearchParamsZy;
 import cn.lili.modules.store.entity.vos.StoreVO;
-import cn.lili.modules.store.mapper.StoreMapper;
+import cn.lili.modules.store.mapper.StoreMapperZy;
 import cn.lili.modules.store.service.StoreDetailService;
-import cn.lili.modules.store.service.StoreService;
+import cn.lili.modules.store.service.StoreServiceZy;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -45,7 +45,7 @@ import java.util.Objects;
  * @since 2020-03-07 16:18:56
  */
 @Service
-public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements StoreService {
+public class StoreServiceZyImpl extends ServiceImpl<StoreMapperZy, Store> implements StoreServiceZy {
 
     /**
      * 会员
@@ -68,11 +68,11 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
     private Cache cache;
 
     @Override
-    public IPage<CustomerStoreVO> queryByParams(StoreSearchParams storeSearchParams) {
-        QueryWrapper queryWrapper = storeSearchParams.queryWrapper();
+    public IPage<CustomerStoreVO> queryByParams(StoreSearchParamsZy storeSearchParamsZy) {
+        QueryWrapper queryWrapper = storeSearchParamsZy.queryWrapper();
 //        queryWrapper.groupBy("o.id");
         queryWrapper.orderByDesc("o.id");
-        return this.baseMapper.queryByParams(PageUtil.initPage(storeSearchParams), queryWrapper);
+        return this.baseMapper.queryByParams(PageUtil.initPage(storeSearchParamsZy), queryWrapper);
     }
 
     @Override
@@ -81,8 +81,8 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
     }
 
     @Override
-    public IPage<StoreVO> findByConditionPage(StoreSearchParams storeSearchParams, PageVO page) {
-        return this.baseMapper.getStoreList(PageUtil.initPage(page), storeSearchParams.queryWrapper());
+    public IPage<StoreVO> findByConditionPage(StoreSearchParamsZy storeSearchParamsZy, PageVO page) {
+        return this.baseMapper.getStoreList(PageUtil.initPage(page), storeSearchParamsZy.queryWrapper());
     }
 
     @Override

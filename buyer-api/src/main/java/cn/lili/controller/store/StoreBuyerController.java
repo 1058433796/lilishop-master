@@ -11,7 +11,7 @@ import cn.lili.modules.store.entity.dto.StoreCompanyDTO;
 import cn.lili.modules.store.entity.dto.StoreOtherInfoDTO;
 import cn.lili.modules.store.entity.vos.*;
 import cn.lili.modules.store.service.StoreDetailService;
-import cn.lili.modules.store.service.StoreService;
+import cn.lili.modules.store.service.StoreServiceZy;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -39,7 +39,7 @@ public class StoreBuyerController {
      * 店铺
      */
     @Autowired
-    private StoreService storeService;
+    private StoreServiceZy storeServiceZy;
     /**
      * 店铺商品分类
      */
@@ -53,8 +53,8 @@ public class StoreBuyerController {
 
     @ApiOperation(value = "获取店铺列表分页")
     @GetMapping
-    public ResultMessage<IPage<StoreVO>> getByPage(StoreSearchParams entity, PageVO page) {
-        return ResultUtil.data(storeService.findByConditionPage(entity, page));
+    public ResultMessage<IPage<StoreVO>> getByPage(StoreSearchParamsZy entity, PageVO page) {
+        return ResultUtil.data(storeServiceZy.findByConditionPage(entity, page));
     }
 
     @ApiOperation(value = "通过id获取店铺信息")
@@ -83,21 +83,21 @@ public class StoreBuyerController {
     @ApiOperation(value = "申请店铺第一步-填写企业信息")
     @PutMapping(value = "/apply/first")
     public ResultMessage<Object> applyFirstStep(StoreCompanyDTO storeCompanyDTO) {
-        storeService.applyFirstStep(storeCompanyDTO);
+        storeServiceZy.applyFirstStep(storeCompanyDTO);
         return ResultUtil.success();
     }
 
     @ApiOperation(value = "申请店铺第二步-填写银行信息")
     @PutMapping(value = "/apply/second")
     public ResultMessage<Object> applyFirstStep(StoreBankDTO storeBankDTO) {
-        storeService.applySecondStep(storeBankDTO);
+        storeServiceZy.applySecondStep(storeBankDTO);
         return ResultUtil.success();
     }
 
     @ApiOperation(value = "申请店铺第三步-填写其他信息")
     @PutMapping(value = "/apply/third")
     public ResultMessage<Object> applyFirstStep(StoreOtherInfoDTO storeOtherInfoDTO) {
-        storeService.applyThirdStep(storeOtherInfoDTO);
+        storeServiceZy.applyThirdStep(storeOtherInfoDTO);
         return ResultUtil.success();
     }
 

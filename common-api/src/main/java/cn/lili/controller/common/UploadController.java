@@ -12,14 +12,13 @@ import cn.lili.common.utils.Base64DecodeMultipartFile;
 import cn.lili.common.utils.CommonUtil;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.file.entity.File;
-import cn.lili.modules.file.plugin.FilePlugin;
 import cn.lili.modules.file.plugin.FilePluginFactory;
 import cn.lili.modules.file.service.FileService;
 import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.service.MemberService;
 import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.enums.StoreStatusEnum;
-import cn.lili.modules.store.service.StoreService;
+import cn.lili.modules.store.service.StoreServiceZy;
 import cn.lili.modules.system.entity.dos.Setting;
 import cn.lili.modules.system.entity.enums.SettingEnum;
 import cn.lili.modules.system.service.SettingService;
@@ -60,7 +59,7 @@ public class UploadController {
     private MemberService memberService;
 
     @Autowired
-    private StoreService storeService;
+    private StoreServiceZy storeServiceZy;
 
     @ApiOperation(value = "文件上传")
     @PostMapping(value = "/file")
@@ -141,9 +140,9 @@ public class UploadController {
         }
 
 //        临时办法 自动通过审核
-        Store store = storeService.getById(member.getStoreId());
+        Store store = storeServiceZy.getById(member.getStoreId());
         store.setStoreDisable(StoreStatusEnum.OPEN.name());
-        storeService.updateById(store);
+        storeServiceZy.updateById(store);
 
         return ResultUtil.data(results);
     }
