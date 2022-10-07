@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
@@ -82,9 +83,9 @@ public class CompanyVo {
     // 组织机构代码有效期 长期
 
     private Boolean codeLongPeriod;
-
+    @NotNull
     private String username;
-
+    @NotNull
     private String password;
 
 }

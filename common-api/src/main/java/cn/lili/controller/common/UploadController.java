@@ -27,13 +27,18 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Properties;
+import java.util.UUID;
 
 /**
  * 文件上传接口
@@ -47,6 +52,11 @@ import java.util.Objects;
 @RequestMapping("/common/common/upload")
 public class UploadController {
 
+    @Value("${lili.api.common}")
+    private String apiUrl;
+
+    @Value("${upload-path}")
+    private String uploadUrl;
     @Autowired
     private FileService fileService;
     @Autowired
@@ -93,9 +103,10 @@ public class UploadController {
         String fileKey = CommonUtil.rename(Objects.requireNonNull(file.getOriginalFilename()));
         File newFile = new File();
         try {
-            InputStream inputStream = file.getInputStream();
+//            InputStream inputStream = file.getInputStream();
             //上传至第三方云服务或服务器
-            result = filePluginFactory.filePlugin().inputStreamUpload(inputStream, fileKey);
+//            result = filePluginFactory.filePlugin().inputStreamUpload(inputStream, fileKey);
+            result = executeUpload(uploadUrl, file);
             //保存数据信息至数据库
             newFile.setName(file.getOriginalFilename());
             newFile.setFileSize(file.getSize());
@@ -118,37 +129,18 @@ public class UploadController {
         return ResultUtil.data(result);
     }
 
-    @ApiOperation(value = "使用账号密码验证的文件上传")
+    @ApiOperation(value = "无需验证的文件上传")
     @PostMapping(value = "/fileUpload")
-    public ResultMessage<Object> fileUpload(@RequestParam("files") MultipartFile[] files,
-                                        @RequestParam("username") String username,
-                                        @RequestParam("password") String password) {
-
-        Member member = memberService.findByUsername(username);
-        if(!new BCryptPasswordEncoder().matches(password, member.getPassword())){
-            return ResultUtil.error(ResultCode.USER_PASSWORD_ERROR);
-        }
-        if(!member.getHaveStore())return ResultUtil.error(ResultCode.STORE_NOT_OPEN);
-
-        ArrayList<String> results = new ArrayList<>();
-        try {
-            for(MultipartFile file: files){
-                String result = save(file, member);
-                results.add(result);
-            }
-        }catch (ServiceException e){
-            return ResultUtil.error(e.getResultCode());
-        }
-
-//        临时办法 自动通过审核
-        Store store = storeService.getById(member.getStoreId());
-        store.setStoreDisable(StoreStatusEnum.OPEN.name());
-        storeService.updateById(store);
-
-        return ResultUtil.data(results);
+    public ResultMessage<Object> fileUpload(@RequestParam("file") MultipartFile file) {
+        String result = save(file);
+////        临时办法 自动通过审核
+//        Store store = storeService.getById(member.getStoreId());
+//        store.setStoreDisable(StoreStatusEnum.OPEN.name());
+//        storeService.updateById(store);
+        return ResultUtil.data(result);
     }
 
-    public String save(MultipartFile file, Member member){
+    public String save(MultipartFile file){
         if (file == null || CharSequenceUtil.isEmpty(file.getContentType())) {
             throw new ServiceException(ResultCode.IMAGE_FILE_EXT_ERROR);
         }
@@ -161,23 +153,48 @@ public class UploadController {
         String fileKey = CommonUtil.rename(Objects.requireNonNull(file.getOriginalFilename()));
         File newFile = new File();
         try {
-            InputStream inputStream = file.getInputStream();
+//            InputStream inputStream = file.getInputStream();
             //上传至第三方云服务或服务器
-            result = filePluginFactory.filePlugin().inputStreamUpload(inputStream, fileKey);
+//            result = filePluginFactory.filePlugin().inputStreamUpload(inputStream, fileKey);
+            result = executeUpload(uploadUrl, file);
             //保存数据信息至数据库
             newFile.setName(file.getOriginalFilename());
             newFile.setFileSize(file.getSize());
             newFile.setFileType(file.getContentType());
             newFile.setFileKey(fileKey);
             newFile.setUrl(result);
-            newFile.setCreateBy(member.getUsername());
+            newFile.setCreateBy(null);
             newFile.setUserEnums(UserEnums.STORE.name());
-            newFile.setOwnerId(member.getStoreId());
+            newFile.setOwnerId(null);
             fileService.save(newFile);
         } catch (Exception e) {
             log.error("文件上传失败", e);
             throw new ServiceException(ResultCode.OSS_EXCEPTION_ERROR);
         }
         return result;
+    }
+
+    private String executeUpload(String uploadDir, MultipartFile file) throws Exception {
+        //文件后缀名
+        String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+        //上传文件名
+        String filename = UUID.randomUUID() + suffix;
+        //服务器端保存的文件对象
+        java.io.File serverFile = new java.io.File(uploadDir + filename);
+
+        if(!serverFile.exists()) {
+            //先得到文件的上级目录，并创建上级目录，在创建文件
+            serverFile.getParentFile().mkdir();
+            try {
+                //创建文件
+                serverFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //将上传的文件写入到服务器端文件内
+        file.transferTo(serverFile);
+        String fileUrl = "http://" + apiUrl + "/" + filename;
+        return fileUrl;
     }
 }
