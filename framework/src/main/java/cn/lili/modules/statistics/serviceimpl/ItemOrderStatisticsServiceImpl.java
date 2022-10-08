@@ -9,7 +9,6 @@ import cn.lili.common.vo.PageVO;
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
 import cn.lili.modules.order.order.entity.enums.FlowTypeEnum;
-import cn.lili.modules.order.order.entity.enums.PayStatusEnum;
 import cn.lili.modules.order.order.entity.vo.OrderSimpleVO;
 import cn.lili.modules.statistics.entity.dto.StatisticsQueryParam;
 import cn.lili.modules.statistics.entity.vo.OrderOverviewVO;
@@ -117,7 +116,7 @@ public class ItemOrderStatisticsServiceImpl extends ServiceImpl<ItemOrderStatist
     @Override
     public long orderNum(String orderStatus) {
         LambdaQueryWrapper<ItemOrder> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(CharSequenceUtil.isNotEmpty(orderStatus),ItemOrder::getOrderStatus, orderStatus);
+        queryWrapper.eq(CharSequenceUtil.isNotEmpty(orderStatus), ItemOrder::getOrderStatus, orderStatus);
         queryWrapper.eq(CharSequenceUtil.equals(Objects.requireNonNull(UserContext.getCurrentUser()).getRole().name(), UserEnums.STORE.name()),
                 ItemOrder::getStoreId, UserContext.getCurrentUser().getStoreId());
         return this.count(queryWrapper);

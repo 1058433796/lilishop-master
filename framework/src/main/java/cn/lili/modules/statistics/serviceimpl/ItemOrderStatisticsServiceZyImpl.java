@@ -116,7 +116,7 @@ public class ItemOrderStatisticsServiceZyImpl extends ServiceImpl<ItemOrderStati
     @Override
     public long orderNum(String orderStatus) {
         LambdaQueryWrapper<ItemOrder> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(CharSequenceUtil.isNotEmpty(orderStatus),ItemOrder::getOrderStatus, orderStatus);
+        queryWrapper.eq(CharSequenceUtil.isNotEmpty(orderStatus), ItemOrder::getOrderStatus, orderStatus);
         queryWrapper.eq(CharSequenceUtil.equals(Objects.requireNonNull(UserContext.getCurrentUser()).getRole().name(), UserEnums.STORE.name()),
                 ItemOrder::getStoreId, UserContext.getCurrentUser().getStoreId());
         return this.count(queryWrapper);

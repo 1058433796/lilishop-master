@@ -2,7 +2,6 @@ package cn.lili.modules.statistics.mapper;
 
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
-import cn.lili.modules.order.order.entity.dos.Order;
 import cn.lili.modules.order.order.entity.vo.OrderSimpleVO;
 import cn.lili.modules.statistics.entity.vo.OrderStatisticsDataVO;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;

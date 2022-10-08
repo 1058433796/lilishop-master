@@ -5,8 +5,6 @@ import cn.lili.modules.itemOrder.entity.dto.ItemOrderExportDTO;
 import cn.lili.modules.itemOrder.entity.dto.ItemOrderSearchParams;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
 import cn.lili.modules.itemOrder.entity.vo.OrderGoodDetailVO;
-import cn.lili.modules.order.order.entity.dto.OrderExportDTO;
-import cn.lili.modules.order.order.entity.dto.OrderSearchParams;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.stereotype.Service;

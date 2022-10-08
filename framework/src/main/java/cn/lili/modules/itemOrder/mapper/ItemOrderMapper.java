@@ -4,8 +4,6 @@ import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.dto.ItemOrderExportDTO;
 import cn.lili.modules.order.order.entity.dos.Order;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
-import cn.lili.modules.order.order.entity.dto.OrderExportDTO;
-import cn.lili.modules.order.order.entity.vo.OrderSimpleVO;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;

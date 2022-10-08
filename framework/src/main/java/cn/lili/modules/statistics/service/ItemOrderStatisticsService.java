@@ -3,8 +3,6 @@ package cn.lili.modules.statistics.service;
 import cn.lili.common.vo.PageVO;
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
-import cn.lili.modules.order.order.entity.dos.Order;
-import cn.lili.modules.order.order.entity.vo.OrderSimpleVO;
 import cn.lili.modules.statistics.entity.dto.StatisticsQueryParam;
 import cn.lili.modules.statistics.entity.vo.OrderOverviewVO;
 import cn.lili.modules.statistics.entity.vo.OrderStatisticsDataVO;
