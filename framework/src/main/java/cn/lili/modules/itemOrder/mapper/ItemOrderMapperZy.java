@@ -1,6 +1,6 @@
 package cn.lili.modules.itemOrder.mapper;
 
-import cn.lili.modules.contract.contract.entity.Contract;
+import cn.lili.modules.contract.entity.Contract;
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.vo.OrderWithContractSimpleV0;
 import cn.lili.modules.schemeComponent.entity.SchemeComponent;

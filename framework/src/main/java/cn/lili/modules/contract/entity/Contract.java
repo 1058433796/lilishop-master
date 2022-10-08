@@ -1,4 +1,4 @@
-package cn.lili.modules.contract.contract.entity;
+package cn.lili.modules.contract.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -32,7 +32,7 @@ public class Contract {
 
     private String buyerState = "未签署";
 
-    private long amount;
+    private Double amount;
 
     private String orderId;
 

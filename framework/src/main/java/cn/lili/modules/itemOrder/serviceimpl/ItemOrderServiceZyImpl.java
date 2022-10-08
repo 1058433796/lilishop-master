@@ -2,6 +2,7 @@ package cn.lili.modules.itemOrder.serviceimpl;
 
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.dto.ItemOrderSearchParams;
+import cn.lili.modules.itemOrder.entity.dto.ItemOrderSearchParamsZy;
 import cn.lili.modules.itemOrder.entity.vo.OrderWithContractSimpleV0;
 import cn.lili.modules.itemOrder.mapper.ItemOrderMapperZy;
 import cn.lili.modules.itemOrder.service.ItemOrderServiceZy;
@@ -16,7 +17,7 @@ import java.util.List;
 @Service
 public class ItemOrderServiceZyImpl extends ServiceImpl<ItemOrderMapperZy, ItemOrder> implements ItemOrderServiceZy {
     @Override
-    public IPage<ItemOrder> queryByParams(ItemOrderSearchParams itemOrderSearchParams) {
+    public IPage<ItemOrder> queryByParams(ItemOrderSearchParamsZy itemOrderSearchParams) {
         return this.page(PageUtil.initPage(itemOrderSearchParams), itemOrderSearchParams.queryWrapper());
     }
 
@@ -31,7 +32,7 @@ public class ItemOrderServiceZyImpl extends ServiceImpl<ItemOrderMapperZy, ItemO
     }
 
     @Override
-    public IPage<OrderWithContractSimpleV0> queryAssociatedContractOrders(ItemOrderSearchParams itemOrderSearchParams) {
+    public IPage<OrderWithContractSimpleV0> queryAssociatedContractOrders(ItemOrderSearchParamsZy itemOrderSearchParams) {
         return this.baseMapper.queryAssociatedContractOrders(PageUtil.initPage(itemOrderSearchParams), itemOrderSearchParams.queryWrapper());
     }
 

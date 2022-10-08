@@ -1,12 +1,10 @@
-package cn.lili.modules.contract.contract.service.serviceImpl;
+package cn.lili.modules.contract.service.serviceImpl;
 
 import cn.lili.modules.contract.entity.Contract;
 import cn.lili.modules.contract.entity.ContractSearchParams;
 import cn.lili.modules.contract.mapper.ContractMapper;
-import cn.lili.modules.contract.contract.service.ContractService;
-import cn.lili.modules.itemOrder.entity.ItemOrder;
+import cn.lili.modules.contract.service.ContractService;
 import cn.lili.mybatis.util.PageUtil;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -30,4 +28,8 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, Contract> i
 
     }
 
+    @Override
+    public boolean save(Contract entity) {
+        return super.save(entity);
+    }
 }

@@ -2,14 +2,13 @@ package cn.lili.controller.itemOrder;
 
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.vo.ResultMessage;
-import cn.lili.modules.itemOrder.entity.ItemOrder;
-import cn.lili.modules.itemOrder.entity.ItemOrderSearchParams;
+import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
+import cn.lili.modules.itemOrder.entity.dto.ItemOrderSearchParamsZy;
 import cn.lili.modules.itemOrder.service.ItemOrderServiceZy;
 import cn.lili.modules.schemeComponent.entity.SchemeComponent;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -19,17 +18,18 @@ public class itemOrderController {
     @Resource
     private ItemOrderServiceZy itemOrderServiceZy;
 
-    @ApiOperation(value = "分页获取项目列表")
+    @ApiOperation(value = "分页获取订单列表")
     @GetMapping("/list")
-    public ResultMessage<IPage<ItemOrder>> getByPage(ItemOrderSearchParams itemOrderSearchParams) {
+    public ResultMessage<IPage<ItemOrder>> getByPage(ItemOrderSearchParamsZy itemOrderSearchParamsZy) {
         //获取当前登录商家账号
-        return ResultUtil.data(itemOrderServiceZy.queryByParams(itemOrderSearchParams));
+        return ResultUtil.data(itemOrderServiceZy.queryByParams(itemOrderSearchParamsZy));
     }
 
     @ApiOperation(value = "查询订单列表")
     @GetMapping
-    public ResultMessage<IPage<ItemOrder>> queryMineOrder(ItemOrderSearchParams itemOrderSearchParams) {
-        return ResultUtil.data(itemOrderServiceZy.queryByParams(itemOrderSearchParams));
+    public ResultMessage<IPage<ItemOrder>> queryMineOrder(ItemOrderSearchParamsZy itemOrderSearchParamsZy) {
+        System.out.println("order table");
+        return ResultUtil.data(itemOrderServiceZy.queryByParams(itemOrderSearchParamsZy));
     }
 
     @ApiOperation(value = "获取供应商在此订单中提供的零件")
@@ -63,9 +63,9 @@ public class itemOrderController {
     public ResultMessage<Object> associatedContractOrders(@PathVariable("oid") String oid) {
         ItemOrder itemOrder = itemOrderServiceZy.getById(oid);
         String schemePrimaryId = itemOrder.getSchemeId();
-        ItemOrderSearchParams itemOrderSearchParams = new ItemOrderSearchParams();
-        itemOrderSearchParams.setSchemeId(schemePrimaryId);
-        return ResultUtil.data(itemOrderServiceZy.queryAssociatedContractOrders(itemOrderSearchParams));
+        ItemOrderSearchParamsZy itemOrderSearchParamsZy = new ItemOrderSearchParamsZy();
+        itemOrderSearchParamsZy.setSchemeId(schemePrimaryId);
+        return ResultUtil.data(itemOrderServiceZy.queryAssociatedContractOrders(itemOrderSearchParamsZy));
     }
     @ApiOperation("支付订单")
     @PutMapping("/pay/{oid}")

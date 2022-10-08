@@ -1,12 +1,12 @@
 package cn.lili.controller.itemScheme;
 
 import cn.hutool.core.date.DateTime;
-import cn.lili.Snowflake;
+import cn.hutool.core.lang.Snowflake;
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.item.entity.ItemScheme;
 import cn.lili.modules.item.service.ItemSchemeService;
-import cn.lili.modules.itemOrder.entity.ItemOrder;
+import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.service.ItemOrderServiceZy;
 import cn.lili.modules.schemeComponent.entity.SchemeComponent;
 import cn.lili.modules.schemeComponent.entity.SchemeComponentSearchParams;
@@ -61,13 +61,13 @@ public class SchemeComponentController {
         List<IdTotal> supplierList = SchemeComponentService.getOrderBy(schemeId);
         StoreVO buyerStore = storeServiceZy.getStoreDetail();
         StoreAfterSaleAddressDTO storep = storeDetailService.getStoreAfterSaleAddressDTO();
-        Snowflake snowflake = Snowflake.getInstanceSnowflake();
+        Snowflake snowflake = new Snowflake();
         ArrayList<Object> arrayList = new ArrayList<>();
         for(IdTotal idTotal : supplierList) {
             try {
                 ItemOrder itemOrder = new ItemOrder();
-                itemOrder.setOrderId(snowflake.nextId() + "");
-                itemOrder.setOrderAmount(idTotal.getTotal()+"");
+                itemOrder.setOrderId(snowflake.nextId()+"");
+                itemOrder.setOrderAmount(idTotal.getTotal());
                 Store supplierStore = storeServiceZy.getById(idTotal.getId());
                 itemOrder.setStoreName(supplierStore.getStoreName());
                 itemOrder.setStoreId(idTotal.getId());
@@ -84,38 +84,6 @@ public class SchemeComponentController {
                 throw new RuntimeException(e);
             }
         }
-//        SchemeComponentSearchParams  schemeComponentSearchParams = new SchemeComponentSearchParams();
-//        schemeComponentSearchParams.setSchemeId(schemeId);
-//        IPage<SchemeComponent> iPage = SchemeComponentService.queryByParams(schemeComponentSearchParams);
-//        List<SchemeComponent> schemeComponents = iPage.getRecords();
-//        ArrayList<Object> arrayList = new ArrayList<>();
-//        Snowflake snowflake = Snowflake.getInstanceSnowflake();
-//        // 获取采购方店铺信息
-//
-//        for (int i=0; i < schemeComponents.size(); ++i) {
-//            SchemeComponent schemeComponent = schemeComponents.get(i);
-//            String ids = schemeComponent.getSupplierId();
-//            Store supplierStore = storeService.getById(ids);
-//            DateTime dateTime = DateTime.now();
-//            ItemOrder itemOrder = new ItemOrder();
-//            itemOrder.setOrderAmount(Double.parseDouble(schemeComponent.getComponentUnitPrice())*Double.parseDouble(schemeComponent.getComponentNumber())+"");
-//            itemOrder.setStoreName(supplierStore.getStoreName());
-//            // 设置订单中与采购方相关的信息
-//            itemOrder.setBuyerPhone(storep.getSalesConsigneeMobile());
-//            itemOrder.setBuyerName(storep.getSalesConsigneeName());
-//            itemOrder.setBuyerAddress(buyerStore.getStoreAddressPath() + buyerStore.getStoreAddressDetail());
-//            itemOrder.setBuyerId(buyerStore.getId());
-//            try {
-//                // 生成订单号、订单产生时间并设置订单所对应的供应商店铺的id
-//                itemOrder.setOrderId(snowflake.nextId()+"");
-//                itemOrder.setCreateTime(dateTime.now());
-//                itemOrder.setStoreId(ids);
-//                itemOrderService.save(itemOrder);
-//                arrayList.add(itemOrder);
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
        return ResultUtil.data(arrayList);
     }
 

@@ -1,7 +1,6 @@
-package cn.lili.modules.contract.contract.mapper;
+package cn.lili.modules.contract.mapper;
 
 import cn.lili.modules.contract.entity.Contract;
-import cn.lili.modules.itemOrder.entity.ItemOrder;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;

@@ -1,4 +1,4 @@
-package cn.lili.modules.contract.contract.entity;
+package cn.lili.modules.contract.entity;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.lili.common.vo.PageVO;

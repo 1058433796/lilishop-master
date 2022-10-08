@@ -100,6 +100,8 @@ public class ItemOrder
     @ApiModelProperty(value = "供应商名称")
     private String storeName;
 
+    @ApiModelProperty(value = "所属方案号")
+    private String schemeId;
 
 
 

@@ -6,7 +6,7 @@ import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.contract.entity.Contract;
 import cn.lili.modules.contract.entity.ContractSearchParams;
 import cn.lili.modules.contract.service.ContractService;
-import cn.lili.modules.itemOrder.entity.ItemOrder;
+import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.service.ItemOrderServiceZy;
 import cn.lili.modules.store.entity.vos.StoreVO;
 import cn.lili.modules.store.service.StoreServiceZy;
@@ -61,7 +61,7 @@ public class ContractController {
         newContract.setOrderId(id);
         newContract.setTimeStart(DateTime.now());
         ItemOrder itemOrder = itemOrderServiceZy.getById(id);
-        newContract.setAmount(Long.parseLong(itemOrder.getOrderAmount()));
+        newContract.setAmount(itemOrder.getOrderAmount());
         newContract.setBuyerId(itemOrder.getBuyerId());
         newContract.setStoreName(itemOrder.getStoreName());
         newContract.setStoreId(itemOrder.getStoreId());
