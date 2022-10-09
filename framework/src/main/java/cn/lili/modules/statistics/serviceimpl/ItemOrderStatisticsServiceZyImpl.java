@@ -67,22 +67,26 @@ public class ItemOrderStatisticsServiceZyImpl extends ServiceImpl<ItemOrderStati
         queryWrapper.select("SUM(order_amount) AS trade_amount , COUNT(0) AS num");
         queryWrapper.eq("pay_status", "已付款");
         Map payment = this.getMap(queryWrapper);
-
+        // 已付款订单数
         orderOverviewVO.setPaymentOrderNum(payment != null && payment.containsKey("num") ? (Long) payment.get("num") : 0L);
+        // 已付款总金额
         orderOverviewVO.setPaymentAmount(payment != null && payment.containsKey("trade_amount") ? Double.parseDouble(payment.get("trade_amount").toString()) : 0D);
 
-        //付款人数
+
         queryWrapper = Wrappers.query();
         queryWrapper.between("create_time", dates[0], dates[1]);
         //如果有店铺id传入，则查询店铺
         if (StringUtils.isNotEmpty(statisticsQueryParam.getStoreId())) {
             queryWrapper.eq("buyer_id", statisticsQueryParam.getStoreId());
         }
-        queryWrapper.select("COUNT(0) AS num");
+        queryWrapper.select("SUM(order_amount) AS total_order_amount , COUNT(0) AS total_orders");
         queryWrapper.groupBy("buyer_id");
-        Map paymentMemberNum = this.getMap(queryWrapper);
+        Map totalMemberNum = this.getMap(queryWrapper);
+        // 所有订单数（包括已付款的和未付款的）
+        orderOverviewVO.setTotalOrders(totalMemberNum != null && totalMemberNum.containsKey("total_orders") ? (Long) totalMemberNum.get("total_orders") : 0L);
+        // 所有订单总金额（包括已付款的和未付款的）
+        orderOverviewVO.setOrderAmount(totalMemberNum != null && totalMemberNum.containsKey("total_order_amount") ? Double.parseDouble(totalMemberNum.get("total_order_amount").toString()) : 0D);
 
-        orderOverviewVO.setPaymentsNum(paymentMemberNum != null && paymentMemberNum.containsKey("num") ? (Long) paymentMemberNum.get("num") : 0L);
         return orderOverviewVO;
     }
 

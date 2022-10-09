@@ -30,7 +30,7 @@ import java.util.Objects;
  * @since 2020/12/9 19:04
  */
 @Slf4j
-@Api(tags = "店铺端,订单统计接口")
+@Api(tags = "采购方端,订单统计接口")
 @RestController
 @RequestMapping("/store/statistics/order")
 public class ProviderOrderStatisticsStoreController {
