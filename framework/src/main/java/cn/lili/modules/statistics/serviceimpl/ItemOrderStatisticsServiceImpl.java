@@ -127,7 +127,7 @@ public class ItemOrderStatisticsServiceImpl extends ServiceImpl<ItemOrderStatist
         Date[] dates = StatisticsDateUtil.getDateArray(statisticsQueryParam);
         QueryWrapper queryWrapper = new QueryWrapper();
         //已支付
-        queryWrapper.eq("pay_status", "已付款");
+        //queryWrapper.eq("pay_status", "已付款");
         //选择商家判定
         queryWrapper.eq(StringUtils.isNotEmpty(statisticsQueryParam.getStoreId()), "store_id", statisticsQueryParam.getStoreId());
 //      查询时间区间
@@ -135,9 +135,10 @@ public class ItemOrderStatisticsServiceImpl extends ServiceImpl<ItemOrderStatist
 //       格式化时间
         queryWrapper.groupBy("DATE_FORMAT(create_time,'%Y-%m-%d')");
         List<OrderStatisticsDataVO> orderStatisticsDataVOS = this.baseMapper.getOrderStatisticsData(queryWrapper);
+        queryWrapper.eq("pay_status", "已付款");
+        List<OrderStatisticsDataVO> orderStatisticsDataVOS2 = this.baseMapper.getOrderStatisticsData(queryWrapper);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dates[0]);
-
         List<OrderStatisticsDataVO> result = new ArrayList<>();
         //时间判定，将数据填充好
         //如果当前的时间，在结束时间之前
@@ -147,15 +148,34 @@ public class ItemOrderStatisticsServiceImpl extends ServiceImpl<ItemOrderStatist
             for (OrderStatisticsDataVO orderStatisticsDataVO : orderStatisticsDataVOS) {
                 if (orderStatisticsDataVO.getCreateTime().equals(calendar.getTime())) {
                     item = orderStatisticsDataVO;
+                    orderStatisticsDataVO.setPayStatus("全部");
                 }
             }
             //如果数据不存在，则进行数据填充
             if (item == null) {
                 item = new OrderStatisticsDataVO();
                 item.setPrice(0d);
+                item.setPayStatus("全部");
                 item.setCreateTime(calendar.getTime());
             }
             result.add(item);
+            item = null;
+            //判定是否已经有这一天的数据
+            for (OrderStatisticsDataVO orderStatisticsDataVO2 : orderStatisticsDataVOS2) {
+                if (orderStatisticsDataVO2.getCreateTime().equals(calendar.getTime())) {
+                    item = orderStatisticsDataVO2;
+                    orderStatisticsDataVO2.setPayStatus("已付款");
+                }
+            }
+            //如果数据不存在，则进行数据填充
+            if (item == null) {
+                item = new OrderStatisticsDataVO();
+                item.setPrice(0d);
+                item.setPayStatus("已付款");
+                item.setCreateTime(calendar.getTime());
+            }
+            result.add(item);
+
             //增加时间
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
         }

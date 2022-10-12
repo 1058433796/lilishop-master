@@ -17,10 +17,13 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, Contract> i
         System.out.println("查询合同");
         return this.page(PageUtil.initPage(contractSearchParams), contractSearchParams.queryWrapper());
     }
+    public void providerSign(String id) {
+        this.baseMapper.providerSign(id);
+    }
+
     public void buyerSign(String id) {
         this.baseMapper.buyerSign(id);
     }
-
     @Override
     public IPage<Contract> queryAssociated(ContractSearchParams contractSearchParams) {
         QueryWrapper queryWrapper = contractSearchParams.queryWrapper();

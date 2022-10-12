@@ -13,6 +13,9 @@ public interface ContractService extends IService<Contract> {
     IPage<Contract> queryByParams(ContractSearchParams contractSearchParams);
 
 
+    void providerSign(String id);
+
+
     void buyerSign(String id);
 
     IPage<Contract> queryAssociated(ContractSearchParams contractSearchParams);

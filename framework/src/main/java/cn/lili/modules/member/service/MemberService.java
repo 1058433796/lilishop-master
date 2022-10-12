@@ -7,6 +7,7 @@ import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.entity.dto.ManagerMemberEditDTO;
 import cn.lili.modules.member.entity.dto.MemberAddDTO;
 import cn.lili.modules.member.entity.dto.MemberEditDTO;
+import cn.lili.modules.member.entity.dto.StoreUserUpdateDTO;
 import cn.lili.modules.member.entity.vo.MemberSearchVO;
 import cn.lili.modules.member.entity.vo.MemberVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -27,6 +28,8 @@ public interface MemberService extends IService<Member> {
      * 默认密码
      */
     static String DEFAULT_PASSWORD = "111111";
+
+    boolean StoreUpdateMember(StoreUserUpdateDTO storeUserUpdateDTO);
 
     /**
      * 获取当前登录的用户信息

@@ -92,4 +92,7 @@ public class ItemOrderSimpleVO {
 
     @ApiModelProperty(value = "供应商名称")
     private String storeName;
+
+    @ApiModelProperty(value = "订单类型")
+    private String type;
 }

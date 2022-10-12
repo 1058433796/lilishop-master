@@ -33,6 +33,18 @@ public class Member extends BaseEntity {
     @ApiModelProperty(value = "会员用户名")
     private String username;
 
+    @ApiModelProperty(value = "会员等级")
+    private String grade;
+
+    @ApiModelProperty(value = "会员类型")
+    private String type;
+
+    @ApiModelProperty(value = "会员微信")
+    private String wechat;
+
+    @ApiModelProperty(value = "会员邮箱")
+    private String email;
+
     @ApiModelProperty(value = "会员密码")
     private String password;
 

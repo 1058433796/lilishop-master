@@ -13,7 +13,8 @@ public interface ContractMapper extends BaseMapper<Contract> {
 
     @Update("UPDATE contract SET buyer_state='已签署' WHERE id=#{id}" )
     void buyerSign(String id);
-
+    @Update("UPDATE contract SET provider_state='已签署' WHERE id=#{id}" )
+    void providerSign(String id);
     @Select("select g.* from order as g")
     IPage<Contract> queryByParams(IPage<Contract> page, @Param(Constants.WRAPPER) Wrapper<Contract> queryWrapper);
 

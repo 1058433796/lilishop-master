@@ -38,7 +38,7 @@ spring:
     type: redis
   # Redis
   redis:
-    host: 127.0.0.1
+    host: 10.27.219.66
     port: 6379
     password: lilishop
     lettuce:
@@ -72,7 +72,7 @@ spring:
 #        url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
 #        username: root
 #        password: 123456
-        url: jdbc:mysql://127.0.0.1:3306/lilishop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+        url: jdbc:mysql://10.27.219.66:3306/lilishop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
         username: root
         password: lilishop
         maxActive: 20
@@ -227,7 +227,7 @@ lili:
   data:
     elasticsearch:
       cluster-name: elasticsearch
-      cluster-nodes: 127.0.0.1:9200
+      cluster-nodes: 10.27.219.66:9200
       index:
         number-of-replicas: 0
         number-of-shards: 3
@@ -237,7 +237,7 @@ lili:
     #        username: elastic
     #        password: LiLiShopES
     logstash:
-      server: 127.0.0.1:4560
+      server: 10.27.219.66:4560
     rocketmq:
       promotion-topic: lili_promotion_topic
       promotion-group: lili_promotion_group
@@ -258,7 +258,7 @@ lili:
       after-sale-topic: lili_after_sale_topic
       after-sale-group: lili_after_sale_group
 rocketmq:
-  name-server: 127.0.0.1:9876
+  name-server: 10.27.219.66:9876
   producer:
     group: lili_group
     send-message-timeout: 30000
@@ -266,7 +266,7 @@ rocketmq:
 xxl:
   job:
     admin:
-      addresses: http://127.0.0.1:9001/xxl-job-admin
+      addresses: http://10.27.219.66:9001/xxl-job-admin
     executor:
       appname: xxl-job-executor-lilishop
       address:

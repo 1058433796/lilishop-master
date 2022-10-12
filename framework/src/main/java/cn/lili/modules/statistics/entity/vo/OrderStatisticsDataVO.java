@@ -32,4 +32,6 @@ public class OrderStatisticsDataVO {
 
     @ApiModelProperty(value = "订单编号")
     private String orderItemSn;
+
+    private String payStatus;
 }

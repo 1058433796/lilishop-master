@@ -23,7 +23,7 @@ public class CustomerStoreVO {
     private String buyerPhone;
 
     @ApiModelProperty(value = "交易金额")
-    private String tradeAmount;
+    private Double tradeAmount;
 
     @ApiModelProperty(value = "最近交易时间")
     private String latestTime;

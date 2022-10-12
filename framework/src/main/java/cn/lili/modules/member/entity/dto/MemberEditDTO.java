@@ -38,7 +38,7 @@ public class MemberEditDTO {
     private Integer sex;
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "会员生日")
     private Date birthday;
 

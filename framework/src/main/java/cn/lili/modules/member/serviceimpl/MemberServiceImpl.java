@@ -108,6 +108,20 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
 
 
     @Override
+    public boolean StoreUpdateMember(StoreUserUpdateDTO storeUserUpdateDTO) {
+        AuthUser tokenUser = Objects.requireNonNull(UserContext.getCurrentUser());
+        Member member = this.findByUsername(tokenUser.getUsername());
+
+        //判断是否用户登录并且会员ID为当前登录会员ID
+        if (!Objects.equals(tokenUser.getId(), member.getId())) {
+            throw new ServiceException(ResultCode.USER_NOT_LOGIN);
+        }
+        //修改
+        BeanUtil.copyProperties(storeUserUpdateDTO, member);
+        return this.updateById(member);
+    }
+
+    @Override
     public Member getUserInfo() {
         AuthUser tokenUser = UserContext.getCurrentUser();
         if (tokenUser != null) {
