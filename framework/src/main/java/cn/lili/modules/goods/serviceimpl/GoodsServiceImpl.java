@@ -174,14 +174,19 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         if (goodsOperationDTO.getGoodsGalleryList() != null && !goodsOperationDTO.getGoodsGalleryList().isEmpty()) {
             this.goodsGalleryService.add(goodsOperationDTO.getGoodsGalleryList(), goods.getId());
         }
-//        添加模型文件
-        if(goodsOperationDTO.getModelList() != null && !goodsOperationDTO.getModelList().isEmpty()){
-            goodsMaterialService.add(goodsOperationDTO.getModelList(), goods.getId(), GoodsMaterialEnum.Model);
-        }
-//      添加材料文件
+
+            //      添加材料文件
         if(goodsOperationDTO.getMaterialList() != null && !goodsOperationDTO.getMaterialList().isEmpty()){
             goodsMaterialService.add(goodsOperationDTO.getMaterialList(), goods.getId(), GoodsMaterialEnum.MATERIAL);
         }
+
+        //        添加模型文件
+        if(goodsOperationDTO.getModelList() != null && !goodsOperationDTO.getModelList().isEmpty()){
+            goodsMaterialService.add(goodsOperationDTO.getModelList(), goods.getId(), GoodsMaterialEnum.Model);
+        }
+
+
+
         this.generateEs(goods);
     }
 

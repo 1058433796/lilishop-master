@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @TableName("li_goods_material")
-@AllArgsConstructor
 @Data
 public class GoodsMaterial extends BaseEntity {
 //    所属商品
@@ -19,4 +18,10 @@ public class GoodsMaterial extends BaseEntity {
  * @see cn.lili.modules.goods.entity.enums.GoodsMaterialEnum
   */
     private String type;
+
+    public GoodsMaterial(String goodsId, String url, String type){
+        this.goodsId = goodsId;
+        this.url = url;
+        this.type = type;
+    }
 }
