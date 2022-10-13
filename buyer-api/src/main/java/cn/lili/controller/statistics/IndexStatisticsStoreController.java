@@ -53,4 +53,6 @@ public class IndexStatisticsStoreController {
     public ResultMessage<StoreIndexStatisticsVO> index() {
         return ResultUtil.data(indexStatisticsService.storeIndexStatistics());
     }
+
+
 }

@@ -6,11 +6,13 @@ import cn.lili.common.security.enums.UserEnums;
 import cn.lili.common.utils.CurrencyUtil;
 import cn.lili.common.utils.StringUtils;
 import cn.lili.common.vo.PageVO;
+import cn.lili.modules.item.service.ItemService;
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
 import cn.lili.modules.order.order.entity.enums.FlowTypeEnum;
 import cn.lili.modules.order.order.entity.vo.OrderSimpleVO;
 import cn.lili.modules.statistics.entity.dto.StatisticsQueryParam;
+import cn.lili.modules.statistics.entity.vo.HomeStatisticDataVO;
 import cn.lili.modules.statistics.entity.vo.OrderOverviewVO;
 import cn.lili.modules.statistics.entity.vo.OrderStatisticsDataVO;
 import cn.lili.modules.statistics.mapper.ItemOrderStatisticsMapperZy;
@@ -47,6 +49,8 @@ public class ItemOrderStatisticsServiceZyImpl extends ServiceImpl<ItemOrderStati
     @Autowired
     private StoreFlowStatisticsService storeFlowStatisticsService;
 
+    @Autowired
+    private ItemService itemService;
     @Override
     public OrderOverviewVO overview(StatisticsQueryParam statisticsQueryParam) {
         Date[] dates = StatisticsDateUtil.getDateArray(statisticsQueryParam);
@@ -67,25 +71,55 @@ public class ItemOrderStatisticsServiceZyImpl extends ServiceImpl<ItemOrderStati
         queryWrapper.select("SUM(order_amount) AS trade_amount , COUNT(0) AS num");
         queryWrapper.eq("pay_status", "已付款");
         Map payment = this.getMap(queryWrapper);
-
+        // 已付款订单数
         orderOverviewVO.setPaymentOrderNum(payment != null && payment.containsKey("num") ? (Long) payment.get("num") : 0L);
+        // 已付款总金额
         orderOverviewVO.setPaymentAmount(payment != null && payment.containsKey("trade_amount") ? Double.parseDouble(payment.get("trade_amount").toString()) : 0D);
 
-        //付款人数
+
         queryWrapper = Wrappers.query();
         queryWrapper.between("create_time", dates[0], dates[1]);
         //如果有店铺id传入，则查询店铺
         if (StringUtils.isNotEmpty(statisticsQueryParam.getStoreId())) {
             queryWrapper.eq("buyer_id", statisticsQueryParam.getStoreId());
         }
-        queryWrapper.select("COUNT(0) AS num");
+        queryWrapper.select("SUM(order_amount) AS total_order_amount , COUNT(0) AS total_orders");
         queryWrapper.groupBy("buyer_id");
-        Map paymentMemberNum = this.getMap(queryWrapper);
+        Map totalMemberNum = this.getMap(queryWrapper);
+        // 所有订单数（包括已付款的和未付款的）
+        orderOverviewVO.setTotalOrders(totalMemberNum != null && totalMemberNum.containsKey("total_orders") ? (Long) totalMemberNum.get("total_orders") : 0L);
+        // 所有订单总金额（包括已付款的和未付款的）
+        orderOverviewVO.setOrderAmount(totalMemberNum != null && totalMemberNum.containsKey("total_order_amount") ? Double.parseDouble(totalMemberNum.get("total_order_amount").toString()) : 0D);
 
-        orderOverviewVO.setPaymentsNum(paymentMemberNum != null && paymentMemberNum.containsKey("num") ? (Long) paymentMemberNum.get("num") : 0L);
         return orderOverviewVO;
     }
 
+    @Override
+    public HomeStatisticDataVO homeStatistic(String storeId) {
+        HomeStatisticDataVO homeStatisticData = new HomeStatisticDataVO();
+        QueryWrapper queryWrapper = Wrappers.query();
+        queryWrapper.eq("buyer_id", storeId);
+        queryWrapper.select("SUM(order_amount) AS trade_amount , COUNT(0) AS num");
+        queryWrapper.eq("pay_status", "已付款");
+
+        Map payment = this.getMap(queryWrapper);
+        // 已付款订单数
+        homeStatisticData.setPayedOrderNum(payment != null && payment.containsKey("num") ? (Long) payment.get("num") : 0L);
+        // 已付款总金额
+        homeStatisticData.setPayedOrderAmount(payment != null && payment.containsKey("trade_amount") ? Double.parseDouble(payment.get("trade_amount").toString()) : 0D);
+        queryWrapper = Wrappers.query();
+        queryWrapper.eq("buyer_id", storeId);
+        queryWrapper.select("SUM(order_amount) AS total_order_amount , COUNT(0) AS total_orders");
+        queryWrapper.groupBy("buyer_id");
+        Map totalMemberNum = this.getMap(queryWrapper);
+        // 所有订单数（包括已付款的和未付款的）
+        homeStatisticData.setTotalOrderNum(totalMemberNum != null && totalMemberNum.containsKey("total_orders") ? (Long) totalMemberNum.get("total_orders") : 0L);
+        // 所有订单总金额（包括已付款的和未付款的）
+        homeStatisticData.setTotalOrderAmount(totalMemberNum != null && totalMemberNum.containsKey("total_order_amount") ? Double.parseDouble(totalMemberNum.get("total_order_amount").toString()) : 0D);
+        homeStatisticData.setProductNum(itemService.getStoreProductNum(storeId));
+
+        return homeStatisticData;
+    }
     /**
      * 运算转换率
      *

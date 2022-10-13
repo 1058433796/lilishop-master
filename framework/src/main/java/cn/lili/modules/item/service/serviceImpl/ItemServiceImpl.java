@@ -45,6 +45,12 @@ public class ItemServiceImpl extends ServiceImpl<ItemMapper, Item> implements It
         boolean save = this.save(item);
         return save;
     }
+
+    @Override
+    public Long getStoreProductNum(String id) {
+        return this.baseMapper.getStoreProductNum(id);
+    }
+
     @Override
     public ItemVO getItemVO(String id) {
         Item item = this.getById(id);

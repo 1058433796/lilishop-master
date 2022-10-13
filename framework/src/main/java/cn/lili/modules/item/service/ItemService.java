@@ -27,6 +27,9 @@ public interface ItemService extends IService<Item> {
      */
     boolean saveItem(Item item);
 
+    Long getStoreProductNum(String id);
+
+
     /**
      * 项目查询
      *

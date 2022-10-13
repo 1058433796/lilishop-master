@@ -22,6 +22,12 @@ public class Contract {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date timeEnd;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date signTime;
+
     private String storeId;
 
     private String storeName;
@@ -35,5 +41,7 @@ public class Contract {
     private Double amount;
 
     private String orderId;
+
+    private String buyerName;
 
 }
