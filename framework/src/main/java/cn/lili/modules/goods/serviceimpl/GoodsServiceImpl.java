@@ -274,7 +274,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         List<String> materials = new ArrayList<>();
         List<GoodsMaterial> materialList = goodsMaterialService.getList(goodsId, GoodsMaterialEnum.MATERIAL);
         for (GoodsMaterial material : materialList) {
-            models.add(material.getUrl());
+            materials.add(material.getUrl());
         }
         goodsVO.setMaterialList(materials);
 
