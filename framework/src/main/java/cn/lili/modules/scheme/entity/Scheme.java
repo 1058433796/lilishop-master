@@ -38,4 +38,6 @@ public class Scheme {
 
     private String updateTime;
 
+    private String schemeSum;
+
 }
