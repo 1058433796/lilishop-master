@@ -9,7 +9,7 @@ server:
       max: 1000
 
 # 服务器ip地址
-server-ip: 127.0.0.1
+server-ip: 112.230.202.198:8890
 
 # 与Spring Boot 2一样，默认情况下，大多数端点都不通过http公开，我们公开了所有端点。对于生产，您应该仔细选择要公开的端点。
 management:
@@ -23,7 +23,7 @@ management:
       exposure:
         include: '*'
 #        文件保存路径
-upload-path: D:/data/
+upload-path: /remoteProject/data/
 
 spring:
   application:
@@ -37,7 +37,7 @@ spring:
     type: redis
   # Redis
   redis:
-    host: 10.27.219.66
+    host: 127.0.0.1
     port: 6379
     password: lilishop
     lettuce:
@@ -68,7 +68,7 @@ spring:
       default-datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://10.27.219.66:3306/lilishop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+        url: jdbc:mysql://127.0.0.1:3306/lilishop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
         username: root
         password: lilishop
         maxActive: 20
@@ -250,7 +250,7 @@ lili:
   data:
     elasticsearch:
       cluster-name: elasticsearch
-      cluster-nodes: 10.27.219.66:9200
+      cluster-nodes: 127.0.0.1:9200
       index:
         number-of-replicas: 0
         number-of-shards: 3
@@ -260,7 +260,7 @@ lili:
     #        username: elastic
     #        password: LiLiShopES
     logstash:
-      server: 10.27.219.66:4560
+      server: 127.0.0.1:4560
     rocketmq:
       promotion-topic: lili_promotion_topic
       promotion-group: lili_promotion_group
@@ -279,7 +279,7 @@ lili:
       notice-send-topic: lili_send_notice_topic
       notice-send-group: lili_send_notice_group
 rocketmq:
-  name-server: 10.27.219.66:9876
+  name-server: 127.0.0.1:9876
   producer:
     group: lili_group
     send-message-timeout: 30000
@@ -287,7 +287,7 @@ rocketmq:
 xxl:
   job:
     admin:
-      addresses: http://10.27.219.66:9001/xxl-job-admin
+      addresses: http://127.0.0.1:9001/xxl-job-admin
     executor:
       appname: xxl-job-executor-lilishop
       address:

@@ -52,7 +52,7 @@ import java.util.UUID;
 @RequestMapping("/common/common/upload")
 public class UploadController {
 
-    @Value("${lili.api.common}")
+    @Value("${server-ip}")
     private String apiUrl;
 
     @Value("${upload-path}")

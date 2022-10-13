@@ -75,7 +75,7 @@ public class SchemeComponentController {
                 itemOrder.setSchemeId(schemePrimaryId);
                 itemOrder.setBuyerPhone(storep.getSalesConsigneeMobile());
                 itemOrder.setBuyerName(storep.getSalesConsigneeName());
-                itemOrder.setBuyerAddress(buyerStore.getStoreAddressPath() + buyerStore.getStoreAddressDetail());
+//                itemOrder.setBuyerAddress(buyerStore.getStoreAddressPath() + buyerStore.getStoreAddressDetail());
                 itemOrder.setBuyerId(buyerStore.getId());
                 itemOrderServiceZy.save(itemOrder);
                 arrayList.add(itemOrder);
