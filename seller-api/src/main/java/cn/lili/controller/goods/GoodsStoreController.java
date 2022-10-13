@@ -102,7 +102,9 @@ public class GoodsStoreController {
     @ApiOperation(value = "新增商品")
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
     public ResultMessage<GoodsOperationDTO> save(@Valid @RequestBody GoodsOperationDTO goodsOperationDTO) {
+        System.out.println("====================================");
         System.out.println(goodsOperationDTO);
+        System.out.println("====================================");
         goodsService.addGoods(goodsOperationDTO);
         return ResultUtil.success();
     }
@@ -110,6 +112,9 @@ public class GoodsStoreController {
     @ApiOperation(value = "修改商品")
     @PutMapping(value = "/update/{goodsId}", consumes = "application/json", produces = "application/json")
     public ResultMessage<GoodsOperationDTO> update(@RequestBody GoodsOperationDTO goodsOperationDTO, @PathVariable String goodsId) {
+        System.out.println("------------------------------");
+        System.out.println(goodsOperationDTO);
+        System.out.println("------------------------------");
         goodsService.editGoods(goodsOperationDTO, goodsId);
         return ResultUtil.success();
     }

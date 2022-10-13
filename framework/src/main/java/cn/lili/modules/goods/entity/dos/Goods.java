@@ -151,8 +151,8 @@ public class Goods extends BaseEntity {
 
     @ApiModelProperty(value = "商品参数json", hidden = true)
     private String params;
-//    goodsId不是表的索引id 而是用户填写的一个属性
-    private String goodsId;
+//    goodsCode不是表的索引id 而是用户填写的一个属性
+    private String goodsCode;
     private String goodsOrigin;
 
     private String goodsBrand;
@@ -163,12 +163,11 @@ public class Goods extends BaseEntity {
 
     private Float goodsMarketPrice;
 
-    @TableField("ANSI_cert")
-    private String ANSICert;
-    @TableField("EN_cert")
-    private String ENCert;
-    @TableField("GB_cert")
-    private String GBCert;
+    private String ansiCert;
+
+    private String enCert;
+
+    private String gbCert;
 
     private String fireProofCert;
 
@@ -191,22 +190,6 @@ public class Goods extends BaseEntity {
 
     public Goods(GoodsOperationDTO goodsOperationDTO) {
         BeanUtil.copyProperties(goodsOperationDTO, this);
-//        this.goodsName = goodsOperationDTO.getGoodsName();
-//        this.categoryPath = goodsOperationDTO.getCategoryPath();
-//        this.storeCategoryPath = goodsOperationDTO.getStoreCategoryPath();
-//        this.brandId = goodsOperationDTO.getBrandId();
-//        this.templateId = goodsOperationDTO.getTemplateId();
-//        this.recommend = goodsOperationDTO.getRecommend();
-//        this.sellingPoint = goodsOperationDTO.getSellingPoint();
-//        this.salesModel = goodsOperationDTO.getSalesModel();
-//        this.goodsUnit = goodsOperationDTO.getGoodsUnit();
-//        this.intro = goodsOperationDTO.getIntro();
-//        this.mobileIntro = goodsOperationDTO.getMobileIntro();
-//        this.goodsVideo = goodsOperationDTO.getGoodsVideo();
-//        this.price = goodsOperationDTO.getPrice();
-//        if (goodsOperationDTO.getGoodsParamsDTOList() != null && goodsOperationDTO.getGoodsParamsDTOList().isEmpty()) {
-//            this.params = JSONUtil.toJsonStr(goodsOperationDTO.getGoodsParamsDTOList());
-//        }
         //如果立即上架则
         this.marketEnable = Boolean.TRUE.equals(goodsOperationDTO.getRelease()) ? GoodsStatusEnum.UPPER.name() : GoodsStatusEnum.DOWN.name();
 //        this.goodsType = goodsOperationDTO.getGoodsType();

@@ -8,6 +8,7 @@ import cn.lili.modules.goods.service.GoodsMaterialService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,12 +19,20 @@ public class GoodsMaterialServiceImpl
 
     //    将材料文件和goodId绑定
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void add(List<String> materialList, String id, GoodsMaterialEnum type) {
 //        删除旧的记录
-        this.remove(new QueryWrapper<GoodsMaterial>().eq("goods_id", id));
+        this.baseMapper.delete(new QueryWrapper<GoodsMaterial>()
+                .eq("goods_id", id)
+                .eq("type", type));
+
             for(String url: materialList){
                 GoodsMaterial material = new GoodsMaterial(id, url, type.name());
-                this.save(material);
+                this.baseMapper.insert(material);
+
+                System.out.println("***************************");
+                System.out.println(material);
+                System.out.println("***************************");
             }
     }
 

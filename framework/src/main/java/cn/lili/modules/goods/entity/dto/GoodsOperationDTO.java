@@ -122,6 +122,8 @@ public class GoodsOperationDTO implements Serializable {
      */
     @ApiModelProperty(value = "批发商品规则")
     private List<WholesaleDTO> wholesaleList;
+//    用户填写的产品编号
+    private String goodsCode;
 
     private String goodsOrigin;
 
@@ -133,15 +135,16 @@ public class GoodsOperationDTO implements Serializable {
 
     private Float goodsMarketPrice;
 
-    private String ANSICert;
 
-    private String ENCert;
+    private String ansiCert;
 
-    private String GBCert;
+    private String enCert;
+
+    private String gbCert;
 
     private String fireProofCert;
 
-    private String AuxCert;
+    private String auxCert;
 
     private String material;
 
