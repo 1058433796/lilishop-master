@@ -4,6 +4,7 @@ import cn.lili.common.vo.PageVO;
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
 import cn.lili.modules.statistics.entity.dto.StatisticsQueryParam;
+import cn.lili.modules.statistics.entity.vo.HomeStatisticDataVO;
 import cn.lili.modules.statistics.entity.vo.OrderOverviewVO;
 import cn.lili.modules.statistics.entity.vo.OrderStatisticsDataVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -34,6 +35,8 @@ public interface ItemOrderStatisticsServiceZy extends IService<ItemOrder> {
      * @return 订单总数量
      */
     long orderNum(String orderStatus);
+
+    HomeStatisticDataVO homeStatistic(String storeId);
 
     /**
      * 图表统计

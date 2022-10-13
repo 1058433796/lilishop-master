@@ -6,7 +6,9 @@ import cn.lili.common.vo.PageVO;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
 import cn.lili.modules.order.aftersale.entity.dos.AfterSale;
+import cn.lili.modules.order.order.entity.dos.Order;
 import cn.lili.modules.statistics.entity.dto.StatisticsQueryParam;
+import cn.lili.modules.statistics.entity.vo.HomeStatisticDataVO;
 import cn.lili.modules.statistics.entity.vo.OrderOverviewVO;
 import cn.lili.modules.statistics.entity.vo.OrderStatisticsDataVO;
 import cn.lili.modules.statistics.service.AfterSaleStatisticsService;
@@ -52,13 +54,25 @@ public class ProviderOrderStatisticsStoreController {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         try {
             statisticsQueryParam.setStoreId(storeId);
-            OrderOverviewVO item = itemOrderStatisticsServiceZy.overview(statisticsQueryParam);
             return ResultUtil.data(itemOrderStatisticsServiceZy.overview(statisticsQueryParam));
         } catch (Exception e) {
             log.error("订单概览统计错误", e);
         }
         return null;
     }
+
+    @ApiOperation(value = "首页统计数据")
+    @GetMapping("/home")
+    public ResultMessage<HomeStatisticDataVO> homeStatistic() {
+        String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
+        try {
+            return ResultUtil.data(itemOrderStatisticsServiceZy.homeStatistic(storeId));
+        } catch (Exception e) {
+            log.error("订单概览统计错误", e);
+        }
+        return null;
+    }
+
 
     @ApiOperation(value = "订单图表统计")
     @GetMapping
