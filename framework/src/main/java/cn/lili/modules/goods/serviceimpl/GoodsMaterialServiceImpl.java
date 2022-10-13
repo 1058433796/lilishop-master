@@ -29,10 +29,6 @@ public class GoodsMaterialServiceImpl
             for(String url: materialList){
                 GoodsMaterial material = new GoodsMaterial(id, url, type.name());
                 this.baseMapper.insert(material);
-
-                System.out.println("***************************");
-                System.out.println(material);
-                System.out.println("***************************");
             }
     }
 
