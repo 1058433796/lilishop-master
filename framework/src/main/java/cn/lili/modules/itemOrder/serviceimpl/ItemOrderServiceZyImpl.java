@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,8 +37,8 @@ public class ItemOrderServiceZyImpl extends ServiceImpl<ItemOrderMapperZy, ItemO
     }
 
     @Override
-    public void payOrder(String oid) {
-        this.baseMapper.payOrder(oid);
+    public void payOrder(String oid, Date time) {
+        this.baseMapper.payOrder(oid, time);
     }
 
 }

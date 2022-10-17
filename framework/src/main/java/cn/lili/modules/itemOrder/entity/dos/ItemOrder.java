@@ -129,13 +129,14 @@ public class ItemOrder {
 
     private double orderAmount;
 
-    private String buyerAddress;
-
     private String storeReply = "已响应";
 
     private String contractStatus = "未签署";
 
     private String payStatus = "未付款";
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date payTime;
 
     private String distributionStatus = "未发货";
 
@@ -148,5 +149,23 @@ public class ItemOrder {
     private String schemeId;
 
     private String storeName;
+    @ApiModelProperty(value = "订单类型")
+    private String type;
+
+    @ApiModelProperty(value = "收货人姓名")
+    private String consigneeName;
+
+    private String consigneePhone;
+
+    private String consigneeAddress;
+
+    private String consigneeAddressId;
+
+    private String logisticsCode;
+
+    private String logisticsName;
+
+    private String logisticsNo;
+
 }
 
