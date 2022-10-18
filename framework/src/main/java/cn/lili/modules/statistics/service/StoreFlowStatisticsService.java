@@ -33,6 +33,7 @@ public interface StoreFlowStatisticsService extends IService<StoreFlow> {
      */
     List<GoodsStatisticsDataVO> getGoodsStatisticsData(GoodsStatisticsQueryParam goodsStatisticsQueryParam, Integer num);
 
+    List<GoodsStatisticsDataVO> getGoodsStatisticsDataTop(GoodsStatisticsQueryParam goodsStatisticsQueryParam, Integer num);
     /**
      * 查询行业统计
      * 根据商品一级分类ID查询

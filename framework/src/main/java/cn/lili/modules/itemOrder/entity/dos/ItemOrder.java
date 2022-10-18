@@ -165,5 +165,8 @@ public class ItemOrder {
 
     private String logisticsNo;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date logisticsTime;
+
 }
 

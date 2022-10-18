@@ -2,11 +2,14 @@ package cn.lili.modules.itemOrder.entity.dos;
 
 import cn.lili.mybatis.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 //@EqualsAndHashCode(callSuper = true)
 @Data
@@ -21,6 +24,9 @@ public class OrderGood
 
     @ApiModelProperty("订单编号")
     private String orderId;
+
+    @ApiModelProperty(value = "产品编号")
+    private String goodId;
 
     @ApiModelProperty(value = "品名")
     private String goodName;
@@ -49,5 +55,6 @@ public class OrderGood
     @ApiModelProperty(value = "总价")
     private String goodTotalprice;
 
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
    }

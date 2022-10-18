@@ -55,6 +55,19 @@ public class StoreFlowStatisticsServiceImpl extends ServiceImpl<StoreFlowStatist
     }
 
     @Override
+    public List<GoodsStatisticsDataVO> getGoodsStatisticsDataTop(GoodsStatisticsQueryParam goodsStatisticsQueryParam, Integer num) {
+        //获取查询条件
+        QueryWrapper queryWrapper = getQueryWrapper1(goodsStatisticsQueryParam);
+        //根据商品分组
+        queryWrapper.groupBy("good_id");
+        queryWrapper.groupBy("good_name");
+
+        //查询前X记录
+        Page page = new Page<GoodsStatisticsDataVO>(1, num);
+        return this.baseMapper.getGoodsStatisticsDataTop(page, queryWrapper);
+    }
+
+    @Override
     public List<CategoryStatisticsDataVO> getCategoryStatisticsData(GoodsStatisticsQueryParam goodsStatisticsQueryParam) {
         //获取查询条件
         QueryWrapper queryWrapper = getQueryWrapper(goodsStatisticsQueryParam);
@@ -218,5 +231,19 @@ public class StoreFlowStatisticsServiceImpl extends ServiceImpl<StoreFlowStatist
         queryWrapper.eq("flow_type", FlowTypeEnum.PAY.name());
         return queryWrapper;
     }
+    private QueryWrapper getQueryWrapper1(GoodsStatisticsQueryParam goodsStatisticsQueryParam) {
 
+        QueryWrapper queryWrapper = Wrappers.query();
+        //判断搜索类型是：年、月
+        Date[] date = StatisticsDateUtil.getDateArray(goodsStatisticsQueryParam);
+        queryWrapper.between("create_time", date[0], date[1]);
+
+        //判断是按照数量统计还是按照金额统计
+        if (goodsStatisticsQueryParam.getType().equals(StatisticsQuery.PRICE.name())) {
+            queryWrapper.orderByDesc("price");
+        } else {
+            queryWrapper.orderByDesc("num");
+        }
+        return queryWrapper;
+    }
 }
