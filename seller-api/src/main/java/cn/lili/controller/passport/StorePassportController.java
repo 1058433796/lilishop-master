@@ -12,9 +12,13 @@ import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.service.MemberService;
 import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.dos.StoreDetail;
+import cn.lili.modules.store.entity.dos.StoreMaterial;
+import cn.lili.modules.store.entity.enums.StoreMaterialEnum;
 import cn.lili.modules.store.entity.enums.StoreStatusEnum;
+import cn.lili.modules.store.entity.vos.CompanySecondVo;
 import cn.lili.modules.store.entity.vos.CompanyVo;
 import cn.lili.modules.store.service.StoreDetailService;
+import cn.lili.modules.store.service.StoreMaterialService;
 import cn.lili.modules.store.service.StoreService;
 import cn.lili.modules.verification.entity.enums.VerificationEnums;
 import cn.lili.modules.verification.service.VerificationService;
@@ -61,6 +65,9 @@ public class StorePassportController {
     private StoreDetailService storeDetailService;
 
     @Autowired
+    private StoreMaterialService storeMaterialService;
+
+    @Autowired
     private VerificationService verificationService;
 
     @ApiOperation(value = "登录接口")
@@ -92,7 +99,7 @@ public class StorePassportController {
             @ApiImplicitParam(name="companyV0", value="表格数据", required = true)
     })
     @PostMapping(value="/storeRegister")
-    public ResultMessage<Object> storeRegister(CompanyVo vo) {
+    public ResultMessage<Object> storeRegister(@Valid CompanyVo vo) {
         System.out.println(vo);
 //        验证账户
         Member member = memberService.findByUsername(vo.getUsername());
@@ -155,12 +162,42 @@ public class StorePassportController {
             storeService.updateById(store);
         }
 
-//        //            暂时办法 注册信息自动通过
-//        store.setStoreDisable(StoreStatusEnum.OPEN.name());
-//        storeService.updateById(store);
 
         return ResultUtil.data(ResultCode.SUCCESS);
     }
+
+    @PostMapping("/storeRegister2")
+    public ResultMessage<Object> storeRegister2(@Valid CompanySecondVo vo){
+        System.out.println(vo);
+        //        验证账户
+        Member member = memberService.findByUsername(vo.getUsername());
+        if(member == null || !new BCryptPasswordEncoder().matches(vo.getPassword(), member.getPassword())){
+            return ResultUtil.error(ResultCode.USER_PASSWORD_ERROR);
+        }
+        if(!member.getHaveStore()){
+            return ResultUtil.error(ResultCode.STORE_NOT_OPEN);
+        }
+        Store store = storeService.getById(member.getStoreId());
+        if(!StoreStatusEnum.APPLY_SECOND_STEP.name().equals(store.getStoreDisable())){
+            return ResultUtil.error(ResultCode.ERROR);
+        }
+        storeMaterialService.add(vo.getBusLicPhotoList(), store.getId(), StoreMaterialEnum.BUSINESS_LICENSE);
+        storeMaterialService.add(vo.getBankLicPhotoList(), store.getId(), StoreMaterialEnum.BANK_OPEN_LICENSE);
+        storeMaterialService.add(vo.getLegalLicPhotoList(), store.getId(), StoreMaterialEnum.LEGAL_LICENSE);
+        storeMaterialService.add(vo.getOrgCodeLicPhotosList(), store.getId(), StoreMaterialEnum.ORG_CODE_LICENSE);
+
+//        修改store状态为待审核
+        store.setStoreDisable(StoreStatusEnum.APPLYING.name());
+        storeService.updateById(store);
+
+//        临时方法store状态直接审核通过
+        store.setStoreDisable(StoreStatusEnum.OPEN.name());
+        storeService.updateById(store);
+
+        return ResultUtil.success();
+    }
+
+
 
     @ApiOperation(value = "注销接口")
     @PostMapping("/logout")

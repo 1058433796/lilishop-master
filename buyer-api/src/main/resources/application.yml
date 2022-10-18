@@ -3,19 +3,12 @@ server:
 
   servlet:
     context-path: /
-#
-#  tomcat:
-#    #最大链接数，默认不设置，默认是10000
-#    max-connections: 6500
-#    #最大等待队列长度，允许HTTP请求缓存到请求队列的最大个数，默认不限制
-#    accept-count: 1000
-#    threads:
-#      #最少闲置
-#      min-spare: 50
-#      #最大线程数  ，默认是200
-#      max: 800
-  netty:
-    connection-timeout:
+
+  tomcat:
+    uri-encoding: UTF-8
+    threads:
+      min-spare: 50
+      max: 1000
 
 # 与Spring Boot 2一样，默认情况下，大多数端点都不通过http公开，我们公开了所有端点。对于生产，您应该仔细选择要公开的端点。
 management:
@@ -28,7 +21,12 @@ management:
     web:
       exposure:
         include: '*'
+
 spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
   application:
     name: buyer-api
   # 要在其中注册的Spring Boot Admin Server的URL。
@@ -36,23 +34,11 @@ spring:
     admin:
       client:
         url: http://127.0.0.1:8000
-  # 文件大小上传配置
-  servlet:
-    multipart:
-      max-file-size: 20MB
-      max-request-size: 20MB
   cache:
     type: redis
-  #jackson json解析
-  jackson:
-    time-zone: GMT+8
-    serialization:
-      #关闭jackson 对json做解析
-      fail-on-empty-beans: false
-
   # Redis
   redis:
-    host: 10.27.240.2
+    host: 127.0.0.1
     port: 6379
     password: lilishop
     lettuce:
@@ -65,7 +51,17 @@ spring:
         max-idle: 10
         # 连接池中的最小空闲连接 默认 8
         min-idle: 8
-  #mysql
+  # 文件大小上传配置
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  jackson:
+    time-zone: GMT+8
+    serialization:
+      #关闭jackson 对json做解析
+      fail-on-empty-beans: false
+
   shardingsphere:
     datasource:
       #  数据库名称，可自定义，可以为多个，以逗号隔开，每个在这里定义的库，都要在下面定义连接属性
@@ -73,13 +69,16 @@ spring:
       default-datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://192.168.2.43:3306/lilishop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+#        url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+#        username: root
+#        password: 123456
+        url: jdbc:mysql://127.0.0.1:3306/lilishop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
         username: root
         password: lilishop
-        maxActive: 50
-        initialSize: 10
+        maxActive: 20
+        initialSize: 5
         maxWait: 60000
-        minIdle: 10
+        minIdle: 5
         timeBetweenEvictionRunsMillis: 60000
         minEvictableIdleTimeMillis: 300000
         validationQuery: SELECT 1 FROM DUAL
@@ -119,7 +118,7 @@ spring:
       sql:
         show: false
 
-# 忽略TOKEN 鉴权 的url
+# 忽略鉴权url
 ignored:
   urls:
     - /editor-app/**
@@ -128,24 +127,8 @@ ignored:
     - /MP_verify_qSyvBPhDsPdxvOhC.txt
     - /weixin/**
     - /source/**
-    - /buyer/payment/cashier/**
-    - /buyer/payment/cashierRefund/**
-    - /buyer/other/pageData/**
-    - /buyer/other/article/**
-    - /buyer/goods/**
-    - /buyer/store/**
-    - /buyer/passport/connect/**
-    - /buyer/members/**
-    - /buyer/passport/member/**
-    - /buyer/passport/member/refresh/**
-    - /buyer/promotion/pintuan/**
-    - /buyer/promotion/seckill/**
-    - /buyer/promotion/pointsGoods/**
-    - /buyer/promotion/coupon
-    - /buyer/member/evaluation/**/goodsEvaluation
-    - /buyer/member/evaluation/**/evaluationNumber
-    - /buyer/other/appVersion/**
-    - /buyer/broadcast/studio/**
+    - /store/passport/login/**
+    - /store/passport/login/refresh/**
     - /druid/**
     - /swagger-ui.html
     - /doc.html
@@ -185,8 +168,9 @@ logging:
   config: classpath:logback-spring.xml
   # 输出级别
   level:
-    root: info
-#    org.springframework: debug
+    cn.lili: info
+  #    org.hibernate: debug
+  #    org.springframework: debug
   file:
     # 指定路径
     path: lili-logs
@@ -215,10 +199,10 @@ lili:
     sk: zhNKVrJK6UPOhqIjn8AQvG37b9sz6
   #域名
   domain:
-    pc: https://pc-b2b2c.pickmall.cn
-    wap: https://m-b2b2c.pickmall.cn
-    store: https://store-b2b2c.pickmall.cn
-    admin: https://admin-b2b2c.pickmall.cn
+    pc: https://pc.b2b2c.pickmall.cn
+    wap: https://m.b2b2c.pickmall.cn
+    store: https://store.b2b2c.pickmall.cn
+    admin: https://admin.b2b2c.pickmall.cn
   #api地址
   api:
     buyer: https://buyer-api.pickmall.cn
@@ -243,7 +227,7 @@ lili:
   data:
     elasticsearch:
       cluster-name: elasticsearch
-      cluster-nodes: 192.168.2.43:9200
+      cluster-nodes: 127.0.0.1:9200
       index:
         number-of-replicas: 0
         number-of-shards: 3
@@ -253,7 +237,7 @@ lili:
     #        username: elastic
     #        password: LiLiShopES
     logstash:
-      server: 192.168.2.43:4560
+      server: 127.0.0.1:4560
     rocketmq:
       promotion-topic: lili_promotion_topic
       promotion-group: lili_promotion_group
@@ -274,7 +258,7 @@ lili:
       after-sale-topic: lili_after_sale_topic
       after-sale-group: lili_after_sale_group
 rocketmq:
-  name-server: 192.168.2.43:9876
+  name-server: 127.0.0.1:9876
   producer:
     group: lili_group
     send-message-timeout: 30000
@@ -282,7 +266,7 @@ rocketmq:
 xxl:
   job:
     admin:
-      addresses: http://192.168.2.43:9001/xxl-job-admin
+      addresses: http://127.0.0.1:9001/xxl-job-admin
     executor:
       appname: xxl-job-executor-lilishop
       address:

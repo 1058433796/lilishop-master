@@ -82,11 +82,16 @@ public class GoodsSearchParams extends PageVO {
      */
     @ApiModelProperty(value = "销售模式", required = true)
     private String salesModel;
+//    商品编号 用户填写属性不用于索引
+    private String goodsCode;
 
     public <T> QueryWrapper<T> queryWrapper() {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         if (CharSequenceUtil.isNotEmpty(goodsId)) {
             queryWrapper.eq("goods_id", goodsId);
+        }
+        if (CharSequenceUtil.isNotEmpty(goodsCode)) {
+            queryWrapper.like("goods_code", goodsCode);
         }
         if (CharSequenceUtil.isNotEmpty(goodsName)) {
             queryWrapper.like("goods_name", goodsName);

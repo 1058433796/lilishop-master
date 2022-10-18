@@ -36,6 +36,9 @@ public class OrderOverviewVO {
     @ApiModelProperty(value = "付款人数")
     private Long paymentsNum;
 
+    @ApiModelProperty(value = "总订单数")
+    private Long totalOrders;
+
     @ApiModelProperty(value = "付款金额")
     private Double paymentAmount;
 

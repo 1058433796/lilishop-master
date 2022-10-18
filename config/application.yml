@@ -29,7 +29,7 @@ spring:
     type: redis
   # Redis
   redis:
-    host: 10.27.240.2
+    host: 10.27.219.66
     port: 6379
     password: lilishop
     lettuce:
@@ -60,10 +60,10 @@ spring:
       default-datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.cj.jdbc.Driver
-#        url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
-#        username: root
-#        password: 123456
-        url: jdbc:mysql://10.27.240.2:3306/lilishop?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+        #        url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+        #        username: root
+        #        password: 123456
+        url: jdbc:mysql://10.27.219.66:3306/lilishop?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
         username: root
         password: lilishop
         maxActive: 50
@@ -229,10 +229,10 @@ lili:
   system:
     isDemoSite: false
     isTestModel: true
-  #     脱敏级别：
-  #     0：不做脱敏处理
-  #     1：管理端用户手机号等信息脱敏
-  #     2：商家端信息脱敏（为2时，表示管理端，商家端同时脱敏）
+    #     脱敏级别：
+    #     0：不做脱敏处理
+    #     1：管理端用户手机号等信息脱敏
+    #     2：商家端信息脱敏（为2时，表示管理端，商家端同时脱敏）
     sensitiveLevel: 1
 
   statistics:
@@ -274,7 +274,7 @@ lili:
   data:
     elasticsearch:
       cluster-name: elasticsearch
-      cluster-nodes: 10.27.240.2:9200
+      cluster-nodes: 10.27.219.66:9200
       index:
         number-of-replicas: 0
         number-of-shards: 3
@@ -285,7 +285,7 @@ lili:
     #        password: LiLiShopES
 
     logstash:
-      server: 10.27.240.2:4560
+      server: 10.27.219.66:4560
     rocketmq:
       promotion-topic: lili_promotion_topic
       promotion-group: lili_promotion_group
@@ -307,7 +307,7 @@ lili:
       after-sale-topic: lili_after_sale_topic
       after-sale-group: lili_after_sale_group
 rocketmq:
-  name-server: 10.27.240.2:9876
+  name-server: 10.27.219.66:9876
   isVIPChannel: false
   producer:
     group: lili_group
@@ -316,7 +316,7 @@ rocketmq:
 xxl:
   job:
     admin:
-      addresses: http://10.27.240.2:9001/xxl-job-admin
+      addresses: http://10.27.219.66:9001/xxl-job-admin
     executor:
       appname: xxl-job-executor-lilishop
       address:

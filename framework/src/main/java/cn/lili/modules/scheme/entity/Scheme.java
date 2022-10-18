@@ -16,27 +16,27 @@ public class Scheme {
 
     private String location;
 
-    private String openMethod;
+    private String openMethod="平开";
 
-    private String openDirection;
+    private String openDirection="外开";
 
-    private String height;
+    private String height="2500";
 
-    private String width;
+    private String width="900";
 
-    private String thickness;
+    private String thickness="55";
 
-    private String texture;
+    private String texture="木";
 
-    private String handle;
+    private String handle="把手";
 
-    private String guard;
+    private String guard="无";
 
-    private String firerating;
+    private String firerating="甲";
 
-    private String wjgroup;
+    private String wjgroup="HWE-4";
 
-    private String updateTime;
+    private String updateTime="一小时前";
 
     private String schemeSum;
 

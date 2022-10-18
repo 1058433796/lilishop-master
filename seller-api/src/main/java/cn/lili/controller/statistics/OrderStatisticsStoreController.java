@@ -4,13 +4,13 @@ import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.PageVO;
 import cn.lili.common.vo.ResultMessage;
+import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
 import cn.lili.modules.order.aftersale.entity.dos.AfterSale;
-import cn.lili.modules.order.order.entity.vo.OrderSimpleVO;
 import cn.lili.modules.statistics.entity.dto.StatisticsQueryParam;
 import cn.lili.modules.statistics.entity.vo.OrderOverviewVO;
 import cn.lili.modules.statistics.entity.vo.OrderStatisticsDataVO;
 import cn.lili.modules.statistics.service.AfterSaleStatisticsService;
-import cn.lili.modules.statistics.service.OrderStatisticsService;
+import cn.lili.modules.statistics.service.ItemOrderStatisticsService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,7 +44,7 @@ public class OrderStatisticsStoreController {
      * 订单统计
      */
     @Autowired
-    private OrderStatisticsService orderStatisticsService;
+    private ItemOrderStatisticsService itemOrderStatisticsService;
 
     @ApiOperation(value = "订单概览统计")
     @GetMapping("/overview")
@@ -52,7 +52,7 @@ public class OrderStatisticsStoreController {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         try {
             statisticsQueryParam.setStoreId(storeId);
-            return ResultUtil.data(orderStatisticsService.overview(statisticsQueryParam));
+            return ResultUtil.data(itemOrderStatisticsService.overview(statisticsQueryParam));
         } catch (Exception e) {
             log.error("订单概览统计错误", e);
         }
@@ -65,7 +65,7 @@ public class OrderStatisticsStoreController {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         try {
             statisticsQueryParam.setStoreId(storeId);
-            return ResultUtil.data(orderStatisticsService.statisticsChart(statisticsQueryParam));
+            return ResultUtil.data(itemOrderStatisticsService.statisticsChart(statisticsQueryParam));
         } catch (Exception e) {
             log.error("订单图表统计错误", e);
         }
@@ -75,11 +75,11 @@ public class OrderStatisticsStoreController {
 
     @ApiOperation(value = "订单统计")
     @GetMapping("/order")
-    public ResultMessage<IPage<OrderSimpleVO>> order(StatisticsQueryParam statisticsQueryParam, PageVO pageVO) {
+    public ResultMessage<IPage<ItemOrderSimpleVO>> order(StatisticsQueryParam statisticsQueryParam, PageVO pageVO) {
         String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         try {
             statisticsQueryParam.setStoreId(storeId);
-            return ResultUtil.data(orderStatisticsService.getStatistics(statisticsQueryParam, pageVO));
+            return ResultUtil.data(itemOrderStatisticsService.getStatistics(statisticsQueryParam, pageVO));
         } catch (Exception e) {
             log.error("订单统计错误", e);
         }

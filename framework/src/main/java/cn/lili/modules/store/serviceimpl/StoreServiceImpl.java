@@ -18,6 +18,8 @@ import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.dos.StoreDetail;
 import cn.lili.modules.store.entity.dto.*;
 import cn.lili.modules.store.entity.enums.StoreStatusEnum;
+import cn.lili.modules.store.entity.vos.CustomerStoreDetailVO;
+import cn.lili.modules.store.entity.vos.CustomerStoreVO;
 import cn.lili.modules.store.entity.vos.StoreSearchParams;
 import cn.lili.modules.store.entity.vos.StoreVO;
 import cn.lili.modules.store.mapper.StoreMapper;
@@ -64,6 +66,28 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
 
     @Autowired
     private Cache cache;
+
+    /**
+     * 查询客户
+     *
+     */
+    @Override
+    public IPage<CustomerStoreVO> queryByParams(StoreSearchParams storeSearchParams) {
+        QueryWrapper queryWrapper = storeSearchParams.queryWrapper();
+//        queryWrapper.groupBy("o.id");
+        queryWrapper.orderByDesc("o.id");
+        return this.baseMapper.queryByParams(PageUtil.initPage(storeSearchParams), queryWrapper);
+    }
+
+
+    /**
+     * 查询客户详细信息
+     *
+     */
+    @Override
+    public CustomerStoreDetailVO queryDetail(String buyerId) {
+        return null;
+    }
 
     @Override
     public IPage<StoreVO> findByConditionPage(StoreSearchParams storeSearchParams, PageVO page) {

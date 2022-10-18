@@ -13,14 +13,12 @@ import cn.lili.common.properties.RocketmqCustomProperties;
 import cn.lili.common.security.AuthUser;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.security.enums.UserEnums;
-import cn.lili.modules.goods.entity.dos.Category;
-import cn.lili.modules.goods.entity.dos.Goods;
-import cn.lili.modules.goods.entity.dos.GoodsGallery;
-import cn.lili.modules.goods.entity.dos.Wholesale;
+import cn.lili.modules.goods.entity.dos.*;
 import cn.lili.modules.goods.entity.dto.GoodsOperationDTO;
 import cn.lili.modules.goods.entity.dto.GoodsParamsDTO;
 import cn.lili.modules.goods.entity.dto.GoodsSearchParams;
 import cn.lili.modules.goods.entity.enums.GoodsAuthEnum;
+import cn.lili.modules.goods.entity.enums.GoodsMaterialEnum;
 import cn.lili.modules.goods.entity.enums.GoodsStatusEnum;
 import cn.lili.modules.goods.entity.vos.GoodsSkuVO;
 import cn.lili.modules.goods.entity.vos.GoodsVO;
@@ -120,6 +118,9 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     @Autowired
     private Cache<GoodsVO> cache;
 
+    @Autowired
+    private GoodsMaterialService goodsMaterialService;
+
     @Override
     public List<Goods> getByBrandIds(List<String> brandIds) {
         LambdaQueryWrapper<Goods> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -167,19 +168,25 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         this.checkGoods(goods);
         //向goods加入图片
         this.setGoodsGalleryParam(goodsOperationDTO.getGoodsGalleryList().get(0), goods);
-        //添加商品参数
-        if (goodsOperationDTO.getGoodsParamsDTOList() != null && !goodsOperationDTO.getGoodsParamsDTOList().isEmpty()) {
-            //给商品参数填充值
-            goods.setParams(JSONUtil.toJsonStr(goodsOperationDTO.getGoodsParamsDTOList()));
-        }
         //添加商品
         this.save(goods);
-        //添加商品sku信息
-        this.goodsSkuService.add(goods, goodsOperationDTO);
         //添加相册
         if (goodsOperationDTO.getGoodsGalleryList() != null && !goodsOperationDTO.getGoodsGalleryList().isEmpty()) {
             this.goodsGalleryService.add(goodsOperationDTO.getGoodsGalleryList(), goods.getId());
         }
+
+            //      添加材料文件
+        if(goodsOperationDTO.getMaterialList() != null && !goodsOperationDTO.getMaterialList().isEmpty()){
+            goodsMaterialService.add(goodsOperationDTO.getMaterialList(), goods.getId(), GoodsMaterialEnum.MATERIAL);
+        }
+
+        //        添加模型文件
+        if(goodsOperationDTO.getModelList() != null && !goodsOperationDTO.getModelList().isEmpty()){
+            goodsMaterialService.add(goodsOperationDTO.getModelList(), goods.getId(), GoodsMaterialEnum.Model);
+        }
+
+
+
         this.generateEs(goods);
     }
 
@@ -193,18 +200,21 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         this.checkGoods(goods);
         //向goods加入图片
         this.setGoodsGalleryParam(goodsOperationDTO.getGoodsGalleryList().get(0), goods);
-        //添加商品参数
-        if (goodsOperationDTO.getGoodsParamsDTOList() != null && !goodsOperationDTO.getGoodsParamsDTOList().isEmpty()) {
-            goods.setParams(JSONUtil.toJsonStr(goodsOperationDTO.getGoodsParamsDTOList()));
-        }
         //修改商品
         this.updateById(goods);
-        //修改商品sku信息
-        this.goodsSkuService.update(goods, goodsOperationDTO);
         //添加相册
         if (goodsOperationDTO.getGoodsGalleryList() != null && !goodsOperationDTO.getGoodsGalleryList().isEmpty()) {
             this.goodsGalleryService.add(goodsOperationDTO.getGoodsGalleryList(), goods.getId());
         }
+        //        添加模型文件
+        if(goodsOperationDTO.getModelList() != null && !goodsOperationDTO.getModelList().isEmpty()){
+            goodsMaterialService.add(goodsOperationDTO.getModelList(), goods.getId(), GoodsMaterialEnum.Model);
+        }
+//      添加材料文件
+        if(goodsOperationDTO.getMaterialList() != null && !goodsOperationDTO.getMaterialList().isEmpty()){
+            goodsMaterialService.add(goodsOperationDTO.getMaterialList(), goods.getId(), GoodsMaterialEnum.MATERIAL);
+        }
+
         if (GoodsAuthEnum.TOBEAUDITED.name().equals(goods.getAuthFlag())) {
             this.deleteEsGoods(Collections.singletonList(goodsId));
         }
@@ -257,10 +267,28 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
             goodsVO.setGoodsParamsDTOList(JSONUtil.toList(goods.getParams(), GoodsParamsDTO.class));
         }
 
+//        将模型文件对应数据放入goodsVo中返回给前端使用
+        List<String> models = new ArrayList<>();
+        List<GoodsMaterial> modelList = goodsMaterialService.getList(goodsId, GoodsMaterialEnum.Model);
+        for (GoodsMaterial model : modelList) {
+            models.add(model.getUrl());
+        }
+        goodsVO.setModelList(models);
+
+//        将材料文件对应数据放入goodsVo中返回给前端使用
+        List<String> materials = new ArrayList<>();
+        List<GoodsMaterial> materialList = goodsMaterialService.getList(goodsId, GoodsMaterialEnum.MATERIAL);
+        for (GoodsMaterial material : materialList) {
+            materials.add(material.getUrl());
+        }
+        goodsVO.setMaterialList(materials);
+
         List<Wholesale> wholesaleList = wholesaleService.findByGoodsId(goodsId);
         if (CollUtil.isNotEmpty(wholesaleList)) {
             goodsVO.setWholesaleList(wholesaleList);
         }
+
+
 
         cache.put(CachePrefix.GOODS.getPrefix() + goodsId, goodsVO);
         return goodsVO;

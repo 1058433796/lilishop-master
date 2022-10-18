@@ -136,5 +136,6 @@ public interface StoreDetailService extends IService<StoreDetail> {
      */
     void updateSettlementDay(String storeId, DateTime dateTime);
 
+
     void updateCompany(CompanyVo companyVo);
 }
