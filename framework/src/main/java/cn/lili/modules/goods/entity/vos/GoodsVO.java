@@ -37,12 +37,12 @@ public class GoodsVO extends Goods {
     @ApiModelProperty(value = "批发商品消费规则列表")
     private List<Wholesale> wholesaleList;
 
-    //    模型文件urlList
-    private List<String> modelList;
-    //  材料文件urlList
-    private List<String> materialList;
+//    //    模型文件urlList
+//    private List<String> modelList;
+//    //  材料文件urlList
+//    private List<String> materialList;
 
-    private List<GoodsMaterial> materialFileList;
+    private List<GoodsMaterial> materialList;
 
 
 }
