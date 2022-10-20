@@ -1,15 +1,18 @@
 package cn.lili.controller.payment;
 
-import cn.lili.modules.item.entity.OrderBean;
+import cn.lili.modules.demo.UnionPaymentService;
 import cn.lili.modules.item.entity.OrderData;
 import cn.lili.modules.item.service.IbankService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/store/iBank/iBank")
@@ -23,11 +26,22 @@ public class IbankController {
     @ResponseBody
     @RequestMapping("/pay/{zongji}/{ordersn}")
     public String generateOrder(OrderData para){
-        //para是生成订单前端传入的数据
-        //先生成订单
-        OrderBean orderbean=ibankService.createOrder();
-        String orderid = orderbean.getOrderid();
-        String jym = orderbean.getJym();
+            return "";
+    }
+
+    @Autowired
+    private UnionPaymentService service;
+
+    /**
+     * 支付
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    @RequestMapping(value = "/pay", method = {RequestMethod.POST, RequestMethod.GET})
+    public void pay(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        service.pay(request, response);
 
     }
 }

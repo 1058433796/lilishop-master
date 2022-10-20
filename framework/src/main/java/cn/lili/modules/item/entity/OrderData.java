@@ -2,7 +2,7 @@ package cn.lili.modules.item.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
+//import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;StringNode
 import lombok.Data;
 
 @Data
