@@ -59,7 +59,13 @@ public class IndexStatisticsManagerController {
         goodsStatisticsQueryParam.setType(StatisticsQuery.PRICE.name());
         return ResultUtil.data(indexStatisticsService.goodsStatistics(goodsStatisticsQueryParam));
     }
-
+    @ApiOperation(value = "获取首页查询热卖商品TOP10")
+    @GetMapping("/goodsStatistics/top10")
+    public ResultMessage<List<GoodsStatisticsDataVO>> goodsStatisticsnew(GoodsStatisticsQueryParam goodsStatisticsQueryParam) {
+        //按照金额查询
+        goodsStatisticsQueryParam.setType(StatisticsQuery.PRICE.name());
+        return ResultUtil.data(indexStatisticsService.goodsStatisticsTop(goodsStatisticsQueryParam));
+    }
     @ApiOperation(value = "获取首页查询热卖店铺TOP10")
     @GetMapping("/storeStatistics")
     public ResultMessage<List<StoreStatisticsDataVO>> storeStatistics(StatisticsQueryParam statisticsQueryParam) {

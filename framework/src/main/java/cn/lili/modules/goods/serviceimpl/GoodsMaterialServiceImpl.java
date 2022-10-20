@@ -20,27 +20,32 @@ public class GoodsMaterialServiceImpl
     //    将材料文件和goodId绑定
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void add(List<String> materialList, String id, GoodsMaterialEnum type) {
+    public void add(List<GoodsMaterial> materialList, String id, GoodsMaterialEnum type) {
 //        删除旧的记录
         this.baseMapper.delete(new QueryWrapper<GoodsMaterial>()
-                .eq("goods_id", id)
-                .eq("type", type));
+                .eq("goods_id", id));
+//                .eq("type", type));
 
-            for(String url: materialList){
-                GoodsMaterial material = new GoodsMaterial(id, url, type.name());
+            for(GoodsMaterial material: materialList){
+                material.setGoodsId(id);
                 this.baseMapper.insert(material);
-
-                System.out.println("***************************");
                 System.out.println(material);
-                System.out.println("***************************");
             }
     }
 
     @Override
     public List<GoodsMaterial> getList(String goodsId, GoodsMaterialEnum materialEnum) {
         QueryWrapper<GoodsMaterial> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("goods_id", goodsId)
-                .eq("type", materialEnum.name());
+        queryWrapper.eq("goods_id", goodsId);
+        if(materialEnum != null) {
+            queryWrapper.eq("type", materialEnum.name());
+        }
+
+        System.out.println("------------------------------------");
+        System.out.println(goodsId);
+        System.out.println(queryWrapper);
+        System.out.println("------------------------------------");
+
         return this.list(queryWrapper);
     }
 }

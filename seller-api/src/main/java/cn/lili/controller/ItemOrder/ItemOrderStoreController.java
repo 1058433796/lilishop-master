@@ -1,8 +1,10 @@
 package cn.lili.controller.itemOrder;
 
+import cn.lili.common.aop.annotation.PreventDuplicateSubmissions;
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.security.OperationalJudgment;
 import cn.lili.common.vo.ResultMessage;
+import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.dto.ItemOrderExportDTO;
 import cn.lili.modules.itemOrder.entity.dto.ItemOrderSearchParams;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
@@ -64,5 +66,28 @@ public class ItemOrderStoreController {
         return ResultUtil.data(itemOrderService.queryExportOrder(itemOrderSearchParams));
     }
 
+    @ApiOperation("供应商响应订单")
+    @PutMapping("/{oid}/response")
+    public ResultMessage<Boolean> storeResponse(@PathVariable("oid") String oid) {
+        System.out.println("供应商响应订单：" + oid);
+        ItemOrder item = itemOrderService.getById(oid);
+        item.setStoreReply("已响应");
+        itemOrderService.updateById(item);
+        return ResultUtil.data(true);
+    }
+
+    @PreventDuplicateSubmissions
+    @ApiOperation(value = "订单发货")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "orderId", value = "订单编号", required = true, dataType = "String", paramType = "path"),
+            @ApiImplicitParam(name = "logisticsNo", value = "发货单号", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "logisticsId", value = "物流公司", required = true, dataType = "String", paramType = "query")
+    })
+    @PostMapping(value = "/{orderId}/delivery")
+    public ResultMessage<Object> delivery(@NotNull(message = "参数非法") @PathVariable String orderId,
+                                          @NotNull(message = "发货单号不能为空") String logisticsNo,
+                                          @NotNull(message = "请选择物流公司") String logisticsId) {
+        return ResultUtil.data(itemOrderService.delivery(orderId, logisticsNo, logisticsId));
+    }
 
 }

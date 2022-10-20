@@ -157,12 +157,12 @@ public class GoodsOperationDTO implements Serializable {
     private String forceLevel;
 
     private String adjustParam;
-//    模型文件urlList
-    private List<String> modelList;
-//  材料文件urlList
-    private List<String> materialList;
+////    模型文件urlList
+//    private List<String> modelList;
+////  材料文件urlList
+//    private List<String> materialList;
 
-    private List<GoodsMaterial> materialFileList;
+    private List<GoodsMaterial> materialList;
 
     public String getGoodsName() {
         //对商品对名称做一个极限处理。这里没有用xss过滤是因为xss过滤为全局过滤，影响很大。

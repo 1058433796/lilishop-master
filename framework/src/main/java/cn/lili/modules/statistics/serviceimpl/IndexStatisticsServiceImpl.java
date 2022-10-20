@@ -228,7 +228,11 @@ public class IndexStatisticsServiceImpl implements IndexStatisticsService {
         //查询商品
         return storeFlowStatisticsService.getGoodsStatisticsData(statisticsQueryParam, 10);
     }
-
+    @Override
+    public List<GoodsStatisticsDataVO> goodsStatisticsTop(GoodsStatisticsQueryParam statisticsQueryParam) {
+        //查询商品
+        return storeFlowStatisticsService.getGoodsStatisticsDataTop(statisticsQueryParam, 10);
+    }
     @Override
     public List<StoreStatisticsDataVO> storeStatistics(StatisticsQueryParam statisticsQueryParam) {
 
