@@ -10,6 +10,8 @@ import cn.lili.modules.itemOrder.entity.dto.ItemOrderSearchParams;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
 import cn.lili.modules.itemOrder.entity.vo.OrderGoodDetailVO;
 import cn.lili.modules.itemOrder.service.ItemOrderService;
+import cn.lili.modules.itemOrder.service.ItemOrderServiceZy;
+import cn.lili.modules.schemeComponent.entity.SchemeComponent;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -19,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -46,17 +49,11 @@ public class ItemOrderStoreController {
     public ResultMessage<IPage<ItemOrderSimpleVO>> queryMineOrder(ItemOrderSearchParams itemOrderSearchParams) {
         return ResultUtil.data(itemOrderService.queryByParams(itemOrderSearchParams));
     }
-
-    @ApiOperation(value = "订单明细")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderId", value = "订单编号", required = true, dataType = "String", paramType = "path")
-    })
-    @GetMapping(value = "/{orderId}")
-    public ResultMessage<OrderGoodDetailVO> detail(@NotNull @PathVariable String orderId) {
-        System.out.println(itemOrderService.getByOrderId(orderId));
-        OperationalJudgment.judgment(itemOrderService.getByOrderId(orderId));
-        System.out.println(itemOrderService.queryDetail(orderId).toString());
-        return ResultUtil.data(itemOrderService.queryDetail(orderId));
+    @ApiOperation(value = "获取供应商在此订单中提供的零件")
+    @GetMapping("/provide/{oid}")
+    public ResultMessage<OrderGoodDetailVO> getSupplierComponent(@PathVariable("oid") String orderId) {
+        OrderGoodDetailVO items = itemOrderService.queryOrderComponent(orderId);
+        return ResultUtil.data(items);
     }
 
 
@@ -72,6 +69,7 @@ public class ItemOrderStoreController {
         System.out.println("供应商响应订单：" + oid);
         ItemOrder item = itemOrderService.getById(oid);
         item.setStoreReply("已响应");
+        item.setReplyStatus("已响应");
         itemOrderService.updateById(item);
         return ResultUtil.data(true);
     }

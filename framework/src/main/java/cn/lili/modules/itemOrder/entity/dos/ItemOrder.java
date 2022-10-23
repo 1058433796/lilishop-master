@@ -131,6 +131,8 @@ public class ItemOrder {
 
     private String storeReply = "已响应";
 
+    private String buyerReply = "已响应";
+
     private String contractStatus = "未签署";
 
     private String payStatus = "未付款";

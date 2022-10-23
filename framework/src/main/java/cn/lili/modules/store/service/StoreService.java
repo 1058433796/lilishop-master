@@ -4,10 +4,7 @@ import cn.lili.common.vo.PageVO;
 import cn.lili.modules.member.entity.dto.CollectionDTO;
 import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.dto.*;
-import cn.lili.modules.store.entity.vos.CustomerStoreDetailVO;
-import cn.lili.modules.store.entity.vos.CustomerStoreVO;
-import cn.lili.modules.store.entity.vos.StoreSearchParams;
-import cn.lili.modules.store.entity.vos.StoreVO;
+import cn.lili.modules.store.entity.vos.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -39,6 +36,8 @@ public interface StoreService extends IService<Store> {
      * @return
      */
     IPage<StoreVO> findByConditionPage(StoreSearchParams entity, PageVO page);
+
+    IPage<ManagerStoreVO> findAllPage(StoreSearchParams storeSearchParams);
 
     /**
      * 获取当前登录店铺信息

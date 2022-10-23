@@ -48,17 +48,13 @@ public class ItemOrderManagerController {
         return ResultUtil.data(itemOrderService.queryByParams(itemOrderSearchParams));
     }
 
-    @ApiOperation(value = "订单明细")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderId", value = "订单编号", required = true, dataType = "String", paramType = "path")
-    })
-    @GetMapping(value = "/{orderId}")
-    public ResultMessage<OrderGoodDetailVO> detail(@NotNull @PathVariable String orderId) {
-        System.out.println(itemOrderService.getByOrderId(orderId));
-        OperationalJudgment.judgment(itemOrderService.getByOrderId(orderId));
-        System.out.println(itemOrderService.queryDetail(orderId).toString());
-        return ResultUtil.data(itemOrderService.queryDetail(orderId));
+    @ApiOperation(value = "获取供应商在此订单中提供的零件")
+    @GetMapping("/provide/{oid}")
+    public ResultMessage<OrderGoodDetailVO> getSupplierComponent(@PathVariable("oid") String orderId) {
+        OrderGoodDetailVO items = itemOrderService.queryOrderComponent(orderId);
+        return ResultUtil.data(items);
     }
+
 
 
     @ApiOperation(value = "查询订单导出列表")

@@ -4,15 +4,17 @@ import cn.lili.common.aop.annotation.DemoSite;
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.vo.PageVO;
 import cn.lili.common.vo.ResultMessage;
+import cn.lili.modules.contract.entity.Contract;
+import cn.lili.modules.contract.entity.ContractSearchParams;
+import cn.lili.modules.contract.service.ContractService;
 import cn.lili.modules.store.entity.dos.Store;
+import cn.lili.modules.store.entity.dos.StoreDetail;
 import cn.lili.modules.store.entity.dto.AdminStoreApplyDTO;
 import cn.lili.modules.store.entity.dto.StoreEditDTO;
-import cn.lili.modules.store.entity.vos.StoreDetailVO;
-import cn.lili.modules.store.entity.vos.StoreManagementCategoryVO;
-import cn.lili.modules.store.entity.vos.StoreSearchParams;
-import cn.lili.modules.store.entity.vos.StoreVO;
+import cn.lili.modules.store.entity.vos.*;
 import cn.lili.modules.store.service.StoreDetailService;
 import cn.lili.modules.store.service.StoreService;
+import cn.lili.modules.store.service.StoreServiceZy;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -47,11 +50,40 @@ public class StoreManagerController {
     @Autowired
     private StoreDetailService storeDetailService;
 
+    @Autowired
+    private ContractService contractService;
+
+    @Autowired
+    private StoreServiceZy storeServiceZy;
+
     @ApiOperation(value = "获取店铺分页列表")
     @GetMapping("/all")
     public ResultMessage<List<Store>> getAll() {
         return ResultUtil.data(storeService.list(new QueryWrapper<Store>().eq("store_disable", "OPEN")));
     }
+    @ApiOperation(value = "获取全部会员分页列表")
+    @GetMapping("/buyer")
+    public ResultMessage<IPage<ManagerStoreVO>> getAllBuyer(StoreSearchParams storeSearchParams) {
+        return ResultUtil.data(storeService.findAllPage(storeSearchParams));
+    }
+    @ApiOperation(value = "会员明细")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "buyerId", value = "采购方编号", required = true, dataType = "String", paramType = "path")
+    })
+    @GetMapping(value = "/detail/{buyerId}")
+    public ResultMessage<StoreDetail> buyerdetail(@NotNull @PathVariable String buyerId) {
+        return ResultUtil.data(storeDetailService.getStoreDetail(buyerId));
+    }
+    @ApiOperation(value = "分页获取合同列表")
+    @GetMapping("/contract/list")
+    public ResultMessage<IPage<Contract>> getByPage(ContractSearchParams contractSearchParams) {
+        //StoreVO buyerStore = storeService.getStoreDetail();
+        //contractSearchParams.setStoreId(buyerStore.getId());
+        return ResultUtil.data(contractService.queryByParams(contractSearchParams));
+    }
+
+
+
 
     @ApiOperation(value = "获取店铺分页列表")
     @GetMapping

@@ -20,6 +20,9 @@ import cn.lili.modules.order.order.entity.enums.DeliverStatusEnum;
 import cn.lili.modules.order.order.entity.enums.OrderComplaintStatusEnum;
 import cn.lili.modules.order.order.entity.enums.OrderItemAfterSaleStatusEnum;
 import cn.lili.modules.order.order.entity.enums.OrderStatusEnum;
+import cn.lili.modules.schemeComponent.entity.SchemeComponent;
+import cn.lili.modules.schemeComponent.mapper.SchemeComponentMapper;
+import cn.lili.modules.schemeComponent.service.SchemeComponentService;
 import cn.lili.modules.system.entity.dos.Logistics;
 import cn.lili.modules.system.service.LogisticsService;
 import cn.lili.mybatis.util.PageUtil;
@@ -53,6 +56,9 @@ public class ItemOrderServiceImpl extends ServiceImpl<ItemOrderMapper, ItemOrder
     @Autowired
     private LogisticsService logisticsService;
 
+    @Autowired
+    private SchemeComponentMapper schemeComponentMapper;
+
     /**
      * 获取订单
      *
@@ -73,25 +79,14 @@ public class ItemOrderServiceImpl extends ServiceImpl<ItemOrderMapper, ItemOrder
     }
 
     @Override
-    public OrderGoodDetailVO  queryDetail(String orderId) {
+    public OrderGoodDetailVO  queryOrderComponent(String orderId) {
         ItemOrder itemOrder = this.getByOrderId(orderId);
-        //System.out.println(itemOrder.toString());
         if (itemOrder == null) {
             throw new ServiceException(ResultCode.ORDER_NOT_EXIST);
         }
-        QueryWrapper<OrderGood> orderGoodWrapper = new QueryWrapper<>();
-        orderGoodWrapper.eq("order_id", orderId);
         //查询订单项信息
-        List<OrderGood> orderGoods = orderGoodMapper.selectList(orderGoodWrapper);
-        //System.out.println(orderGoods.toString());
-        //查询订单日志信息
-        //List<OrderLog> orderLogs = orderLogService.getOrderLog(orderSn);
-        //查询发票信息
-        //Receipt receipt = receiptService.getByOrderSn(orderSn);
-        //查询订单和自订单，然后写入vo返回
-        OrderGoodDetailVO orderGoodDetailVO=new OrderGoodDetailVO(itemOrder, orderGoods);
-        System.out.println(orderGoodDetailVO);
-        return  orderGoodDetailVO;
+        List<SchemeComponent> schemeComponentList = this.baseMapper.queryOrderComponent(orderId, itemOrder.getStoreId());
+        return new OrderGoodDetailVO(itemOrder, schemeComponentList);
     }
 
     @Override

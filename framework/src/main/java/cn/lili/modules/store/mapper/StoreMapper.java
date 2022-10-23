@@ -3,6 +3,7 @@ package cn.lili.modules.store.mapper;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
 import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.vos.CustomerStoreVO;
+import cn.lili.modules.store.entity.vos.ManagerStoreVO;
 import cn.lili.modules.store.entity.vos.StoreVO;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -41,6 +42,8 @@ public interface StoreMapper extends BaseMapper<Store> {
     @Select("select s.* from li_store as s ${ew.customSqlSegment}")
     IPage<StoreVO> getStoreList(IPage<StoreVO> page, @Param(Constants.WRAPPER) Wrapper<StoreVO> queryWrapper);
 
+    @Select("select a.id,a.store_name as buyer_name,link_phone as buyer_phone,grade,create_time,point from li_store as a,li_store_detail as b where a.id=b.store_id  ${ew.customSqlSegment}")
+    IPage<ManagerStoreVO> getStoreAsBuyerList(IPage<ManagerStoreVO> page, @Param(Constants.WRAPPER) Wrapper<ManagerStoreVO> queryWrapper);
 
     /**
      * 修改店铺收藏数据

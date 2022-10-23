@@ -33,6 +33,9 @@ public class Store extends BaseEntity {
 
     private static final long serialVersionUID = -5861767726387892272L;
 
+    @ApiModelProperty(value = "等级")
+    private String grade;
+
     @ApiModelProperty(value = "会员Id")
     private String memberId;
 

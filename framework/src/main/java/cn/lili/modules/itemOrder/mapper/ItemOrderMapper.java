@@ -4,6 +4,7 @@ import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.dto.ItemOrderExportDTO;
 import cn.lili.modules.order.order.entity.dos.Order;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
+import cn.lili.modules.schemeComponent.entity.SchemeComponent;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -36,7 +37,10 @@ public interface ItemOrderMapper extends BaseMapper<ItemOrder> {
             " FROM li_order o INNER JOIN li_order_item AS oi on o.sn = oi.order_sn ${ew.customSqlSegment} ")
     List<Order> queryListByParams(@Param(Constants.WRAPPER) Wrapper<Order> queryWrapper);
 
-
+    @Select("SELECT * FROM scheme_component WHERE scheme_id = " +
+            "(SELECT scheme_id FROM item_scheme WHERE primary_id = " +
+            "(SELECT scheme_id FROM item_order WHERE order_id=#{oid})) AND supplier_id=#{storeId}")
+    List<SchemeComponent> queryOrderComponent(String oid, String storeId);
     /**
      * 查询导出订单DTO列表
      *
