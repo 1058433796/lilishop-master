@@ -124,9 +124,8 @@ public interface MemberService extends IService<Member> {
      * @param userName    会员
      * @param password    密码
      * @param mobilePhone mobilePhone
-     * @return 处理结果
      */
-    Token register(String userName, String password, String mobilePhone);
+    void register(String userName, String password, String mobilePhone);
 
     /**
      * 注册商家
@@ -134,9 +133,8 @@ public interface MemberService extends IService<Member> {
      * @param userName    会员
      * @param password    密码
      * @param mobilePhone mobilePhone
-     * @return 处理结果
      */
-    Token storeRegister(String userName, String password, String mobilePhone);
+    void storeRegister(String userName, String password, String mobilePhone);
 
     /**
      * 修改当前会员的手机号

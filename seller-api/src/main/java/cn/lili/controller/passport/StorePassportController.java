@@ -70,13 +70,13 @@ public class StorePassportController {
     @Autowired
     private VerificationService verificationService;
 
-    @ApiOperation(value = "登录接口")
+    @ApiOperation(value = "商家登录接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query"),
             @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query")
     })
-    @PostMapping("/userLogin")
-    public ResultMessage<Object> userLogin(@NotNull(message = "用户名不能为空") @RequestParam String username,
+    @PostMapping("/storeLogin")
+    public ResultMessage<Object> storeLogin(@NotNull(message = "用户名不能为空") @RequestParam String username,
                                            @NotNull(message = "密码不能为空") @RequestParam String password, @RequestHeader String uuid) {
             try {
                 Token token = this.memberService.usernameStoreLogin(username, password);
@@ -86,13 +86,47 @@ public class StorePassportController {
             }
     }
 
+    @ApiOperation(value = "用户登录接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query")
+    })
+    @PostMapping("/userLogin")
+    public ResultMessage<Object> userLogin(@NotNull(message = "用户名不能为空") @RequestParam String username,
+                                            @NotNull(message = "密码不能为空") @RequestParam String password, @RequestHeader String uuid) {
+        try {
+            Token token = this.memberService.usernameLogin(username, password);
+            return ResultUtil.data(token);
+        }catch (ServiceException e){
+            return ResultUtil.error(e.getResultCode());
+        }
+    }
+
     @PostMapping("/userRegister")
     public ResultMessage<Object> userRegister(@NotNull(message = "用户名不能为空") @RequestParam String username,
                                            @NotNull(message = "密码不能为空") @RequestParam String password,
                                               @NotNull(message = "手机号不能为空") @RequestParam String mobile,
                                               @RequestHeader String uuid
                                               ) {
-        return ResultUtil.data(this.memberService.register(username, password, mobile));
+        this.memberService.storeRegister(username, password, mobile);
+        return ResultUtil.success();
+    }
+
+    @PostMapping("/userRegisterWithStore")
+    public ResultMessage<Object> userRegisterWithStore(@NotNull(message = "用户名不能为空") @RequestParam String username,
+                                              @NotNull(message = "密码不能为空") @RequestParam String password,
+                                              @NotNull(message = "手机号不能为空") @RequestParam String mobile,
+                                              @RequestHeader String uuid
+    ) {
+        this.memberService.register(username, password, mobile);
+//      模拟第一轮注册
+        CompanyVo vo = new CompanyVo(username, password);
+        storeRegister(vo);
+//        模拟第二轮注册
+        CompanySecondVo vo2 = new CompanySecondVo(username, password);
+        storeRegister2(vo2);
+
+        return ResultUtil.success();
     }
     @ApiOperation(value = "店铺注册接口，注册第一步")
     @ApiImplicitParams({
