@@ -91,9 +91,9 @@ public class UploadController {
             throw new ServiceException(ResultCode.IMAGE_FILE_EXT_ERROR);
         }
 
-        if (!CharSequenceUtil.containsAny(file.getContentType().toLowerCase(), "image")) {
-            throw new ServiceException(ResultCode.FILE_TYPE_NOT_SUPPORT);
-        }
+//        if (!CharSequenceUtil.containsAny(file.getContentType().toLowerCase(), "image")) {
+//            throw new ServiceException(ResultCode.FILE_TYPE_NOT_SUPPORT);
+//        }
 
         if (CharSequenceUtil.isNotBlank(base64)) {
             //base64上传
@@ -145,9 +145,9 @@ public class UploadController {
             throw new ServiceException(ResultCode.IMAGE_FILE_EXT_ERROR);
         }
 
-        if (!CharSequenceUtil.containsAny(file.getContentType().toLowerCase(), "image")) {
-            throw new ServiceException(ResultCode.FILE_TYPE_NOT_SUPPORT);
-        }
+//        if (!CharSequenceUtil.containsAny(file.getContentType().toLowerCase(), "image")) {
+//            throw new ServiceException(ResultCode.FILE_TYPE_NOT_SUPPORT);
+//        }
 
         String result;
         String fileKey = CommonUtil.rename(Objects.requireNonNull(file.getOriginalFilename()));

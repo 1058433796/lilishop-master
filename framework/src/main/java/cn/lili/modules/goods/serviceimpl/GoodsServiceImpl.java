@@ -180,10 +180,10 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
             goodsMaterialService.add(goodsOperationDTO.getMaterialList(), goods.getId(), GoodsMaterialEnum.MATERIAL);
         }
 
-        //        添加模型文件
-        if(goodsOperationDTO.getModelList() != null && !goodsOperationDTO.getModelList().isEmpty()){
-            goodsMaterialService.add(goodsOperationDTO.getModelList(), goods.getId(), GoodsMaterialEnum.Model);
-        }
+//        //        添加模型文件
+//        if(goodsOperationDTO.getModelList() != null && !goodsOperationDTO.getModelList().isEmpty()){
+//            goodsMaterialService.add(goodsOperationDTO.getModelList(), goods.getId(), GoodsMaterialEnum.Model);
+//        }
 
 
 
@@ -206,10 +206,10 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         if (goodsOperationDTO.getGoodsGalleryList() != null && !goodsOperationDTO.getGoodsGalleryList().isEmpty()) {
             this.goodsGalleryService.add(goodsOperationDTO.getGoodsGalleryList(), goods.getId());
         }
-        //        添加模型文件
-        if(goodsOperationDTO.getModelList() != null && !goodsOperationDTO.getModelList().isEmpty()){
-            goodsMaterialService.add(goodsOperationDTO.getModelList(), goods.getId(), GoodsMaterialEnum.Model);
-        }
+//        //        添加模型文件
+//        if(goodsOperationDTO.getModelList() != null && !goodsOperationDTO.getModelList().isEmpty()){
+//            goodsMaterialService.add(goodsOperationDTO.getModelList(), goods.getId(), GoodsMaterialEnum.Model);
+//        }
 //      添加材料文件
         if(goodsOperationDTO.getMaterialList() != null && !goodsOperationDTO.getMaterialList().isEmpty()){
             goodsMaterialService.add(goodsOperationDTO.getMaterialList(), goods.getId(), GoodsMaterialEnum.MATERIAL);
@@ -247,11 +247,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
             images.add(goodsGallery.getOriginal());
         }
         goodsVO.setGoodsGalleryList(images);
-        //商品sku赋值
-        List<GoodsSkuVO> goodsListByGoodsId = goodsSkuService.getGoodsListByGoodsId(goodsId);
-        if (goodsListByGoodsId != null && !goodsListByGoodsId.isEmpty()) {
-            goodsVO.setSkuList(goodsListByGoodsId);
-        }
+//        //商品sku赋值
+//        List<GoodsSkuVO> goodsListByGoodsId = goodsSkuService.getGoodsListByGoodsId(goodsId);
+//        if (goodsListByGoodsId != null && !goodsListByGoodsId.isEmpty()) {
+//            goodsVO.setSkuList(goodsListByGoodsId);
+//        }
         //商品分类名称赋值
         List<String> categoryName = new ArrayList<>();
         String categoryPath = goods.getCategoryPath();
@@ -262,33 +262,28 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         }
         goodsVO.setCategoryName(categoryName);
 
-        //参数非空则填写参数
-        if (CharSequenceUtil.isNotEmpty(goods.getParams())) {
-            goodsVO.setGoodsParamsDTOList(JSONUtil.toList(goods.getParams(), GoodsParamsDTO.class));
-        }
+//        //参数非空则填写参数
+//        if (CharSequenceUtil.isNotEmpty(goods.getParams())) {
+//            goodsVO.setGoodsParamsDTOList(JSONUtil.toList(goods.getParams(), GoodsParamsDTO.class));
+//        }
 
-//        将模型文件对应数据放入goodsVo中返回给前端使用
-        List<String> models = new ArrayList<>();
-        List<GoodsMaterial> modelList = goodsMaterialService.getList(goodsId, GoodsMaterialEnum.Model);
-        for (GoodsMaterial model : modelList) {
-            models.add(model.getUrl());
-        }
-        goodsVO.setModelList(models);
+////        将模型文件对应数据放入goodsVo中返回给前端使用
+//        List<String> models = new ArrayList<>();
+//        List<GoodsMaterial> modelList = goodsMaterialService.getList(goodsId, GoodsMaterialEnum.Model);
+//        for (GoodsMaterial model : modelList) {
+//            models.add(model.getUrl());
+//        }
+//        goodsVO.setModelList(models);
+
 
 //        将材料文件对应数据放入goodsVo中返回给前端使用
-        List<String> materials = new ArrayList<>();
-        List<GoodsMaterial> materialList = goodsMaterialService.getList(goodsId, GoodsMaterialEnum.MATERIAL);
-        for (GoodsMaterial material : materialList) {
-            materials.add(material.getUrl());
-        }
-        goodsVO.setMaterialList(materials);
+        List<GoodsMaterial> materialList = goodsMaterialService.getList(goodsId, null);
+        goodsVO.setMaterialList(materialList);
 
-        List<Wholesale> wholesaleList = wholesaleService.findByGoodsId(goodsId);
-        if (CollUtil.isNotEmpty(wholesaleList)) {
-            goodsVO.setWholesaleList(wholesaleList);
-        }
-
-
+//        List<Wholesale> wholesaleList = wholesaleService.findByGoodsId(goodsId);
+//        if (CollUtil.isNotEmpty(wholesaleList)) {
+//            goodsVO.setWholesaleList(wholesaleList);
+//        }
 
         cache.put(CachePrefix.GOODS.getPrefix() + goodsId, goodsVO);
         return goodsVO;
