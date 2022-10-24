@@ -89,11 +89,12 @@ public class MemberBuyerController {
                                           @RequestHeader String uuid,
                                           @NotNull(message = "验证码不能为空") @RequestParam String code) {
 
-        if (smsUtil.verifyCode(mobilePhone, VerificationEnums.REGISTER, uuid, code)) {
-            return ResultUtil.data(memberService.register(username, password, mobilePhone));
-        } else {
-            throw new ServiceException(ResultCode.VERIFICATION_SMS_CHECKED_ERROR);
-        }
+//        if (smsUtil.verifyCode(mobilePhone, VerificationEnums.REGISTER, uuid, code)) {
+        memberService.register(username, password, mobilePhone);
+        return ResultUtil.success();
+//        } else {
+//            throw new ServiceException(ResultCode.VERIFICATION_SMS_CHECKED_ERROR);
+//        }
 
     }
 
