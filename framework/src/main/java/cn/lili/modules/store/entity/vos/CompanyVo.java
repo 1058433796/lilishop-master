@@ -2,6 +2,7 @@ package cn.lili.modules.store.entity.vos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
@@ -87,6 +88,29 @@ public class CompanyVo {
     private String username;
     @NotNull
     private String password;
+
+    public CompanyVo(String username, String password){
+        this.username = username;
+        this.password = password;
+
+        companyType = "";
+        companyName = "";
+        businessNumber = "";
+        businessAddress = "";
+        businessDetailAddress = "";
+        businessLongPeriod = true;
+        legalType = "";
+        legalNumber = "";
+        legalName = "";
+        legalLongPeriod = true;
+        companyAddress = "";
+        companyDetailAddress = "";
+        companyEmergencyName = "";
+        companyEmergencyPhoneNumber = "";
+        code = "";
+        codeLongPeriod = true;
+
+    }
 
 }
 
