@@ -8,13 +8,18 @@ import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.item.entity.*;
 import cn.lili.modules.item.service.ItemGuarantyService;
+import cn.lili.modules.item.service.ItemSchemeService;
 import cn.lili.modules.item.service.ItemService;
+import cn.lili.modules.scheme.entity.Scheme;
+import cn.lili.modules.scheme.service.SchemeService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import cn.lili.modules.item.entity.ItemSearchParams;
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,6 +30,13 @@ public class ItemController {
     private ItemService itemService;
     @Resource
     private ItemGuarantyService itemGuarantyService;
+    @Resource
+    private ItemSchemeService itemSchemeService;
+    @Resource
+    private SchemeService schemeService;
+    @Resource
+    private ItemSchemeService itemschemeService;
+
     //    @ApiOperation(value = "测试获取项目列表")
 //    @GetMapping("/test")
 //    public List<Item> findAll(){
@@ -45,10 +57,59 @@ public class ItemController {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
         item.setBuyerId(currentUser.getStoreId());
         item.setBuyerName(currentUser.getStoreName());
+        Date date = new Date();
+        SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd :hh:mm:ss");
+        item.setCreateTime(date);
+        //创建项目
         if (itemService.saveItem(item)) {
+            //创建项目之后,为项目创建对应方案
+        }
+            String itemId=item.getItemId();//添加之后的新项目ID
+            List<Scheme> schemelist=schemeService.getSchemeList();
+            int finish=0;
+            for (int i=0;i<schemelist.size();i++){
+                //按照每一条方案进行添加
+                ItemSchemeVO itemScheme=new ItemSchemeVO();
+                String schemeid= schemelist.get(i).getSchemeId();
+                itemScheme.setSchemeId(schemeid);
+                itemScheme.setItemId(itemId);
+                itemScheme.setDoorId(schemelist.get(i).getDoorId());
+                itemScheme.setLocation(schemelist.get(i).getLocation());
+                itemScheme.setOpenMethod(schemelist.get(i).getOpenMethod());
+                itemScheme.setOpenDirection(schemelist.get(i).getOpenDirection());
+                itemScheme.setHeight(schemelist.get(i).getHeight());
+                itemScheme.setWidth(schemelist.get(i).getWidth());
+                itemScheme.setThickness(schemelist.get(i).getThickness());
+                itemScheme.setGuard(schemelist.get(i).getGuard());
+                itemScheme.setTexture(schemelist.get(i).getTexture());
+                itemScheme.setHandle(schemelist.get(i).getHandle());
+                itemScheme.setFirerating(schemelist.get(i).getFirerating());
+                itemScheme.setWjgroup(schemelist.get(i).getWjgroup());
+                itemScheme.setUpdateTime(schemelist.get(i).getUpdateTime());
+                if (itemschemeService.saveItemScheme(itemScheme)) {
+                    finish++;
+                    System.out.println(finish);
+                    //保存一条项目方案后生成对应保证单
+                    String itemName=item.getItemName();
+//                    String primaryId=itemScheme.getPrimaryId();
+//                    String schemeSum=schemelist.get(i).getSchemeSum();
+//                    String orderName=itemName+"项目";
+//                    String orderContent=itemName+"内容";
+                    ItemGuaranty itemGuaranty=new ItemGuaranty();
+                    itemGuaranty.setItemId(itemId);
+                    itemGuaranty.setPrimaryId(itemScheme.getPrimaryId());
+                    itemGuaranty.setBuyerId(currentUser.getStoreId());
+                    itemGuaranty.setSchemeSum(schemelist.get(i).getSchemeSum());
+                    itemGuaranty.setOrderContent(item.getItemName()+"内容");
+                    itemGuaranty.setOrderName(item.getItemName()+"项目");
+                    itemGuarantyService.createGuaranty(itemGuaranty);
+                }
+            }
+        if (finish==schemelist.size()){
             return ResultUtil.success(ResultCode.PINTUAN_ADD_SUCCESS);
         }
-        throw new ServiceException(ResultCode.PINTUAN_ADD_ERROR);
+            return ResultUtil.success(ResultCode.PINTUAN_ADD_SUCCESS);
+
     }
     @GetMapping(value = "/{id}")
     @ApiOperation(value = "通过id获取")
