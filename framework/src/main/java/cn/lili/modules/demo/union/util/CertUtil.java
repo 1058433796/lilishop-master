@@ -412,6 +412,7 @@ public class CertUtil {
 		} catch (Exception e) {
 			LogUtil.writeErrorLog("getSignCertId Error", e);
 			return null;
+
 		}
 	}
 
