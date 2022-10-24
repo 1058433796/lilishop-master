@@ -38,7 +38,6 @@ public class MemberNoticeSenterManagerController {
     @ApiOperation(value = "获取全部数据")
     @GetMapping(value = "/getAll")
     public ResultMessage<List<MemberNoticeSenter>> getAll() {
-
         List<MemberNoticeSenter> list = memberNoticeSenterService.list();
         return ResultUtil.data(list);
     }
@@ -55,7 +54,6 @@ public class MemberNoticeSenterManagerController {
     @ApiOperation(value = "编辑或更新数据")
     @PostMapping(value = "/insertOrUpdate")
     public ResultMessage<MemberNoticeSenter> saveOrUpdate(MemberNoticeSenter memberNoticeSenter) {
-
         memberNoticeSenterService.customSave(memberNoticeSenter);
         return ResultUtil.data(memberNoticeSenter);
     }

@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/store/itemOrder/itemOrder")
+@RequestMapping("/manager/itemOrder/itemOrder")
 public class itemOrderController {
     @Resource
     private ItemOrderServiceZy itemOrderServiceZy;
@@ -45,7 +45,6 @@ public class itemOrderController {
     public ResultMessage<Boolean> buyerResponse(@PathVariable("oid") String oid) {
         ItemOrder item = itemOrderServiceZy.getById(oid);
         item.setReplyStatus("已响应");
-        item.setBuyerReply("已响应");
         itemOrderServiceZy.updateById(item);
         return ResultUtil.data(true);
     }

@@ -24,5 +24,7 @@ public interface ContractMapper extends BaseMapper<Contract> {
             "NATURAL JOIN " +
             "(SELECT order_id , scheme_id FROM item_order) AS o ${ew.customSqlSegment}")
     IPage<Contract> queryAssociated(IPage<Contract> page, @Param(Constants.WRAPPER) Wrapper<Contract> queryWrapper);
+    @Select("SELECT COUNT(*) FROM contract WHERE buyer_id=#{buyerId} AND buyer_state='未签署'")
+    Long waitToSignContract(String buyerId);
 
 }

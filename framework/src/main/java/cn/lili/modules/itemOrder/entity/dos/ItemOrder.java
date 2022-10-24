@@ -144,6 +144,8 @@ public class ItemOrder {
 
     private String buyerId;
 
+    private String buyerReply;
+
     private String storeId;
 
     private String schemeId;

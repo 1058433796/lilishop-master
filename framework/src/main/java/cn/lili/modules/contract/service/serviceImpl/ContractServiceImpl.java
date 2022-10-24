@@ -31,6 +31,11 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, Contract> i
     }
 
     @Override
+    public Long waitToSignContract(String buyerId) {
+        return this.baseMapper.waitToSignContract(buyerId);
+    }
+
+    @Override
     public boolean save(Contract entity) {
         return super.save(entity);
     }

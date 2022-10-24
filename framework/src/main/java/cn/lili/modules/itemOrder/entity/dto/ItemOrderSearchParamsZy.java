@@ -54,8 +54,11 @@ public class ItemOrderSearchParamsZy extends PageVO {
         if (CharSequenceUtil.isNotEmpty(payStatus)) {
             queryWrapper.like("pay_status", payStatus);
         }
+//        if (CharSequenceUtil.isNotEmpty(replyStatus)) {
+//            queryWrapper.like("reply_status", replyStatus);
+//        }
         if (CharSequenceUtil.isNotEmpty(replyStatus)) {
-            queryWrapper.like("reply_status", replyStatus);
+            queryWrapper.like("buyer_reply", replyStatus);
         }
 
         if (CharSequenceUtil.isNotEmpty(schemeId)) {
