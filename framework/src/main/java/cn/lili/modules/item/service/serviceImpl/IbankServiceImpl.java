@@ -1,17 +1,12 @@
 package cn.lili.modules.item.service.serviceImpl;
 
 
-import cn.lili.modules.item.Util.CUPACPUtil;
-import cn.lili.modules.item.Util.LogUtil;
-import cn.lili.modules.item.Util.SDKConfig;
-import cn.lili.modules.item.Util.SecureUtil;
 import cn.lili.modules.item.entity.OrderBean;
 import cn.lili.modules.item.entity.enums.*;
 import cn.lili.modules.item.mapper.IbankMapper;
 import cn.lili.modules.item.service.IbankService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.apache.commons.lang3.StringUtils;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
@@ -195,48 +190,48 @@ public class IbankServiceImpl extends ServiceImpl<IbankMapper, OrderBean> implem
 //
 //
 //    }
-    @Override
-    public void getPayUrl(String orderId,String txnAmt,String txnTime) throws IOException {
-        Map<String, String> data = new HashMap<String, String>();
-        data.put("version", "5.0.0");
-        data.put("encoding", "UTF-8");
-        // 签名方法 01 RSA
-        data.put("signMethod","01");
-        // 交易类型 01-消费
-        data.put("txnType", "01");
-        // 交易子类型 01:自助消费 02:订购 03:分期付款
-        data.put("txnSubType", "01");
-        // 业务类型
-        data.put("bizType", "000202");
-        // 渠道类型，07-PC，08-手机
-        data.put("channelType","07");
-        // 前台通知地址 ，控件接入方式无作用
-        data.put("frontUrl", "");
-        // 后台通知地址
-        data.put("backUrl", "http://www.specialUrl.com");
-        // 接入类型，商户接入填0 0- 商户 ， 1： 收单， 2：平台商户
-        data.put("accessType", "0");
-        // 商户号码，请改成自己的商户号
-        data.put("merId", "37050161667600000374");
-        // 商户订单号，8-40位数字字母
-        data.put("orderId", orderId);
-        // 订单发送时间，取系统时间
-        data.put("txnTime", txnTime);
-        // 交易金额，单位分
-        data.put("txnAmt",txnAmt);
-        // 交易币种
-        data.put("currencyCode",  "156");
-        Map<String, String> submitFromData = CUPACPUtil.signData(data,
-                "C\\:\\\\cupacp\\\\b2b\\\\PRO_700000000000001_acp.pfx", "123456");
-        String requestFrontUrl = SDKConfig.getConfig().getFrontRequestUrl();
-
-        String html = CUPACPUtil.createHtml(requestFrontUrl, submitFromData);
-
-        loga.info("银联全渠道ACP-B2B支付请求的报文串：" + html);
-//        OrderLogUtil.savePayLog(this.orderid, "1", "银联全渠道ACP-B2B支付请求的报文串：" + html);
-
-
-    }
+//    @Override
+//    public void getPayUrl(String orderId,String txnAmt,String txnTime) throws IOException {
+//        Map<String, String> data = new HashMap<String, String>();
+//        data.put("version", "5.0.0");
+//        data.put("encoding", "UTF-8");
+//        // 签名方法 01 RSA
+//        data.put("signMethod","01");
+//        // 交易类型 01-消费
+//        data.put("txnType", "01");
+//        // 交易子类型 01:自助消费 02:订购 03:分期付款
+//        data.put("txnSubType", "01");
+//        // 业务类型
+//        data.put("bizType", "000202");
+//        // 渠道类型，07-PC，08-手机
+//        data.put("channelType","07");
+//        // 前台通知地址 ，控件接入方式无作用
+//        data.put("frontUrl", "");
+//        // 后台通知地址
+//        data.put("backUrl", "http://www.specialUrl.com");
+//        // 接入类型，商户接入填0 0- 商户 ， 1： 收单， 2：平台商户
+//        data.put("accessType", "0");
+//        // 商户号码，请改成自己的商户号
+//        data.put("merId", "37050161667600000374");
+//        // 商户订单号，8-40位数字字母
+//        data.put("orderId", orderId);
+//        // 订单发送时间，取系统时间
+//        data.put("txnTime", txnTime);
+//        // 交易金额，单位分
+//        data.put("txnAmt",txnAmt);
+//        // 交易币种
+//        data.put("currencyCode",  "156");
+//        Map<String, String> submitFromData = CUPACPUtil.signData(data,
+//                "C\\:\\\\cupacp\\\\b2b\\\\PRO_700000000000001_acp.pfx", "123456");
+//        String requestFrontUrl = SDKConfig.getConfig().getFrontRequestUrl();
+//
+//        String html = CUPACPUtil.createHtml(requestFrontUrl, submitFromData);
+//
+//        loga.info("银联全渠道ACP-B2B支付请求的报文串：" + html);
+////        OrderLogUtil.savePayLog(this.orderid, "1", "银联全渠道ACP-B2B支付请求的报文串：" + html);
+//
+//
+//    }
 
 
 }

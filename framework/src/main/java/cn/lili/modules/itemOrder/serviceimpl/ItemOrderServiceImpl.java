@@ -110,7 +110,7 @@ public class ItemOrderServiceImpl extends ServiceImpl<ItemOrderMapper, ItemOrder
             order.setLogisticsCode(logistics.getId());
             order.setLogisticsName(logistics.getName());
             order.setLogisticsNo(logisticsNo);
-            order.setLogisticsTime(new Date());
+//            order.setLogisticsTime(new Date());
             order.setDistributionStatus("已发货");
             order.setOrderStatus("已发货");
             this.updateById(order);

@@ -17,7 +17,7 @@ public interface IbankService {
 
 //    void copyOrderValueToOrig(OrderBean orderBean);
 
-    void getPayUrl(String orderId,String txnAmt,String txnTime) throws IOException;
+//    void getPayUrl(String orderId,String txnAmt,String txnTime) throws IOException;
 
 
 
