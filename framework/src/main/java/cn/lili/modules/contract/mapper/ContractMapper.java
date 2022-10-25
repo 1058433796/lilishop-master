@@ -9,14 +9,18 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.Date;
+
 public interface ContractMapper extends BaseMapper<Contract> {
 
-    @Update("UPDATE contract SET buyer_state='已签署' WHERE id=#{id}" )
-    void buyerSign(String id);
-    @Update("UPDATE contract SET provider_state='已签署' WHERE id=#{id}" )
-    void providerSign(String id);
+    @Update("UPDATE contract SET buyer_state='已签署', sign_time=#{date} WHERE id=#{id}" )
+    void buyerSign(String id, Date date);
+
     @Select("select g.* from order as g")
     IPage<Contract> queryByParams(IPage<Contract> page, @Param(Constants.WRAPPER) Wrapper<Contract> queryWrapper);
+
+    @Update("UPDATE contract SET provider_state='已签署' WHERE id=#{id}" )
+    void providerSign(String id);
 
     @Select("SELECT * FROM " +
             "(SELECT * from contract) AS s " +
