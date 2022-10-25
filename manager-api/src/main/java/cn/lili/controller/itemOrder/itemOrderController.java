@@ -27,6 +27,12 @@ public class itemOrderController {
         return ResultUtil.data(itemOrderServiceZy.queryByParams(itemOrderSearchParamsZy));
     }
 
+    @ApiOperation(value = "查询单个订单的详细信息")
+    @GetMapping("/order/{oid}")
+    public ResultMessage<ItemOrder> getOrderDetail(@PathVariable("oid") String orderId) {
+        return ResultUtil.data(itemOrderServiceZy.getById(orderId));
+    }
+
     @ApiOperation(value = "查询订单列表")
     @GetMapping
     public ResultMessage<IPage<ItemOrder>> queryMineOrder(ItemOrderSearchParamsZy itemOrderSearchParamsZy) {
