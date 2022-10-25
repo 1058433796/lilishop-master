@@ -2,6 +2,7 @@ package cn.lili.modules.itemOrder.entity.vo;
 
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.dos.OrderGood;
+import cn.lili.modules.schemeComponent.entity.SchemeComponent;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,11 +22,11 @@ public class OrderGoodDetailVO implements Serializable {
     /**
      * 子订单信息
      */
-    private List<OrderGood> orderGoods;
+    private List<SchemeComponent> schemeComponentList;
 
-    public OrderGoodDetailVO(ItemOrder itemOrder, List<OrderGood> orderGoods) {
+    public OrderGoodDetailVO(ItemOrder itemOrder, List<SchemeComponent> schemeComponentList) {
         this.itemOrder=itemOrder;
-        this.orderGoods=orderGoods;
+        this.schemeComponentList=schemeComponentList;
     }
 
 

@@ -11,7 +11,7 @@ public enum DeliverStatusEnum {
     /**
      * 发货状态
      */
-    UNDELIVERED("未发货"),
+    UNDELIVERED("待发货"),
     DELIVERED("已发货"),
     RECEIVED("已收货");
 

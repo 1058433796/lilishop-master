@@ -2,6 +2,7 @@ package cn.lili.modules.itemOrder.serviceimpl;
 
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
+import cn.lili.common.security.OperationalJudgment;
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.dos.OrderGood;
 import cn.lili.modules.itemOrder.entity.dto.ItemOrderExportDTO;
@@ -11,15 +12,32 @@ import cn.lili.modules.itemOrder.entity.vo.OrderGoodDetailVO;
 import cn.lili.modules.itemOrder.mapper.ItemOrderMapper;
 import cn.lili.modules.itemOrder.mapper.OrderGoodMapper;
 import cn.lili.modules.itemOrder.service.ItemOrderService;
+import cn.lili.modules.order.order.aop.OrderLogPoint;
+import cn.lili.modules.order.order.entity.dos.Order;
+import cn.lili.modules.order.order.entity.dos.OrderItem;
+import cn.lili.modules.order.order.entity.dto.OrderMessage;
+import cn.lili.modules.order.order.entity.enums.DeliverStatusEnum;
+import cn.lili.modules.order.order.entity.enums.OrderComplaintStatusEnum;
+import cn.lili.modules.order.order.entity.enums.OrderItemAfterSaleStatusEnum;
+import cn.lili.modules.order.order.entity.enums.OrderStatusEnum;
+import cn.lili.modules.schemeComponent.entity.SchemeComponent;
+import cn.lili.modules.schemeComponent.mapper.SchemeComponentMapper;
+import cn.lili.modules.schemeComponent.service.SchemeComponentService;
+import cn.lili.modules.system.entity.dos.Logistics;
+import cn.lili.modules.system.service.LogisticsService;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -32,6 +50,14 @@ public class ItemOrderServiceImpl extends ServiceImpl<ItemOrderMapper, ItemOrder
     @Resource
     private OrderGoodMapper orderGoodMapper;
 
+    /**
+     * 物流公司
+     */
+    @Autowired
+    private LogisticsService logisticsService;
+
+    @Autowired
+    private SchemeComponentMapper schemeComponentMapper;
 
     /**
      * 获取订单
@@ -53,25 +79,14 @@ public class ItemOrderServiceImpl extends ServiceImpl<ItemOrderMapper, ItemOrder
     }
 
     @Override
-    public OrderGoodDetailVO  queryDetail(String orderId) {
+    public OrderGoodDetailVO  queryOrderComponent(String orderId) {
         ItemOrder itemOrder = this.getByOrderId(orderId);
-        //System.out.println(itemOrder.toString());
         if (itemOrder == null) {
             throw new ServiceException(ResultCode.ORDER_NOT_EXIST);
         }
-        QueryWrapper<OrderGood> orderGoodWrapper = new QueryWrapper<>();
-        orderGoodWrapper.eq("order_id", orderId);
         //查询订单项信息
-        List<OrderGood> orderGoods = orderGoodMapper.selectList(orderGoodWrapper);
-        //System.out.println(orderGoods.toString());
-        //查询订单日志信息
-        //List<OrderLog> orderLogs = orderLogService.getOrderLog(orderSn);
-        //查询发票信息
-        //Receipt receipt = receiptService.getByOrderSn(orderSn);
-        //查询订单和自订单，然后写入vo返回
-        OrderGoodDetailVO orderGoodDetailVO=new OrderGoodDetailVO(itemOrder, orderGoods);
-        System.out.println(orderGoodDetailVO);
-        return  orderGoodDetailVO;
+        List<SchemeComponent> schemeComponentList = this.baseMapper.queryOrderComponent(orderId, itemOrder.getStoreId());
+        return new OrderGoodDetailVO(itemOrder, schemeComponentList);
     }
 
     @Override
@@ -79,4 +94,34 @@ public class ItemOrderServiceImpl extends ServiceImpl<ItemOrderMapper, ItemOrder
         return this.baseMapper.queryExportOrder(itemOrderSearchParams.queryWrapper());
     }
 
+    @Override
+    @OrderLogPoint(description = "'订单['+#orderId+']发货，发货单号['+#logisticsNo+']'", orderSn = "#ordeId")
+    @Transactional(rollbackFor = Exception.class)
+    public ItemOrder delivery(String orderId, String logisticsNo, String logisticsId) {
+        ItemOrder order = OperationalJudgment.judgment(this.getByOrderId(orderId));
+        //如果订单未发货，并且订单状态值等于待发货
+        if (order.getDistributionStatus().equals("未发货")) {
+            //获取对应物流
+            Logistics logistics = logisticsService.getById(logisticsId);
+            if (logistics == null) {
+                throw new ServiceException(ResultCode.ORDER_LOGISTICS_ERROR);
+            }
+            //写入物流信息
+            order.setLogisticsCode(logistics.getId());
+            order.setLogisticsName(logistics.getName());
+            order.setLogisticsNo(logisticsNo);
+            order.setLogisticsTime(new Date());
+            order.setDistributionStatus("已发货");
+            order.setOrderStatus("已发货");
+            this.updateById(order);
+            //发送订单状态改变消息
+//            OrderMessage orderMessage = new OrderMessage();
+//            orderMessage.setNewStatus(OrderStatusEnum.DELIVERED);
+//            orderMessage.setOrderSn(order.getSn());
+//            this.sendUpdateStatusMessage(orderMessage);
+        } else {
+            throw new ServiceException(ResultCode.ORDER_DELIVER_ERROR);
+        }
+        return order;
+    }
 }

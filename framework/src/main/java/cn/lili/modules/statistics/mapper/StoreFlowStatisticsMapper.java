@@ -30,7 +30,15 @@ public interface StoreFlowStatisticsMapper extends BaseMapper<StoreFlow> {
      */
     @Select("SELECT goods_id,goods_name,SUM(final_price) AS price,SUM(num) AS num FROM li_store_flow ${ew.customSqlSegment}")
     List<GoodsStatisticsDataVO> getGoodsStatisticsData(IPage<GoodsStatisticsDataVO> page, @Param(Constants.WRAPPER) Wrapper<GoodsStatisticsDataVO> queryWrapper);
-
+    /**
+     * 产品统计
+     *
+     * @param page         分页
+     * @param queryWrapper 查询条件
+     * @return 商品统计列表
+     */
+    @Select("SELECT good_id as goods_id,good_name as goods_name,SUM(good_totalprice) AS price,SUM(good_number) AS num FROM order_good ${ew.customSqlSegment}")
+    List<GoodsStatisticsDataVO> getGoodsStatisticsDataTop(IPage<GoodsStatisticsDataVO> page, @Param(Constants.WRAPPER) Wrapper<GoodsStatisticsDataVO> queryWrapper);
     /**
      * 分类统计
      *

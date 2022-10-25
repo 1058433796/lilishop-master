@@ -13,7 +13,7 @@ import java.util.Date;
 
 public interface ContractMapper extends BaseMapper<Contract> {
 
-    @Update("UPDATE contract SET buyer_state='已签署', sign_time=#{date} WHERE id=#{id} " )
+    @Update("UPDATE contract SET buyer_state='已签署', sign_time=#{date} WHERE id=#{id}" )
     void buyerSign(String id, Date date);
 
     @Select("select g.* from order as g")

@@ -5,6 +5,8 @@ import cn.lili.modules.itemOrder.entity.dto.ItemOrderExportDTO;
 import cn.lili.modules.itemOrder.entity.dto.ItemOrderSearchParams;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
 import cn.lili.modules.itemOrder.entity.vo.OrderGoodDetailVO;
+import cn.lili.modules.order.order.entity.dos.Order;
+import cn.lili.modules.schemeComponent.entity.SchemeComponent;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.stereotype.Service;
@@ -31,14 +33,7 @@ public interface ItemOrderService extends IService<ItemOrder> {
      */
     IPage<ItemOrderSimpleVO> queryByParams(ItemOrderSearchParams itemorderSearchParams);
 
-    /**
-     * 订单详细
-     *
-     * @param orderId 订单id
-     * @return 订单详细
-     */
-    OrderGoodDetailVO queryDetail(String orderId);
-
+    OrderGoodDetailVO queryOrderComponent(String oid);
 
     /**
      * 查询导出订单列表
@@ -47,4 +42,14 @@ public interface ItemOrderService extends IService<ItemOrder> {
      * @return 导出订单列表
      */
     List<ItemOrderExportDTO> queryExportOrder(ItemOrderSearchParams itemOrderSearchParams);
+
+    /**
+     * 订单发货
+     *
+     * @param orderId      订单编号
+     * @param logisticsNo 发货单号
+     * @param logisticsId   物流公司
+     * @return 订单
+     */
+    ItemOrder delivery(String orderId, String logisticsNo, String logisticsId);
 }

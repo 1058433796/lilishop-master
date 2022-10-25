@@ -19,8 +19,10 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, Contract> i
         System.out.println("查询合同");
         return this.page(PageUtil.initPage(contractSearchParams), contractSearchParams.queryWrapper());
     }
-    public void buyerSign(String id, Date time) {
-        this.baseMapper.buyerSign(id, time);
+
+    @Override
+    public void buyerSign(String id, Date date) {
+        this.baseMapper.buyerSign(id,date);
     }
 
     @Override

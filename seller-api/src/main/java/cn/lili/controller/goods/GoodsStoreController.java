@@ -102,7 +102,7 @@ public class GoodsStoreController {
     @ApiOperation(value = "新增商品")
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
     public ResultMessage<GoodsOperationDTO> save(@Valid @RequestBody GoodsOperationDTO goodsOperationDTO) {
-        System.out.println(goodsOperationDTO);
+
         goodsService.addGoods(goodsOperationDTO);
         return ResultUtil.success();
     }

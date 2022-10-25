@@ -8,7 +8,6 @@ import cn.lili.cache.CachePrefix;
 import cn.lili.common.aop.annotation.DemoSite;
 import cn.lili.common.context.ThreadContextHolder;
 import cn.lili.common.enums.ResultCode;
-import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.enums.SwitchEnum;
 import cn.lili.common.event.TransactionCommitSendMQEvent;
 import cn.lili.common.exception.ServiceException;
@@ -34,7 +33,6 @@ import cn.lili.modules.member.mapper.MemberMapper;
 import cn.lili.modules.member.service.MemberService;
 import cn.lili.modules.member.token.MemberTokenGenerate;
 import cn.lili.modules.member.token.StoreTokenGenerate;
-import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.enums.StoreStatusEnum;
 import cn.lili.modules.store.service.StoreService;
 import cn.lili.mybatis.util.PageUtil;
@@ -108,6 +106,20 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
 
 
     @Override
+    public boolean StoreUpdateMember(StoreUserUpdateDTO storeUserUpdateDTO) {
+        AuthUser tokenUser = Objects.requireNonNull(UserContext.getCurrentUser());
+        Member member = this.findByUsername(tokenUser.getUsername());
+
+        //判断是否用户登录并且会员ID为当前登录会员ID
+        if (!Objects.equals(tokenUser.getId(), member.getId())) {
+            throw new ServiceException(ResultCode.USER_NOT_LOGIN);
+        }
+        //修改
+        BeanUtil.copyProperties(storeUserUpdateDTO, member);
+        return this.updateById(member);
+    }
+
+    @Override
     public Member getUserInfo() {
         AuthUser tokenUser = UserContext.getCurrentUser();
         if (tokenUser != null) {
@@ -140,9 +152,11 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         if (!new BCryptPasswordEncoder().matches(password, member.getPassword())) {
             throw new ServiceException(ResultCode.USER_PASSWORD_ERROR);
         }
-        loginBindUser(member);
+//        loginBindUser(member);
+//        return storeTokenGenerate.createToken(member, false);
         return memberTokenGenerate.createToken(member, false);
     }
+
 
     @Override
     public Token usernameStoreLogin(String username, String password) {
@@ -374,26 +388,26 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
 
     @Override
     @Transactional
-    public Token register(String userName, String password, String mobilePhone) {
+    public void register(String userName, String password, String mobilePhone) {
         //检测会员信息
         checkMember(userName, mobilePhone);
         //设置会员信息
         Member member = new Member(userName, new BCryptPasswordEncoder().encode(password), mobilePhone, userName, "https://i.loli.net/2020/11/19/LyN6JF7zZRskdIe.png");
         //注册成功后用户自动登录
         registerHandler(member);
-        return memberTokenGenerate.createToken(member, false);
+//        return memberTokenGenerate.createToken(member, false);
     }
 
     @Override
     @Transactional
-    public Token storeRegister(String userName, String password, String mobilePhone) {
+    public void storeRegister(String userName, String password, String mobilePhone) {
         //检测会员信息
         checkMember(userName, mobilePhone);
         //设置会员信息
         Member member = new Member(userName, new BCryptPasswordEncoder().encode(password), mobilePhone);
         //注册成功后用户自动登录
         registerHandler(member);
-        return memberTokenGenerate.createToken(member, false);
+//        return memberTokenGenerate.createToken(member, false);
     }
 
     @Override
@@ -720,7 +734,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
      */
     private void checkMember(String userName, String mobilePhone) {
         //判断手机号是否存在
-        if (findMember(mobilePhone, userName) > 0) {
+        if (findMember(userName) != null) {
             throw new ServiceException(ResultCode.USER_EXIST);
         }
     }

@@ -18,10 +18,7 @@ import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.dos.StoreDetail;
 import cn.lili.modules.store.entity.dto.*;
 import cn.lili.modules.store.entity.enums.StoreStatusEnum;
-import cn.lili.modules.store.entity.vos.CustomerStoreDetailVO;
-import cn.lili.modules.store.entity.vos.CustomerStoreVO;
-import cn.lili.modules.store.entity.vos.StoreSearchParams;
-import cn.lili.modules.store.entity.vos.StoreVO;
+import cn.lili.modules.store.entity.vos.*;
 import cn.lili.modules.store.mapper.StoreMapper;
 import cn.lili.modules.store.service.StoreDetailService;
 import cn.lili.modules.store.service.StoreService;
@@ -92,6 +89,11 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
     @Override
     public IPage<StoreVO> findByConditionPage(StoreSearchParams storeSearchParams, PageVO page) {
         return this.baseMapper.getStoreList(PageUtil.initPage(page), storeSearchParams.queryWrapper());
+    }
+
+    @Override
+    public IPage<ManagerStoreVO> findAllPage(StoreSearchParams storeSearchParams) {
+        return this.baseMapper.getStoreAsBuyerList(PageUtil.initPage(storeSearchParams), storeSearchParams.queryWrapper());
     }
 
     @Override

@@ -31,4 +31,5 @@ public class ItemGuaranty {
 
     private String buyerId;
 
+    private String itemId;
 }
