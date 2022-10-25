@@ -19,6 +19,9 @@ public interface ContractMapper extends BaseMapper<Contract> {
     @Select("select g.* from order as g")
     IPage<Contract> queryByParams(IPage<Contract> page, @Param(Constants.WRAPPER) Wrapper<Contract> queryWrapper);
 
+    @Update("UPDATE contract SET provider_state='已签署' WHERE id=#{id}" )
+    void providerSign(String id);
+
     @Select("SELECT * FROM " +
             "(SELECT * from contract) AS s " +
             "NATURAL JOIN " +

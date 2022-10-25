@@ -24,6 +24,11 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, Contract> i
     }
 
     @Override
+    public void providerSign(String id) {
+        this.baseMapper.providerSign(id);
+    }
+
+    @Override
     public IPage<Contract> queryAssociated(ContractSearchParams contractSearchParams) {
         QueryWrapper queryWrapper = contractSearchParams.queryWrapper();
         return this.baseMapper.queryAssociated(PageUtil.initPage(contractSearchParams), queryWrapper);
