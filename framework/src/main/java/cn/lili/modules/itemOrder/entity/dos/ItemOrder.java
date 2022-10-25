@@ -167,6 +167,8 @@ public class ItemOrder {
 
     private String logisticsName;
 
+    private Date logisticsTime;
+
     private String logisticsNo;
 
 }

@@ -78,7 +78,7 @@ public class SchemeComponentController {
                 itemOrder.setStoreId(idTotal.getId());
                 itemOrder.setCreateTime(DateTime.now());
                 itemOrder.setSchemeId(schemePrimaryId);
-                itemOrder.setConsigneeName(loggingBuyer.getUsername());
+                itemOrder.setConsigneeName(loggingBuyer.getNickName());
                 itemOrder.setConsigneePhone(loggingBuyer.getMobile());
                 itemOrder.setBuyerPhone(storep.getSalesConsigneeMobile());
                 itemOrder.setBuyerName(buyerStore.getStoreName());
@@ -93,6 +93,4 @@ public class SchemeComponentController {
         }
        return ResultUtil.data(arrayList);
     }
-
-
 }
