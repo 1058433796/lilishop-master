@@ -34,7 +34,10 @@ public interface OrderStatisticsService extends IService<Order> {
      * @return 订单总数量
      */
     long orderNum(String orderStatus);
-
+    //供应商待响应订单数
+    long orderNumReply(String orderStatus);
+    //供应商待响应合同数
+    long orderNumContract(String orderStatus);
     /**
      * 图表统计
      *

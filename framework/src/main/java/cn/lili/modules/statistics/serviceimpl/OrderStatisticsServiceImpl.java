@@ -6,6 +6,10 @@ import cn.lili.common.security.enums.UserEnums;
 import cn.lili.common.utils.CurrencyUtil;
 import cn.lili.common.utils.StringUtils;
 import cn.lili.common.vo.PageVO;
+import cn.lili.modules.contract.entity.Contract;
+import cn.lili.modules.contract.service.ContractService;
+import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
+import cn.lili.modules.itemOrder.service.ItemOrderService;
 import cn.lili.modules.order.order.entity.dos.Order;
 import cn.lili.modules.order.order.entity.enums.FlowTypeEnum;
 import cn.lili.modules.order.order.entity.enums.PayStatusEnum;
@@ -25,6 +29,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -46,6 +51,12 @@ public class OrderStatisticsServiceImpl extends ServiceImpl<OrderStatisticsMappe
 
     @Autowired
     private StoreFlowStatisticsService storeFlowStatisticsService;
+
+    @Autowired
+    private ItemOrderService itemOrderService;
+
+    @Autowired
+    private ContractService contractService;
 
     @Override
     public OrderOverviewVO overview(StatisticsQueryParam statisticsQueryParam) {
@@ -97,13 +108,28 @@ public class OrderStatisticsServiceImpl extends ServiceImpl<OrderStatisticsMappe
 
     @Override
     public long orderNum(String orderStatus) {
-        LambdaQueryWrapper<Order> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(CharSequenceUtil.isNotEmpty(orderStatus), Order::getOrderStatus, orderStatus);
+        LambdaQueryWrapper<ItemOrder> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(CharSequenceUtil.isNotEmpty(orderStatus), ItemOrder::getOrderStatus, orderStatus);
         queryWrapper.eq(CharSequenceUtil.equals(Objects.requireNonNull(UserContext.getCurrentUser()).getRole().name(), UserEnums.STORE.name()),
-                Order::getStoreId, UserContext.getCurrentUser().getStoreId());
-        return this.count(queryWrapper);
+                ItemOrder::getStoreId, UserContext.getCurrentUser().getStoreId());
+        return itemOrderService.count(queryWrapper);
     }
-
+    @Override
+    public long orderNumReply(String orderStatus) {
+        LambdaQueryWrapper<ItemOrder> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(CharSequenceUtil.isNotEmpty(orderStatus), ItemOrder::getStoreReply, orderStatus);
+        queryWrapper.eq(CharSequenceUtil.equals(Objects.requireNonNull(UserContext.getCurrentUser()).getRole().name(), UserEnums.STORE.name()),
+                ItemOrder::getStoreId, UserContext.getCurrentUser().getStoreId());
+        return itemOrderService.count(queryWrapper);
+    }
+    @Override
+    public long orderNumContract(String Status) {
+        LambdaQueryWrapper<Contract> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(CharSequenceUtil.isNotEmpty(Status), Contract::getProviderState, Status);
+        queryWrapper.eq(CharSequenceUtil.equals(Objects.requireNonNull(UserContext.getCurrentUser()).getRole().name(), UserEnums.STORE.name()),
+                Contract::getStoreId, UserContext.getCurrentUser().getStoreId());
+        return contractService.count(queryWrapper);
+    }
     @Override
     public List<OrderStatisticsDataVO> statisticsChart(StatisticsQueryParam statisticsQueryParam) {
         Date[] dates = StatisticsDateUtil.getDateArray(statisticsQueryParam);

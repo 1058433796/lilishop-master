@@ -240,6 +240,7 @@ public class PlatformViewServiceImpl extends ServiceImpl<PlatformViewMapper, Pla
             if (StringUtils.isNotEmpty(queryParam.getStoreId())) {
                 return cache.counter(CachePrefix.UV.getPrefix() + StatisticsSuffix.suffix(queryParam.getStoreId())).intValue();
             }
+            System.out.println(cache.counter(CachePrefix.UV.getPrefix() + StatisticsSuffix.suffix()).intValue());
             return cache.counter(CachePrefix.UV.getPrefix() + StatisticsSuffix.suffix()).intValue();
         } else {
             QueryWrapper queryWrapper = new QueryWrapper();

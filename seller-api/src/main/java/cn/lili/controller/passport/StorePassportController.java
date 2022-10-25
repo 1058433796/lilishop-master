@@ -10,6 +10,8 @@ import cn.lili.common.utils.BeanUtil;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.service.MemberService;
+import cn.lili.modules.statistics.aop.PageViewPoint;
+import cn.lili.modules.statistics.aop.enums.PageViewEnum;
 import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.dos.StoreDetail;
 import cn.lili.modules.store.entity.dos.StoreMaterial;
@@ -76,6 +78,7 @@ public class StorePassportController {
             @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query")
     })
     @PostMapping("/userLogin")
+    @PageViewPoint(type = PageViewEnum.STORE, id = "#id")
     public ResultMessage<Object> userLogin(@NotNull(message = "用户名不能为空") @RequestParam String username,
                                            @NotNull(message = "密码不能为空") @RequestParam String password, @RequestHeader String uuid) {
             try {

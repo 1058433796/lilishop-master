@@ -96,4 +96,47 @@ public class StoreSearchParams extends PageVO implements Serializable {
         }
         return queryWrapper;
     }
+
+    public <T> QueryWrapper<T> queryWrapper2() {
+        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
+        AuthUser currentUser = UserContext.getCurrentUser();
+        if (currentUser != null) {
+            //按卖家查询
+            queryWrapper.eq(CharSequenceUtil.equals(currentUser.getRole().name(), UserEnums.STORE.name()), "o.store_id", currentUser.getStoreId());
+
+            //店铺查询
+            queryWrapper.eq(CharSequenceUtil.equals(currentUser.getRole().name(), UserEnums.MANAGER.name())
+                    && CharSequenceUtil.isNotEmpty(storeId), "o.store_id", storeId);
+
+            //按买家查询
+            queryWrapper.eq(CharSequenceUtil.equals(currentUser.getRole().name(), UserEnums.MEMBER.name()) && buyerId == null, "o.buyer_id", currentUser.getId());
+
+        }
+        if (StringUtils.isNotEmpty(storeName)) {
+            queryWrapper.like("a.store_name", storeName);
+        }
+        if (StringUtils.isNotEmpty(memberName)) {
+            queryWrapper.like("member_name", memberName);
+        }
+//        if (StringUtils.isNotEmpty(storeDisable)) {
+//            queryWrapper.eq("store_disable", storeDisable);
+//        } else {
+//            queryWrapper.and(Wrapper -> Wrapper.eq("store_disable", StoreStatusEnum.OPEN.name()).or().eq("store_disable", StoreStatusEnum.CLOSED.name()));
+//        }
+        //按时间查询
+        if (StringUtils.isNotEmpty(startDate)) {
+            queryWrapper.ge("create_time", DateUtil.parse(startDate));
+        }
+        if (StringUtils.isNotEmpty(endDate)) {
+            queryWrapper.le("create_time", DateUtil.parse(endDate));
+        }
+
+        if (StringUtils.isNotEmpty(buyerName)) {
+            queryWrapper.like("buyer_name",buyerName);
+        }
+        if (StringUtils.isNotEmpty(buyerPhone)) {
+            queryWrapper.like("link_phone", buyerPhone);
+        }
+        return queryWrapper;
+    }
 }

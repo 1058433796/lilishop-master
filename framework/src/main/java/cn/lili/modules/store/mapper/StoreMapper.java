@@ -42,7 +42,7 @@ public interface StoreMapper extends BaseMapper<Store> {
     @Select("select s.* from li_store as s ${ew.customSqlSegment}")
     IPage<StoreVO> getStoreList(IPage<StoreVO> page, @Param(Constants.WRAPPER) Wrapper<StoreVO> queryWrapper);
 
-    @Select("select a.id,a.store_name as buyer_name,link_phone as buyer_phone,grade,create_time,point from li_store as a,li_store_detail as b where a.id=b.store_id  ${ew.customSqlSegment}")
+    @Select("select a.id,a.store_name as buyer_name,link_phone as buyer_phone,grade,create_time,point from li_store as a inner join  li_store_detail as b on a.id=b.store_id  ${ew.customSqlSegment}")
     IPage<ManagerStoreVO> getStoreAsBuyerList(IPage<ManagerStoreVO> page, @Param(Constants.WRAPPER) Wrapper<ManagerStoreVO> queryWrapper);
 
     /**

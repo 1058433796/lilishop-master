@@ -75,16 +75,16 @@ public class OrderStoreController {
         return ResultUtil.data(itemOrderService.queryByParams(itemOrderSearchParams));
     }
 
-    @ApiOperation(value = "订单明细")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderId", value = "订单编号", required = true, dataType = "String", paramType = "path")
-    })
-    @GetMapping(value = "/{orderId}")
-    public ResultMessage<OrderGoodDetailVO> detail(@NotNull @PathVariable String orderId) {
-        OperationalJudgment.judgment(itemOrderService.getByOrderId(orderId));
-        System.out.println(itemOrderService.queryDetail(orderId).toString());
-        return ResultUtil.data(itemOrderService.queryDetail(orderId));
-    }
+//    @ApiOperation(value = "订单明细")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "orderId", value = "订单编号", required = true, dataType = "String", paramType = "path")
+//    })
+//    @GetMapping(value = "/{orderId}")
+//    public ResultMessage<OrderGoodDetailVO> detail(@NotNull @PathVariable String orderId) {
+//        OperationalJudgment.judgment(itemOrderService.getByOrderId(orderId));
+//        System.out.println(itemOrderService.queryDetail(orderId).toString());
+//        return ResultUtil.data(itemOrderService.queryDetail(orderId));
+//    }
 //    @ApiOperation(value = "订单明细")
 //    @ApiImplicitParams({
 //            @ApiImplicitParam(name = "orderSn", value = "订单编号", required = true, dataType = "String", paramType = "path")

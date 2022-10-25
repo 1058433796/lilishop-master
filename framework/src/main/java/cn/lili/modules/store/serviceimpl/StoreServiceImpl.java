@@ -93,7 +93,7 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
 
     @Override
     public IPage<ManagerStoreVO> findAllPage(StoreSearchParams storeSearchParams) {
-        return this.baseMapper.getStoreAsBuyerList(PageUtil.initPage(storeSearchParams), storeSearchParams.queryWrapper());
+        return this.baseMapper.getStoreAsBuyerList(PageUtil.initPage(storeSearchParams), storeSearchParams.queryWrapper2());
     }
 
     @Override
