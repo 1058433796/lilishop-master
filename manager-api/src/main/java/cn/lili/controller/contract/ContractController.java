@@ -12,19 +12,16 @@ import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.vos.StoreVO;
 import cn.lili.modules.store.service.StoreServiceZy;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.SimpleFormatter;
 
 @RestController
-@RequestMapping("/store/contract/contract")
+@RequestMapping("/manager/contract/contract")
 public class ContractController {
     // 合同编号前缀，合同编号由前缀拼接订单编号而成
     private static String prefix = "C";
@@ -40,8 +37,9 @@ public class ContractController {
     @ApiOperation(value = "分页获取合同列表")
     @GetMapping("/list")
     public ResultMessage<IPage<Contract>> getByPage(ContractSearchParams contractSearchParams) {
-        StoreVO buyerStore = storeServiceZy.getStoreDetail();
-        contractSearchParams.setBuyerId(buyerStore.getId());
+        System.out.println("获取关联合同:" + contractSearchParams.getStoreId());
+//        StoreVO buyerStore = storeServiceZy.getStoreDetail();
+//        contractSearchParams.setBuyerId(buyerStore.getId());
         return ResultUtil.data(contractService.queryByParams(contractSearchParams));
     }
 
@@ -51,7 +49,7 @@ public class ContractController {
         System.out.println("create contract:"  + id);
         Contract contract = contractService.getById(prefix+id);
         ItemOrder order = itemOrderServiceZy.getById(id);
-        if(contract != null) {
+        if(contract!=null) {
             ContractSearchParams contractSearchParams = new ContractSearchParams();
             contractSearchParams.setSchemeId(order.getSchemeId());
             return ResultUtil.data(contractService.queryAssociated(contractSearchParams));
@@ -60,13 +58,13 @@ public class ContractController {
         newContract.setId(prefix+id);
         newContract.setOrderId(id);
         newContract.setCreateTime(DateTime.now());
-        Store store = storeServiceZy.getById(order.getBuyerId());
-        newContract.setAmount(order.getOrderAmount());
-        newContract.setBuyerId(order.getBuyerId());
-        newContract.setStoreName(order.getStoreName());
-        newContract.setStoreId(order.getStoreId());
+        ItemOrder itemOrder = itemOrderServiceZy.getById(id);
+        Store store = storeServiceZy.getById(itemOrder.getBuyerId());
+        newContract.setAmount(itemOrder.getOrderAmount());
+        newContract.setBuyerId(itemOrder.getBuyerId());
+        newContract.setStoreName(itemOrder.getStoreName());
+        newContract.setStoreId(itemOrder.getStoreId());
         newContract.setBuyerName(store.getStoreName());
-        newContract.setSchemeId(order.getSchemeId());
         contractService.save(newContract);
         ContractSearchParams contractSearchParams = new ContractSearchParams();
         contractSearchParams.setSchemeId(order.getSchemeId());
@@ -77,7 +75,7 @@ public class ContractController {
     @PutMapping("/{contractId}/sign")
     public ResultMessage<Object> signContract(@PathVariable("contractId") String id) {
         Date date = DateTime.now();
-        //contractService.buyerSign(id, date);
+        contractService.buyerSign(id, date);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return ResultUtil.data(sdf.format(date));
     }

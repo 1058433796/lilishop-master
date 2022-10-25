@@ -19,5 +19,6 @@ public interface ContractService extends IService<Contract> {
     void buyerSign(String id);
 
     IPage<Contract> queryAssociated(ContractSearchParams contractSearchParams);
+    Long waitToSignContract(String buyerId);
 
 }

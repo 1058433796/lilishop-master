@@ -5,10 +5,12 @@ import lombok.Data;
 
 @Data
 public class HomeStatisticDataVO {
-    @ApiModelProperty(value = "待付款订单数")
-    private Long waitToPay;
-    @ApiModelProperty(value = "待发货订单数")
-    private Long waitToDis;
+    @ApiModelProperty(value = "待响应订单数")
+    private Long waitToSignOrder;
+    @ApiModelProperty(value = "待响应合同数")
+    private Long waitToSignContract;
+    @ApiModelProperty(value = "待签署履约保证单")
+    private Long waitToSignGuaranty;
     @ApiModelProperty(value = "总订单数")
     private Long totalOrderNum;
     @ApiModelProperty(value = "总订单金额")

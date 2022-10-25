@@ -8,6 +8,8 @@ import cn.lili.modules.item.entity.ItemScheme;
 import cn.lili.modules.item.service.ItemSchemeService;
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.service.ItemOrderServiceZy;
+import cn.lili.modules.member.entity.dos.Member;
+import cn.lili.modules.member.service.MemberService;
 import cn.lili.modules.schemeComponent.entity.SchemeComponent;
 import cn.lili.modules.schemeComponent.entity.SchemeComponentSearchParams;
 import cn.lili.modules.schemeComponent.mapper.IdTotal;
@@ -44,6 +46,8 @@ public class SchemeComponentController {
     StoreDetailService storeDetailService;
     @Autowired
     ItemSchemeService itemSchemeService;
+    @Autowired
+    MemberService memberService;
     Logger logger = LoggerFactory.getLogger(SchemeComponentController.class);
 
     @ApiOperation(value = "分页获取方案零件列表")
@@ -63,6 +67,7 @@ public class SchemeComponentController {
         StoreAfterSaleAddressDTO storep = storeDetailService.getStoreAfterSaleAddressDTO();
         Snowflake snowflake = new Snowflake();
         ArrayList<Object> arrayList = new ArrayList<>();
+        Member loggingBuyer = memberService.getUserInfo();
         for(IdTotal idTotal : supplierList) {
             try {
                 ItemOrder itemOrder = new ItemOrder();
@@ -73,9 +78,11 @@ public class SchemeComponentController {
                 itemOrder.setStoreId(idTotal.getId());
                 itemOrder.setCreateTime(DateTime.now());
                 itemOrder.setSchemeId(schemePrimaryId);
+                itemOrder.setConsigneeName(loggingBuyer.getUsername());
+                itemOrder.setConsigneePhone(loggingBuyer.getMobile());
                 itemOrder.setBuyerPhone(storep.getSalesConsigneeMobile());
-                itemOrder.setBuyerName(storep.getSalesConsigneeName());
-//                itemOrder.setBuyerAddress(buyerStore.getStoreAddressPath() + buyerStore.getStoreAddressDetail());
+                itemOrder.setBuyerName(buyerStore.getStoreName());
+                itemOrder.setConsigneeAddress(buyerStore.getStoreAddressPath() + buyerStore.getStoreAddressDetail());
                 itemOrder.setBuyerId(buyerStore.getId());
                 itemOrderServiceZy.save(itemOrder);
                 arrayList.add(itemOrder);

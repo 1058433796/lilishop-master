@@ -6,6 +6,8 @@ import cn.lili.common.security.enums.UserEnums;
 import cn.lili.common.utils.CurrencyUtil;
 import cn.lili.common.utils.StringUtils;
 import cn.lili.common.vo.PageVO;
+import cn.lili.modules.contract.service.ContractService;
+import cn.lili.modules.item.service.ItemGuarantyService;
 import cn.lili.modules.item.service.ItemService;
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
@@ -49,6 +51,10 @@ public class ItemOrderStatisticsServiceZyImpl extends ServiceImpl<ItemOrderStati
     @Autowired
     private StoreFlowStatisticsService storeFlowStatisticsService;
 
+    @Autowired
+    private ItemGuarantyService itemGuarantyService;
+    @Autowired
+    private ContractService contractService;
     @Autowired
     private ItemService itemService;
     @Override
@@ -117,6 +123,16 @@ public class ItemOrderStatisticsServiceZyImpl extends ServiceImpl<ItemOrderStati
         // 所有订单总金额（包括已付款的和未付款的）
         homeStatisticData.setTotalOrderAmount(totalMemberNum != null && totalMemberNum.containsKey("total_order_amount") ? Double.parseDouble(totalMemberNum.get("total_order_amount").toString()) : 0D);
         homeStatisticData.setProductNum(itemService.getStoreProductNum(storeId));
+        // 查询待响应订单数
+        queryWrapper = Wrappers.query();
+        queryWrapper.eq("buyer_id", storeId);
+        queryWrapper.eq("buyer_reply", "未响应");
+        queryWrapper.select("count(*) AS to_res_order");
+        Map waitToSignOrder = this.getMap(queryWrapper);
+        homeStatisticData.setWaitToSignOrder(waitToSignOrder != null && waitToSignOrder.containsKey("to_res_order") ? (Long) waitToSignOrder.get("to_res_order") : 0L);
+
+        homeStatisticData.setWaitToSignGuaranty(itemGuarantyService.waitToSignGuaranty(storeId));
+        homeStatisticData.setWaitToSignContract(contractService.waitToSignContract(storeId));
 
         return homeStatisticData;
     }

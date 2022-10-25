@@ -38,7 +38,6 @@ public class MessageManagerController {
     @PostMapping
     @ApiOperation(value = "发送消息")
     public ResultMessage<Boolean> sendMessage(Message message) {
-
         return ResultUtil.data(messageService.sendMessage(message));
     }
 

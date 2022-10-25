@@ -30,6 +30,7 @@ public class MemberStatisticsManagerController {
     @ApiOperation(value = "获取会员统计")
     @GetMapping
     public ResultMessage<List<MemberStatisticsData>> getByList(StatisticsQueryParam statisticsQueryParam) {
+
         return ResultUtil.data(memberStatisticsService.statistics(statisticsQueryParam));
     }
 }

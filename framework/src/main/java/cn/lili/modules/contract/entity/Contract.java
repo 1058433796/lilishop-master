@@ -44,4 +44,6 @@ public class Contract {
 
     private String buyerName;
 
+    private String schemeId;
+
 }

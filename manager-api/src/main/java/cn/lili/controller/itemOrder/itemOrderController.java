@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/store/itemOrder/itemOrder")
+@RequestMapping("/manager/itemOrder/itemOrder")
 public class itemOrderController {
     @Resource
     private ItemOrderServiceZy itemOrderServiceZy;
@@ -25,6 +25,12 @@ public class itemOrderController {
     public ResultMessage<IPage<ItemOrder>> getByPage(ItemOrderSearchParamsZy itemOrderSearchParamsZy) {
         //获取当前登录商家账号
         return ResultUtil.data(itemOrderServiceZy.queryByParams(itemOrderSearchParamsZy));
+    }
+
+    @ApiOperation(value = "查询单个订单的详细信息")
+    @GetMapping("/order/{oid}")
+    public ResultMessage<ItemOrder> getOrderDetail(@PathVariable("oid") String orderId) {
+        return ResultUtil.data(itemOrderServiceZy.getById(orderId));
     }
 
     @ApiOperation(value = "查询订单列表")
@@ -45,7 +51,6 @@ public class itemOrderController {
     public ResultMessage<Boolean> buyerResponse(@PathVariable("oid") String oid) {
         ItemOrder item = itemOrderServiceZy.getById(oid);
         item.setReplyStatus("已响应");
-        item.setBuyerReply("已响应");
         itemOrderServiceZy.updateById(item);
         return ResultUtil.data(true);
     }
