@@ -166,6 +166,7 @@ public class StorePassportController {
         }else{
             //    不存在商店    注册商店
             store = new Store(member);
+            store.setStoreName(vo.getCompanyName());
 //            store.setStoreDisable(StoreStatusEnum.APPLY_SECOND_STEP.name());
             storeService.save(store);
 
