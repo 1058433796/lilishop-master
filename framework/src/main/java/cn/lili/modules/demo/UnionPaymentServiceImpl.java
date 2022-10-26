@@ -45,7 +45,7 @@ public class UnionPaymentServiceImpl implements UnionPaymentService {
      * @param response
      */
     @Override
-    public String pay(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void pay(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         request.setCharacterEncoding(DemoBase.encoding);
         response.setContentType("text/html; charset="+ DemoBase.encoding);
@@ -113,8 +113,8 @@ public class UnionPaymentServiceImpl implements UnionPaymentService {
 
         LogUtil.writeLog("打印请求HTML，此为请求报文，为联调排查问题的依据："+html);
         //将生成的html写到浏览器中完成自动跳转打开银联支付页面；这里调用signData之后，将html写到浏览器跳转到银联页面之前均不能对html中的表单项的名称和值进行修改，如果修改会导致验签不通过
-//        response.getWriter().write(html);
-        return html;
+        response.getWriter().write(html);
+//        return html;
 
 
     }

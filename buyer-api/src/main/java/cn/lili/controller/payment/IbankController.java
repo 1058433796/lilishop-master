@@ -38,10 +38,12 @@ public class IbankController {
      * @param response
      * @throws IOException
      */
-    @RequestMapping(value = "/pay", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/payNew", method = {RequestMethod.POST, RequestMethod.GET})
     public void pay(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         service.pay(request, response);
+
+//        return res;
 
     }
 }

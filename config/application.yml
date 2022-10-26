@@ -20,6 +20,8 @@ management:
       exposure:
         include: '*'
 spring:
+  main:
+    allow-bean-definition-overriding: true
   # 要在其中注册的Spring Boot Admin Server的URL。
   boot:
     admin:
