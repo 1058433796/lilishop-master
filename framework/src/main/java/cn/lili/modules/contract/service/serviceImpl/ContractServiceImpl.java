@@ -10,6 +10,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class ContractServiceImpl extends ServiceImpl<ContractMapper, Contract> implements ContractService {
     @Override
@@ -17,18 +19,27 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, Contract> i
         System.out.println("查询合同");
         return this.page(PageUtil.initPage(contractSearchParams), contractSearchParams.queryWrapper());
     }
+
+    @Override
+    public void buyerSign(String id, Date date) {
+        this.baseMapper.buyerSign(id,date);
+    }
+
+    @Override
     public void providerSign(String id) {
         this.baseMapper.providerSign(id);
     }
 
-    public void buyerSign(String id) {
-        this.baseMapper.buyerSign(id);
-    }
     @Override
     public IPage<Contract> queryAssociated(ContractSearchParams contractSearchParams) {
         QueryWrapper queryWrapper = contractSearchParams.queryWrapper();
         return this.baseMapper.queryAssociated(PageUtil.initPage(contractSearchParams), queryWrapper);
 
+    }
+
+    @Override
+    public Long waitToSignContract(String buyerId) {
+        return this.baseMapper.waitToSignContract(buyerId);
     }
 
     @Override

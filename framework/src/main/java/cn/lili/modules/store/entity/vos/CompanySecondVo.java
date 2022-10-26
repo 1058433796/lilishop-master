@@ -1,8 +1,10 @@
 package cn.lili.modules.store.entity.vos;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,4 +22,14 @@ public class CompanySecondVo {
     private String username;
     @NotNull
     private String password;
+
+    public CompanySecondVo(String username, String password){
+        this.username = username;
+        this.password = password;
+        busLicPhotoList = new ArrayList<>();
+        legalLicPhotoList = new ArrayList<>();
+        bankLicPhotoList = new ArrayList<>();
+        orgCodeLicPhotosList = new ArrayList<>();
+    }
+
 }

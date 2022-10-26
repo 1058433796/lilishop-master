@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -24,5 +25,5 @@ public interface ItemOrderServiceZy extends IService<ItemOrder> {
 
     IPage<OrderWithContractSimpleV0> queryAssociatedContractOrders(ItemOrderSearchParamsZy itemOrderSearchParamsZy);
 
-    void payOrder(String oid);
+    void payOrder(String oid, Date time);
 }

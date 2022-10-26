@@ -39,6 +39,9 @@ public class ItemOrderSimpleVO {
     @ApiModelProperty(value = "支付方式")
     private String payMode;
 
+    @ApiModelProperty(value = "支付时间")
+    private String payTime;
+
     @ApiModelProperty(value = "创建时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
@@ -50,11 +53,14 @@ public class ItemOrderSimpleVO {
     @ApiModelProperty(value = "收货人姓名")
     private String consigneeName;
 
+    @ApiModelProperty(value = "收货人地址")
+    private String consigneeAddress;
+
     @ApiModelProperty(value = "订单金额")
     private Double orderAmount;
 
-    @ApiModelProperty(value = "收货人地址")
-    private String buyerAddress;
+//    @ApiModelProperty(value = "收货人地址")
+//    private String buyerAddress;
 
     @ApiModelProperty(value = "供应商响应状态")
     private String storeReply;
@@ -79,7 +85,8 @@ public class ItemOrderSimpleVO {
     @ApiModelProperty(value = "响应状态")
     private String replyStatus;
 
-
+    @ApiModelProperty(value = "下单人电话")
+    private String consigneePhone;
 
     @ApiModelProperty(value = "采购方ID")
     private String buyerId;

@@ -3,12 +3,14 @@ package cn.lili.controller.statistics;
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.vo.PageVO;
 import cn.lili.common.vo.ResultMessage;
+import cn.lili.modules.itemOrder.entity.vo.ItemOrderSimpleVO;
 import cn.lili.modules.order.aftersale.entity.dos.AfterSale;
 import cn.lili.modules.order.order.entity.vo.OrderSimpleVO;
 import cn.lili.modules.statistics.entity.dto.StatisticsQueryParam;
 import cn.lili.modules.statistics.entity.vo.OrderOverviewVO;
 import cn.lili.modules.statistics.entity.vo.OrderStatisticsDataVO;
 import cn.lili.modules.statistics.service.AfterSaleStatisticsService;
+import cn.lili.modules.statistics.service.ItemOrderStatisticsServiceZy;
 import cn.lili.modules.statistics.service.OrderStatisticsService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
@@ -37,11 +39,15 @@ public class OrderStatisticsManagerController {
     @Autowired
     private AfterSaleStatisticsService afterSaleStatisticsService;
 
+    @Autowired
+    private ItemOrderStatisticsServiceZy itemOrderStatisticsServiceZy;
+
     @ApiOperation(value = "订单概览统计")
     @GetMapping("/overview")
     public ResultMessage<OrderOverviewVO> overview(StatisticsQueryParam statisticsQueryParam) {
         try {
-            return ResultUtil.data(orderStatisticsService.overview(statisticsQueryParam));
+            OrderOverviewVO orderOverviewVO = itemOrderStatisticsServiceZy.overview(statisticsQueryParam);
+            return ResultUtil.data(orderOverviewVO);
         } catch (Exception e) {
             log.error("订单概览统计错误",e);
         }
@@ -52,7 +58,7 @@ public class OrderStatisticsManagerController {
     @GetMapping
     public ResultMessage<List<OrderStatisticsDataVO>> statisticsChart(StatisticsQueryParam statisticsQueryParam) {
         try {
-            return ResultUtil.data(orderStatisticsService.statisticsChart(statisticsQueryParam));
+            return ResultUtil.data(itemOrderStatisticsServiceZy.statisticsChart(statisticsQueryParam));
         } catch (Exception e) {
             log.error("订单图表统计",e);
         }
@@ -62,9 +68,9 @@ public class OrderStatisticsManagerController {
 
     @ApiOperation(value = "订单统计")
     @GetMapping("/order")
-    public ResultMessage<IPage<OrderSimpleVO>> order(StatisticsQueryParam statisticsQueryParam, PageVO pageVO) {
+    public ResultMessage<IPage<ItemOrderSimpleVO>> order(StatisticsQueryParam statisticsQueryParam, PageVO pageVO) {
         try {
-            return ResultUtil.data(orderStatisticsService.getStatistics(statisticsQueryParam, pageVO));
+            return ResultUtil.data(itemOrderStatisticsServiceZy.getStatistics(statisticsQueryParam, pageVO));
         } catch (Exception e) {
             log.error("订单统计",e);
         }

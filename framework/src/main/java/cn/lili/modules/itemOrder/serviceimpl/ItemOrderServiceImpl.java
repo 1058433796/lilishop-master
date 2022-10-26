@@ -1,5 +1,6 @@
 package cn.lili.modules.itemOrder.serviceimpl;
 
+import cn.hutool.core.date.DateTime;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.security.OperationalJudgment;
@@ -110,7 +111,7 @@ public class ItemOrderServiceImpl extends ServiceImpl<ItemOrderMapper, ItemOrder
             order.setLogisticsCode(logistics.getId());
             order.setLogisticsName(logistics.getName());
             order.setLogisticsNo(logisticsNo);
-            order.setLogisticsTime(new Date());
+            order.setLogisticsTime(DateTime.now());
             order.setDistributionStatus("已发货");
             order.setOrderStatus("已发货");
             this.updateById(order);

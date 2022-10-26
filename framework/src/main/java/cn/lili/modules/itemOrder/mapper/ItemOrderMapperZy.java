@@ -12,6 +12,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ItemOrderMapperZy extends BaseMapper<ItemOrder> {
@@ -33,7 +34,8 @@ public interface ItemOrderMapperZy extends BaseMapper<ItemOrder> {
 
 
 
-
+    @Update("UPDATE contract SET buyer_state='已签署', sign_time=#{date} WHERE id=#{id} " )
+    void buyerSign(String id, Date date);
 
 
 
@@ -42,12 +44,10 @@ public interface ItemOrderMapperZy extends BaseMapper<ItemOrder> {
             "(SELECT scheme_id FROM item_scheme WHERE primary_id = " +
             "(SELECT scheme_id FROM item_order WHERE order_id=#{oid})) AND supplier_id=#{storeId}")
     List<SchemeComponent> queryOrderComponent(String oid, String storeId);
-
     @Select("SELECT * FROM item_order WHERE scheme_id=#{oid}")
     List<ItemOrder> getAssociatedOrders(String oid);
-
-    @Update("UPDATE item_order SET pay_status='已付款' WHERE order_id=#{oid}")
-    void payOrder(String oid);
+    @Update("UPDATE item_order SET pay_status='已付款', pay_time=#{date} WHERE order_id=#{oid}")
+    void payOrder(String oid, Date date);
 
     @Select("SELECT * FROM " +
             "(SELECT * FROM item_order) AS o " +

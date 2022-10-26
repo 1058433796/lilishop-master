@@ -38,4 +38,6 @@ public class Scheme {
 
     private String updateTime="一小时前";
 
+    private String schemeSum;
+
 }

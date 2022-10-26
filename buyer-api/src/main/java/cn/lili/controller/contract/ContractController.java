@@ -51,7 +51,7 @@ public class ContractController {
         System.out.println("create contract:"  + id);
         Contract contract = contractService.getById(prefix+id);
         ItemOrder order = itemOrderServiceZy.getById(id);
-        if(contract!=null) {
+        if(contract != null) {
             ContractSearchParams contractSearchParams = new ContractSearchParams();
             contractSearchParams.setSchemeId(order.getSchemeId());
             return ResultUtil.data(contractService.queryAssociated(contractSearchParams));
@@ -60,13 +60,13 @@ public class ContractController {
         newContract.setId(prefix+id);
         newContract.setOrderId(id);
         newContract.setCreateTime(DateTime.now());
-        ItemOrder itemOrder = itemOrderServiceZy.getById(id);
-        Store store = storeServiceZy.getById(itemOrder.getBuyerId());
-        newContract.setAmount(itemOrder.getOrderAmount());
-        newContract.setBuyerId(itemOrder.getBuyerId());
-        newContract.setStoreName(itemOrder.getStoreName());
-        newContract.setStoreId(itemOrder.getStoreId());
+        Store store = storeServiceZy.getById(order.getBuyerId());
+        newContract.setAmount(order.getOrderAmount());
+        newContract.setBuyerId(order.getBuyerId());
+        newContract.setStoreName(order.getStoreName());
+        newContract.setStoreId(order.getStoreId());
         newContract.setBuyerName(store.getStoreName());
+        newContract.setSchemeId(order.getSchemeId());
         contractService.save(newContract);
         ContractSearchParams contractSearchParams = new ContractSearchParams();
         contractSearchParams.setSchemeId(order.getSchemeId());
@@ -81,6 +81,4 @@ public class ContractController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return ResultUtil.data(sdf.format(date));
     }
-
-
 }

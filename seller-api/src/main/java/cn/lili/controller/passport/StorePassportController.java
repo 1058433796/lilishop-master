@@ -72,14 +72,14 @@ public class StorePassportController {
     @Autowired
     private VerificationService verificationService;
 
-    @ApiOperation(value = "登录接口")
+    @ApiOperation(value = "商家登录接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query"),
             @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query")
     })
-    @PostMapping("/userLogin")
-    @PageViewPoint(type = PageViewEnum.STORE, id = "#id")
-    public ResultMessage<Object> userLogin(@NotNull(message = "用户名不能为空") @RequestParam String username,
+    @PostMapping("/storeLogin")
+    @PageViewPoint(type = PageViewEnum.OTHER, id = "#id")
+    public ResultMessage<Object> storeLogin(@NotNull(message = "用户名不能为空") @RequestParam String username,
                                            @NotNull(message = "密码不能为空") @RequestParam String password, @RequestHeader String uuid) {
             try {
                 Token token = this.memberService.usernameStoreLogin(username, password);
@@ -87,6 +87,23 @@ public class StorePassportController {
             }catch (ServiceException e){
                 return ResultUtil.error(e.getResultCode());
             }
+    }
+
+    @ApiOperation(value = "用户登录接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query"),
+            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query")
+    })
+    @PostMapping("/userLogin")
+    @PageViewPoint(type = PageViewEnum.OTHER, id = "#id")
+    public ResultMessage<Object> userLogin(@NotNull(message = "用户名不能为空") @RequestParam String username,
+                                            @NotNull(message = "密码不能为空") @RequestParam String password, @RequestHeader String uuid) {
+        try {
+            Token token = this.memberService.usernameLogin(username, password);
+            return ResultUtil.data(token);
+        }catch (ServiceException e){
+            return ResultUtil.error(e.getResultCode());
+        }
     }
 
     @PostMapping("/userRegister")

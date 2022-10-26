@@ -35,7 +35,7 @@ public class SchemeController {
     private ItemSchemeService itemschemeService;
 
     @GetMapping(value = "/list")
-    @ApiOperation(value = "通过项目id获取项目方案列表")
+    @ApiOperation(value = "方案列表")
     public ResultMessage<IPage<Scheme>> getByPage(SchemeSearchParams schemeSearchParams) {
         return ResultUtil.data(schemeService.queryByParams(schemeSearchParams));
     }
