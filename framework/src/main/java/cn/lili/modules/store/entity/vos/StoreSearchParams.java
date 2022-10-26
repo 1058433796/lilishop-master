@@ -75,12 +75,6 @@ public class StoreSearchParams extends PageVO implements Serializable {
         if (StringUtils.isNotEmpty(memberName)) {
             queryWrapper.like("member_name", memberName);
         }
-        if (StringUtils.isNotEmpty(storeDisable)) {
-            queryWrapper.eq("store_disable", storeDisable);
-        }
-        else {
-            queryWrapper.and(Wrapper -> Wrapper.eq("store_disable", StoreStatusEnum.OPEN.name()).or().eq("store_disable", StoreStatusEnum.CLOSED.name()));
-        }
         //按时间查询
         if (StringUtils.isNotEmpty(startDate)) {
             queryWrapper.ge("create_time", DateUtil.parse(startDate));

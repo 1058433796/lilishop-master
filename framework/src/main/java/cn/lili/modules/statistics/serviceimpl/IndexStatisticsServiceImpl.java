@@ -188,11 +188,11 @@ public class IndexStatisticsServiceImpl implements IndexStatisticsService {
         storeIndexStatisticsVO.setOrderPrice(map.get("price") != null ? Double.parseDouble(map.get("price").toString()) : 0.0);
 
         //访问量
-        StatisticsQueryParam queryParam = new StatisticsQueryParam();
-        queryParam.setSearchType(SearchTypeEnum.TODAY.name());
-        queryParam.setStoreId(storeId);
-        PlatformViewVO platformViewVO = platformViewService.list(queryParam).get(0);
-        storeIndexStatisticsVO.setStoreUV(platformViewVO.getUvNum().intValue());
+//        StatisticsQueryParam queryParam = new StatisticsQueryParam();
+//        queryParam.setSearchType(SearchTypeEnum.TODAY.name());
+//        queryParam.setStoreId(storeId);
+//        PlatformViewVO platformViewVO = platformViewService.list(queryParam).get(0);
+//        storeIndexStatisticsVO.setStoreUV(platformViewVO.getUvNum().intValue());
 
         //待响应订单数量
         storeIndexStatisticsVO.setUnRepliedOrder(orderStatisticsService.orderNumReply("未响应"));

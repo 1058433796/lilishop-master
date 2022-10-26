@@ -63,14 +63,9 @@ public class PageViewInterceptor {
                 try {
                     map = spelFormat(point);
                 } catch (Exception e) {
-                    System.out.println("--------------------------");
-                    System.out.println("--------------------------");
                     return;
                 }
                 storeId = map.get("id");
-                System.out.println("--------------------------");
-                System.out.println(storeId);
-                System.out.println("--------------------------");
                 break;
             default:
                 storeId = "-1";
