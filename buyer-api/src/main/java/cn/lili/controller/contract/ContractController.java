@@ -77,8 +77,8 @@ public class ContractController {
     @PutMapping("/{contractId}/sign")
     public ResultMessage<Object> signContract(@PathVariable("contractId") String id) {
         Date date = DateTime.now();
-        //contractService.buyerSign(id, date);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        contractService.buyerSign(id, date);
         return ResultUtil.data(sdf.format(date));
     }
 }

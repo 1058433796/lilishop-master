@@ -52,7 +52,7 @@ public class itemOrderController {
 
     @ApiOperation("根据订单号寻找关联订单")
     @GetMapping("/associated/{oid}")
-    public ResultMessage<Object> associatedOrders(@PathVariable("oid") String oid) {
+    public ResultMessage<List<ItemOrder>> associatedOrders(@PathVariable("oid") String oid) {
         ItemOrder itemOrder = itemOrderServiceZy.getById(oid);
         String schemePrimaryId = itemOrder.getSchemeId();
         List<ItemOrder> itemOrders =  itemOrderServiceZy.getAssociatedOrders(schemePrimaryId);
@@ -73,6 +73,12 @@ public class itemOrderController {
     @PutMapping("/pay/{oid}")
     public ResultMessage<Boolean> payOrder(@PathVariable("oid") String oid){
         itemOrderServiceZy.payOrder(oid, DateTime.now());
+        return ResultUtil.data(true);
+    }
+    @ApiOperation("订单物流签署")
+    @PutMapping("/logistic/{oid}")
+    public ResultMessage<Boolean> logisticSignOrder(@PathVariable("oid") String oid){
+        itemOrderServiceZy.buyerLogisticSign(oid, DateTime.now());
         return ResultUtil.data(true);
     }
 }

@@ -49,10 +49,13 @@ public interface ItemOrderMapperZy extends BaseMapper<ItemOrder> {
     @Update("UPDATE item_order SET pay_status='已付款', pay_time=#{date} WHERE order_id=#{oid}")
     void payOrder(String oid, Date date);
 
+    @Update("UPDATE item_order SET order_status='已签收', buyer_logistic_sign_time=#{date} WHERE order_id=#{oid}")
+    void buyerLogisticSign(String oid, Date date);
+
     @Select("SELECT * FROM " +
             "(SELECT * FROM item_order) AS o " +
             "NATURAL JOIN " +
             "(SELECT order_id, buyer_state FROM contract) AS c ${ew.customSqlSegment}")
-    IPage<OrderWithContractSimpleV0> queryAssociatedContractOrders(IPage<Contract> page, @Param(Constants.WRAPPER) Wrapper<Contract> queryWrapper);
+    IPage<ItemOrder> queryAssociatedContractOrders(IPage<Contract> page, @Param(Constants.WRAPPER) Wrapper<Contract> queryWrapper);
 
 }

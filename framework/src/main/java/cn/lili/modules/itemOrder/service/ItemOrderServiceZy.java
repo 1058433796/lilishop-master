@@ -1,5 +1,6 @@
 package cn.lili.modules.itemOrder.service;
 
+import cn.lili.modules.item.entity.Item;
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.dto.ItemOrderSearchParamsZy;
 import cn.lili.modules.itemOrder.entity.vo.OrderWithContractSimpleV0;
@@ -23,7 +24,10 @@ public interface ItemOrderServiceZy extends IService<ItemOrder> {
     List<SchemeComponent> queryOrderComponent(String oid, String storeId);
     List<ItemOrder> getAssociatedOrders(String oid);
 
-    IPage<OrderWithContractSimpleV0> queryAssociatedContractOrders(ItemOrderSearchParamsZy itemOrderSearchParamsZy);
+    IPage<ItemOrder> queryAssociatedContractOrders(ItemOrderSearchParamsZy itemOrderSearchParamsZy);
 
     void payOrder(String oid, Date time);
+    void buyerLogisticSign(String oid, Date date);
+
+
 }
