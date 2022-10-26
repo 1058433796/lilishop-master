@@ -126,9 +126,9 @@ public class IndexStatisticsServiceImpl implements IndexStatisticsService {
         //获取总订单数量
         indexStatisticsVO.setOrderNum(orderStatisticsService.orderNum(null));
         //获取总会员数量
-        indexStatisticsVO.setMemberNum(memberStatisticsService.getMemberCount());
+        indexStatisticsVO.setMemberNum(storeStatisticsService.storeNum());
         //获取总上架商品数量
-        indexStatisticsVO.setGoodsNum(goodsStatisticsService.goodsNum(GoodsStatusEnum.UPPER, GoodsAuthEnum.PASS));
+        indexStatisticsVO.setGoodsNum(goodsStatisticsService.goodsNum(null, GoodsAuthEnum.PASS));
         //获取总店铺数量
         indexStatisticsVO.setStoreNum(storeStatisticsService.storeNum());
 
@@ -137,16 +137,16 @@ public class IndexStatisticsServiceImpl implements IndexStatisticsService {
         //今日下单数
         indexStatisticsVO.setTodayOrderNum(map.get("num") == null ? 0L : (Long) map.get("num"));
         //今日下单金额
-        indexStatisticsVO.setTodayOrderPrice(map.get("price") == null ? 0D : (Double) map.get("price"));
+        indexStatisticsVO.setTodayOrderPrice(map.get("price") == null ? 0D : Double.parseDouble(map.get("price").toString()) );
 
         //今日新增会员数量
         indexStatisticsVO.setTodayMemberNum(memberStatisticsService.todayMemberNum());
         //今日新增商品数量
-        indexStatisticsVO.setTodayGoodsNum(goodsStatisticsService.todayUpperNum());
+        //indexStatisticsVO.setTodayGoodsNum(goodsStatisticsService.todayUpperNum());
         //今日新增店铺数量
         indexStatisticsVO.setTodayStoreNum(storeStatisticsService.todayStoreNum());
         //今日新增评论数量
-        indexStatisticsVO.setTodayMemberEvaluation(memberEvaluationStatisticsService.todayMemberEvaluation());
+        //indexStatisticsVO.setTodayMemberEvaluation(memberEvaluationStatisticsService.todayMemberEvaluation());
         //当前在线人数
         indexStatisticsVO.setCurrentNumberPeopleOnline(platformViewService.online());
 
@@ -181,44 +181,46 @@ public class IndexStatisticsServiceImpl implements IndexStatisticsService {
         StoreIndexStatisticsVO storeIndexStatisticsVO = new StoreIndexStatisticsVO();
 
         //商品总数量
-        storeIndexStatisticsVO.setGoodsNum(goodsStatisticsService.goodsNum(GoodsStatusEnum.UPPER, null));
+        storeIndexStatisticsVO.setGoodsNum(goodsStatisticsService.goodsNum(null, null));
         //订单总数量、订单总金额
         Map<String, Object> map = storeFlowStatisticsService.getOrderStatisticsPrice();
         storeIndexStatisticsVO.setOrderNum(Convert.toInt(map.get("num").toString()));
         storeIndexStatisticsVO.setOrderPrice(map.get("price") != null ? Double.parseDouble(map.get("price").toString()) : 0.0);
 
         //访问量
-        StatisticsQueryParam queryParam = new StatisticsQueryParam();
-        queryParam.setSearchType(SearchTypeEnum.TODAY.name());
-        queryParam.setStoreId(storeId);
-        PlatformViewVO platformViewVO = platformViewService.list(queryParam).get(0);
-        storeIndexStatisticsVO.setStoreUV(platformViewVO.getUvNum().intValue());
+//        StatisticsQueryParam queryParam = new StatisticsQueryParam();
+//        queryParam.setSearchType(SearchTypeEnum.TODAY.name());
+//        queryParam.setStoreId(storeId);
+//        PlatformViewVO platformViewVO = platformViewService.list(queryParam).get(0);
+//        storeIndexStatisticsVO.setStoreUV(platformViewVO.getUvNum().intValue());
 
-        //待付款订单数量
-        storeIndexStatisticsVO.setUnPaidOrder(orderStatisticsService.orderNum(OrderStatusEnum.UNPAID.name()));
+        //待响应订单数量
+        storeIndexStatisticsVO.setUnRepliedOrder(orderStatisticsService.orderNumReply("未响应"));
+        //待响应合同数量
+        storeIndexStatisticsVO.setUnRepliedContract(orderStatisticsService.orderNumContract("未响应"));
         //待发货订单数量
-        storeIndexStatisticsVO.setUnDeliveredOrder(orderStatisticsService.orderNum(OrderStatusEnum.UNDELIVERED.name()));
+        storeIndexStatisticsVO.setUnDeliveredOrder(orderStatisticsService.orderNum("未发货"));
         //待收货订单数量
-        storeIndexStatisticsVO.setDeliveredOrder(orderStatisticsService.orderNum(OrderStatusEnum.DELIVERED.name()));
+        storeIndexStatisticsVO.setDeliveredOrder(orderStatisticsService.orderNum("已发货"));
 
         //待处理退货数量
-        storeIndexStatisticsVO.setReturnGoods(afterSaleStatisticsService.applyNum(AfterSaleTypeEnum.RETURN_GOODS.name()));
+        //storeIndexStatisticsVO.setReturnGoods(afterSaleStatisticsService.applyNum(AfterSaleTypeEnum.RETURN_GOODS.name()));
         //待处理退款数量
-        storeIndexStatisticsVO.setReturnMoney(afterSaleStatisticsService.applyNum(AfterSaleTypeEnum.RETURN_MONEY.name()));
+        //storeIndexStatisticsVO.setReturnMoney(afterSaleStatisticsService.applyNum(AfterSaleTypeEnum.RETURN_MONEY.name()));
         //待回复评价数量
-        storeIndexStatisticsVO.setMemberEvaluation(memberEvaluationStatisticsService.getWaitReplyNum());
+        //storeIndexStatisticsVO.setMemberEvaluation(memberEvaluationStatisticsService.getWaitReplyNum());
         //待处理投诉数量
-        storeIndexStatisticsVO.setComplaint(orderComplaintStatisticsService.waitComplainNum());
+        //storeIndexStatisticsVO.setComplaint(orderComplaintStatisticsService.waitComplainNum());
 
         //待上架商品数量
-        storeIndexStatisticsVO.setWaitUpper(goodsStatisticsService.goodsNum(GoodsStatusEnum.DOWN, null));
+        //storeIndexStatisticsVO.setWaitUpper(goodsStatisticsService.goodsNum(GoodsStatusEnum.DOWN, null));
         //待审核商品数量
-        storeIndexStatisticsVO.setWaitAuth(goodsStatisticsService.goodsNum(null, GoodsAuthEnum.TOBEAUDITED));
+        //storeIndexStatisticsVO.setWaitAuth(goodsStatisticsService.goodsNum(null, GoodsAuthEnum.TOBEAUDITED));
 
         //可参与秒杀活动数量
-        storeIndexStatisticsVO.setSeckillNum(seckillStatisticsService.getApplyNum());
+        //storeIndexStatisticsVO.setSeckillNum(seckillStatisticsService.getApplyNum());
         //待处理商家结算
-        storeIndexStatisticsVO.setWaitPayBill(billStatisticsService.billNum(BillStatusEnum.OUT));
+        //storeIndexStatisticsVO.setWaitPayBill(billStatisticsService.billNum(BillStatusEnum.OUT));
 
         return storeIndexStatisticsVO;
     }

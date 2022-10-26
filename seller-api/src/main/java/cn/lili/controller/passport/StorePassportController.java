@@ -10,6 +10,8 @@ import cn.lili.common.utils.BeanUtil;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.service.MemberService;
+import cn.lili.modules.statistics.aop.PageViewPoint;
+import cn.lili.modules.statistics.aop.enums.PageViewEnum;
 import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.dos.StoreDetail;
 import cn.lili.modules.store.entity.dos.StoreMaterial;
@@ -76,6 +78,7 @@ public class StorePassportController {
             @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query")
     })
     @PostMapping("/storeLogin")
+    @PageViewPoint(type = PageViewEnum.OTHER, id = "#id")
     public ResultMessage<Object> storeLogin(@NotNull(message = "用户名不能为空") @RequestParam String username,
                                            @NotNull(message = "密码不能为空") @RequestParam String password, @RequestHeader String uuid) {
             try {
@@ -92,6 +95,7 @@ public class StorePassportController {
             @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query")
     })
     @PostMapping("/userLogin")
+    @PageViewPoint(type = PageViewEnum.OTHER, id = "#id")
     public ResultMessage<Object> userLogin(@NotNull(message = "用户名不能为空") @RequestParam String username,
                                             @NotNull(message = "密码不能为空") @RequestParam String password, @RequestHeader String uuid) {
         try {
@@ -108,25 +112,7 @@ public class StorePassportController {
                                               @NotNull(message = "手机号不能为空") @RequestParam String mobile,
                                               @RequestHeader String uuid
                                               ) {
-        this.memberService.storeRegister(username, password, mobile);
-        return ResultUtil.success();
-    }
-
-    @PostMapping("/userRegisterWithStore")
-    public ResultMessage<Object> userRegisterWithStore(@NotNull(message = "用户名不能为空") @RequestParam String username,
-                                              @NotNull(message = "密码不能为空") @RequestParam String password,
-                                              @NotNull(message = "手机号不能为空") @RequestParam String mobile,
-                                              @RequestHeader String uuid
-    ) {
-        this.memberService.register(username, password, mobile);
-//      模拟第一轮注册
-        CompanyVo vo = new CompanyVo(username, password);
-        storeRegister(vo);
-//        模拟第二轮注册
-        CompanySecondVo vo2 = new CompanySecondVo(username, password);
-        storeRegister2(vo2);
-
-        return ResultUtil.success();
+        return ResultUtil.data(this.memberService.register(username, password, mobile));
     }
     @ApiOperation(value = "店铺注册接口，注册第一步")
     @ApiImplicitParams({

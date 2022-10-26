@@ -4,6 +4,8 @@ import cn.lili.common.security.AuthUser;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.security.enums.UserEnums;
 import cn.lili.common.utils.StringUtils;
+import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
+import cn.lili.modules.itemOrder.service.ItemOrderService;
 import cn.lili.modules.order.order.entity.dos.StoreFlow;
 import cn.lili.modules.order.order.entity.enums.FlowTypeEnum;
 import cn.lili.modules.statistics.entity.dto.GoodsStatisticsQueryParam;
@@ -40,6 +42,10 @@ public class StoreFlowStatisticsServiceImpl extends ServiceImpl<StoreFlowStatist
 
     @Autowired
     private OrderStatisticsService orderStatisticsService;
+
+    @Autowired
+    private ItemOrderService itemOrderService;
+
     @Override
     public List<GoodsStatisticsDataVO> getGoodsStatisticsData(GoodsStatisticsQueryParam goodsStatisticsQueryParam, Integer num) {
         //获取查询条件
@@ -59,8 +65,8 @@ public class StoreFlowStatisticsServiceImpl extends ServiceImpl<StoreFlowStatist
         //获取查询条件
         QueryWrapper queryWrapper = getQueryWrapper1(goodsStatisticsQueryParam);
         //根据商品分组
-        queryWrapper.groupBy("good_id");
-        queryWrapper.groupBy("good_name");
+        queryWrapper.groupBy("component_id");
+        queryWrapper.groupBy("component_name");
 
         //查询前X记录
         Page page = new Page<GoodsStatisticsDataVO>(1, num);
@@ -83,9 +89,9 @@ public class StoreFlowStatisticsServiceImpl extends ServiceImpl<StoreFlowStatist
 
     @Override
     public Map<String, Object> getOrderStatisticsPrice() {
-        QueryWrapper queryWrapper = Wrappers.query();
+        QueryWrapper<ItemOrder> queryWrapper = Wrappers.query();
         //支付订单
-        queryWrapper.eq("flow_type", FlowTypeEnum.PAY.name());
+        queryWrapper.eq("pay_status", "已付款");
 
         //商家查询，则增加商家判定
         AuthUser authUser = UserContext.getCurrentUser();
@@ -93,11 +99,30 @@ public class StoreFlowStatisticsServiceImpl extends ServiceImpl<StoreFlowStatist
             queryWrapper.eq("store_id", authUser.getStoreId());
         }
         //大于今天凌晨
-        queryWrapper.ge("create_time", cn.lili.common.utils.DateUtil.startOfTodDayTime());
-
-        queryWrapper.select("SUM(final_price) AS price , COUNT(0) AS num");
-        return this.getMap(queryWrapper);
+        //queryWrapper.ge("create_time", cn.lili.common.utils.DateUtil.startOfTodDayTime());
+        queryWrapper.select("SUM(order_amount) AS price , COUNT(0) AS num");
+        return itemOrderService.getMap(queryWrapper);
     }
+
+
+
+//    @Override
+//    public Map<String, Object> getOrderStatisticsPrice() {
+//        QueryWrapper queryWrapper = Wrappers.query();
+//        //支付订单
+//        queryWrapper.eq("flow_type", FlowTypeEnum.PAY.name());
+//
+//        //商家查询，则增加商家判定
+//        AuthUser authUser = UserContext.getCurrentUser();
+//        if (authUser.getRole().equals(UserEnums.STORE)) {
+//            queryWrapper.eq("store_id", authUser.getStoreId());
+//        }
+//        //大于今天凌晨
+//        queryWrapper.ge("create_time", cn.lili.common.utils.DateUtil.startOfTodDayTime());
+//
+//        queryWrapper.select("SUM(final_price) AS price , COUNT(0) AS num");
+//        return this.getMap(queryWrapper);
+//    }
 
 
     @Override
@@ -236,7 +261,7 @@ public class StoreFlowStatisticsServiceImpl extends ServiceImpl<StoreFlowStatist
         QueryWrapper queryWrapper = Wrappers.query();
         //判断搜索类型是：年、月
         Date[] date = StatisticsDateUtil.getDateArray(goodsStatisticsQueryParam);
-        queryWrapper.between("create_time", date[0], date[1]);
+        //queryWrapper.between("create_time", date[0], date[1]);
 
         //判断是按照数量统计还是按照金额统计
         if (goodsStatisticsQueryParam.getType().equals(StatisticsQuery.PRICE.name())) {
