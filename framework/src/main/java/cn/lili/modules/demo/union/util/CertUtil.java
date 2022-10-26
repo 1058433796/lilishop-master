@@ -66,7 +66,7 @@ public class CertUtil {
 			initRootCert();//初始化验签证书的根证书
 			initEncryptCert();//初始化加密公钥
 			initTrackKey();//构建磁道加密公钥
-			initValidateCertFromDir();//初始化所有的验签证书
+//			initValidateCertFromDir();//初始化所有的验签证书
 		} catch (Exception e) {
 			LogUtil.writeErrorLog("init失败。（如果是用对称密钥签名的可无视此异常。）", e);
 		}
