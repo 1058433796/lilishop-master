@@ -8,8 +8,9 @@ server:
       min-spare: 50
       max: 1000
 
-# 服务器ip地址
+# 服务器ip地址 本机开发时为localhost
 server-ip: 112.230.202.198:8890
+#server-ip: 127.0.0.1:8890
 
 # 与Spring Boot 2一样，默认情况下，大多数端点都不通过http公开，我们公开了所有端点。对于生产，您应该仔细选择要公开的端点。
 management:
@@ -24,6 +25,7 @@ management:
         include: '*'
 #        文件保存路径
 upload-path: /remoteProject/data/
+#upload-path: D:\data\
 
 spring:
   application:
@@ -113,9 +115,9 @@ spring:
       #是否打印逻辑SQL语句和实际SQL语句，建议调试时打印，在生产环境关闭
       sql:
         show: false
-  web:
-    resources:
-      static-locations: file:${upload-path}
+#  web:
+#    resources:
+#      static-locations: file:${upload-path}
 
 # 忽略鉴权url
 ignored:

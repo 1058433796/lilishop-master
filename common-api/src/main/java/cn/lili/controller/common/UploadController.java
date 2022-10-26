@@ -133,10 +133,6 @@ public class UploadController {
     @PostMapping(value = "/fileUpload")
     public ResultMessage<Object> fileUpload(@RequestParam("file") MultipartFile file) {
         String result = save(file);
-////        临时办法 自动通过审核
-//        Store store = storeService.getById(member.getStoreId());
-//        store.setStoreDisable(StoreStatusEnum.OPEN.name());
-//        storeService.updateById(store);
         return ResultUtil.data(result);
     }
 
@@ -194,7 +190,7 @@ public class UploadController {
         }
         //将上传的文件写入到服务器端文件内
         file.transferTo(serverFile);
-        String fileUrl = "http://" + apiUrl + "/" + filename;
+        String fileUrl = "http://" + apiUrl + "/images/" + filename;
         return fileUrl;
     }
 }
