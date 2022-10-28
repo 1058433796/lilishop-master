@@ -5,8 +5,10 @@ import cn.hutool.core.lang.Snowflake;
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.item.entity.ItemScheme;
+import cn.lili.modules.item.entity.ItemSchemeSearchParams;
 import cn.lili.modules.item.service.ItemSchemeService;
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
+import cn.lili.modules.itemOrder.entity.dto.ItemOrderSearchParamsZy;
 import cn.lili.modules.itemOrder.service.ItemOrderServiceZy;
 import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.service.MemberService;
@@ -57,40 +59,47 @@ public class SchemeComponentController {
     }
 
     @PostMapping(value = "/{id}/supplier")
-    @ApiOperation(value = "通过方案编号创建订单")
-    public  ResultMessage<Object> getSchemeSupplier(@PathVariable("id") String schemePrimaryId) {
-        System.out.println("建立订单");
-        ItemScheme itemScheme  = itemSchemeService.getById(schemePrimaryId);
-        String schemeId = itemScheme.getSchemeId();
+    @ApiOperation(value = "通过方案编号创建订单,直接根据方案和供应商创建，id是方案ID")
+    public  ResultMessage<Object> getSchemeSupplier(@PathVariable("id") String schemeId) {
+
+//        ItemScheme itemScheme  = itemSchemeService.getById(schemePrimaryId);
+//        String schemeId = itemScheme.getSchemeId();
         List<IdTotal> supplierList = SchemeComponentService.getOrderBy(schemeId);
         StoreVO buyerStore = storeServiceZy.getStoreDetail();
-        StoreAfterSaleAddressDTO storep = storeDetailService.getStoreAfterSaleAddressDTO();
+        String buyerId = buyerStore.getId();
+        System.out.println("建立订单");
+//        StoreAfterSaleAddressDTO storep = storeDetailService.getStoreAfterSaleAddressDTO();
         Snowflake snowflake = new Snowflake();
         ArrayList<Object> arrayList = new ArrayList<>();
         Member loggingBuyer = memberService.getUserInfo();
-        for(IdTotal idTotal : supplierList) {
+        for (IdTotal idTotal : supplierList) {
             try {
                 ItemOrder itemOrder = new ItemOrder();
-                itemOrder.setOrderId(snowflake.nextId()+"");
+                itemOrder.setOrderId(snowflake.nextId() + "");
                 itemOrder.setOrderAmount(idTotal.getTotal());
                 Store supplierStore = storeServiceZy.getById(idTotal.getId());
                 itemOrder.setStoreName(supplierStore.getStoreName());
                 itemOrder.setStoreId(idTotal.getId());
                 itemOrder.setCreateTime(DateTime.now());
-                itemOrder.setSchemeId(schemePrimaryId);
+                itemOrder.setSchemeId(schemeId);
                 itemOrder.setConsigneeName(loggingBuyer.getNickName());
                 itemOrder.setConsigneePhone(loggingBuyer.getMobile());
-                itemOrder.setBuyerPhone(storep.getSalesConsigneeMobile());
+                //                System.out.println("1");
+                //                System.out.println(storep.getSalesConsigneeMobile());
+                //                itemOrder.setBuyerPhone(storep.getSalesConsigneeMobile());
                 itemOrder.setBuyerName(buyerStore.getStoreName());
                 itemOrder.setConsigneeAddress(buyerStore.getStoreAddressPath() + buyerStore.getStoreAddressDetail());
                 itemOrder.setBuyerId(buyerStore.getId());
                 itemOrderServiceZy.save(itemOrder);
                 arrayList.add(itemOrder);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 logger.error("Order create error: schemeID:" + schemeId);
                 throw new RuntimeException(e);
             }
         }
-       return ResultUtil.data(arrayList);
+        return ResultUtil.data(arrayList);
+
     }
+
+
 }

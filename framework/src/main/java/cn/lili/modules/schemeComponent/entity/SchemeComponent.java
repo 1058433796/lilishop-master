@@ -10,7 +10,7 @@ import lombok.Data;
 public class SchemeComponent {
     private String componentId;
 
-    private String componentName;
+    private String pm;
 
     private String componentUnitPrice;
 
@@ -19,5 +19,16 @@ public class SchemeComponent {
     private String schemeId;
 
     private String supplierId;
+
+    private String cs;
+
+    private String sm;
+
+    private String dw;
+
+    private String pp;
+
+    private String xh;
+
 
 }

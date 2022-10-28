@@ -10,11 +10,11 @@ import lombok.Data;
 public class Scheme {
     private String schemeId;
 
-    private String schemeName;
+//    private String schemeName;
 
     private String doorId;
 
-    private String location;
+//    private String location;
 
     private String openMethod="平开";
 
@@ -28,7 +28,7 @@ public class Scheme {
 
     private String texture="木";
 
-    private String handle="把手";
+    private String handle;
 
     private String guard="无";
 
@@ -36,8 +36,19 @@ public class Scheme {
 
     private String wjgroup="HWE-4";
 
-    private String updateTime="一小时前";
+//    private String updateTime="一小时前";
 
     private String schemeSum;
+
+    private String roomFunction;
+
+    private String weight;
+
+    private String doorShape;
+
+    private String groupType;
+
+    private String qkType;
+
 
 }

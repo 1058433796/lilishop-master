@@ -112,7 +112,8 @@ public class StorePassportController {
                                               @NotNull(message = "手机号不能为空") @RequestParam String mobile,
                                               @RequestHeader String uuid
                                               ) {
-        return ResultUtil.data(this.memberService.register(username, password, mobile));
+        this.memberService.register(username, password, mobile);
+        return ResultUtil.success();
     }
     @ApiOperation(value = "店铺注册接口，注册第一步")
     @ApiImplicitParams({

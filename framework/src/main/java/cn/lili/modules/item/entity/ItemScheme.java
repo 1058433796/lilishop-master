@@ -22,7 +22,7 @@ public class ItemScheme {
     private String schemeSum;
     private String doorId;
 
-    private String location;
+//    private String location;
 
     private String openMethod;
 
@@ -44,6 +44,19 @@ public class ItemScheme {
 
     private String wjgroup;
 
-    private String updateTime;
+    private String roomFunction;
+
+    private String weight;
+
+    private String doorShape;
+
+    private String groupType;
+
+    private String qkType;
+
+
+
+
+//    private String updateTime;
 
 }

@@ -52,13 +52,13 @@ public class SchemeController {
         List<Scheme> schemelist=schemeService.getSchemeList();
         int finish=0;
         for (int i=0;i<schemelist.size();i++){
-            //按照每一条方案进行添加
+            //按照方案里的每一条内容进行添加
             ItemSchemeVO itemScheme=new ItemSchemeVO();
             String schemeid= schemelist.get(i).getSchemeId();
             itemScheme.setSchemeId(schemeid);
             itemScheme.setItemId(id);
             itemScheme.setDoorId(schemelist.get(i).getDoorId());
-            itemScheme.setLocation(schemelist.get(i).getLocation());
+//            itemScheme.setLocation(schemelist.get(i).getLocation());
             itemScheme.setOpenMethod(schemelist.get(i).getOpenMethod());
             itemScheme.setOpenDirection(schemelist.get(i).getOpenDirection());
             itemScheme.setHeight(schemelist.get(i).getHeight());
@@ -69,7 +69,12 @@ public class SchemeController {
             itemScheme.setHandle(schemelist.get(i).getHandle());
             itemScheme.setFirerating(schemelist.get(i).getFirerating());
             itemScheme.setWjgroup(schemelist.get(i).getWjgroup());
-            itemScheme.setUpdateTime(schemelist.get(i).getUpdateTime());
+            itemScheme.setDoorShape(schemelist.get(i).getDoorShape());
+            itemScheme.setRoomFunction(schemelist.get(i).getRoomFunction());
+            itemScheme.setWeight(schemelist.get(i).getWeight());
+            itemScheme.setGroupType(schemelist.get(i).getGroupType());
+            itemScheme.setQkType(schemelist.get(i).getQkType());
+//            itemScheme.setUpdateTime(schemelist.get(i).getUpdateTime());
             if (itemschemeService.saveItemScheme(itemScheme)) {
                 finish++;
                 System.out.println(finish);
