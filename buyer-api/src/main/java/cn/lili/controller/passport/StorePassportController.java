@@ -48,18 +48,6 @@ public class StorePassportController {
     @Autowired
     private MemberService memberService;
 
-    @Autowired
-    private StoreServiceZy storeServiceZy;
-
-    @Autowired
-    private StoreDetailService storeDetailService;
-
-    @Autowired
-    private VerificationService verificationService;
-
-    @Autowired
-    private StoreService storeService;
-
     @ApiOperation(value = "登录接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query"),
@@ -85,39 +73,6 @@ public class StorePassportController {
                                               ) {
         this.memberService.register(username, password, mobile);
         return ResultUtil.success();
-    }
-
-
-    @PostMapping("/userRegisterWithStore")
-    public ResultMessage<Object> userRegisterWithStore(@NotNull(message = "用户名不能为空") @RequestParam String username,
-                                                       @NotNull(message = "密码不能为空") @RequestParam String password,
-                                                       @NotNull(message = "手机号不能为空") @RequestParam String mobile,
-                                                       @RequestHeader String uuid
-    ) {
-        this.memberService.register(username, password, mobile);
-//      模拟store注册
-//        CompanyVo vo = new CompanyVo(username, password);
-//        storeRegister(vo);
-
-        return ResultUtil.success();
-    }
-
-    public void storeRegister(CompanyVo vo) {
-//        验证账户
-        Member member = memberService.findByUsername(vo.getUsername());
-        //    不存在商店    注册商店
-        Store store = new Store(member);
-        storeService.save(store);
-
-        member.setStoreId(store.getId());
-        member.setHaveStore(true);
-        memberService.updateById(member);
-//            创建storeDetail
-        StoreDetail storeDetail = new StoreDetail(store.getId(),vo);
-        storeDetailService.save(storeDetail);
-        //  store状态直接审核通过
-        store.setStoreDisable(StoreStatusEnum.OPEN.name());
-        storeService.updateById(store);
     }
 
     @ApiOperation(value = "注销接口")

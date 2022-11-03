@@ -88,7 +88,7 @@ public class StorePassportController {
             }
     }
 
-    @GetMapping("/userRole")
+    @PostMapping("/userRole")
     public ResultMessage<Object> getUserRole(@NotNull(message = "用户名不能为空") String username){
         Map<String, String> map = new HashMap<>();
         map.put("role", "unknown");
