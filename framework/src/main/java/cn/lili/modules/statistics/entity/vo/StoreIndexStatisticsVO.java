@@ -21,12 +21,18 @@ public class StoreIndexStatisticsVO {
     @ApiModelProperty(value = "访客数UV")
     private Integer storeUV;
 
+
+
     @ApiModelProperty(value = "待付款订单数量")
     private Long unPaidOrder;
     @ApiModelProperty(value = "待发货订单数量")
     private Long unDeliveredOrder;
     @ApiModelProperty(value = "待收货订单数量")
     private Long deliveredOrder;
+    @ApiModelProperty(value = "待响应订单数量")
+    private Long unRepliedOrder;
+    @ApiModelProperty(value = "待响应合同数量")
+    private Long unRepliedContract;
 
     @ApiModelProperty(value = "待处理退货数量")
     private Long returnGoods;

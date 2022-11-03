@@ -7,6 +7,8 @@ import cn.lili.modules.contract.entity.Contract;
 import cn.lili.modules.contract.entity.ContractSearchParams;
 import cn.lili.modules.contract.service.ContractService;
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
+import cn.lili.modules.itemOrder.entity.dto.ItemOrderExportDTO;
+import cn.lili.modules.itemOrder.entity.dto.ItemOrderSearchParams;
 import cn.lili.modules.itemOrder.service.ItemOrderServiceZy;
 import cn.lili.modules.store.entity.vos.StoreVO;
 import cn.lili.modules.store.service.StoreServiceZy;
@@ -17,6 +19,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.Configuration;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +44,14 @@ public class ContractStoreController {
         contractSearchParams.setStoreId(buyerStore.getId());
         return ResultUtil.data(contractService.queryByParams(contractSearchParams));
     }
+
+    @ApiOperation(value = "查询合同导出列表")
+    @GetMapping("/queryExportContract")
+    public ResultMessage<List<Contract>> queryExportContract(ContractSearchParams contractSearchParams) {
+        return ResultUtil.data(contractService.list(contractSearchParams.queryWrapper()));
+    }
+
+
 
     @ApiOperation(value = "根据订单号生成合同，如果此订单存在对应的合同则返回已生成的合同")
     @PutMapping("/{orderId}/create")

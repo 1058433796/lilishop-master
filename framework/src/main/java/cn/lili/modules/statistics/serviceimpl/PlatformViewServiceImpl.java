@@ -73,7 +73,7 @@ public class PlatformViewServiceImpl extends ServiceImpl<PlatformViewMapper, Pla
             return (Long) object;
         }
         //这里统计的是有效的accessToken ，如果需要数据精确，需要调整accessToken的有效时间，开发人员建议2小时误差较为合适
-        Long num = Long.valueOf(cache.keys(CachePrefix.ACCESS_TOKEN.getPrefix(UserEnums.MEMBER) + "*").size());
+        Long num = Long.valueOf(cache.keys(CachePrefix.ACCESS_TOKEN.getPrefix(UserEnums.STORE) + "*").size());
         cache.put(CachePrefix.ONLINE_NUM.getPrefix(), num, statisticsProperties.getCurrentOnlineUpdate().longValue());
         return num;
     }

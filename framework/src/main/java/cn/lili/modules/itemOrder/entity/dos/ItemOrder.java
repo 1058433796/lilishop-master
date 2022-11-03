@@ -166,10 +166,12 @@ public class ItemOrder {
     private String logisticsCode;
 
     private String logisticsName;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date logisticsTime;
 
     private String logisticsNo;
 
+    @ApiModelProperty(value = "采购方物流签署时间")
+    private Date buyerLogisticSignTime;
 }
 

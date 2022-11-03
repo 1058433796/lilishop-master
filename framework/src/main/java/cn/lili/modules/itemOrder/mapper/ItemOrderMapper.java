@@ -38,8 +38,7 @@ public interface ItemOrderMapper extends BaseMapper<ItemOrder> {
     List<Order> queryListByParams(@Param(Constants.WRAPPER) Wrapper<Order> queryWrapper);
 
     @Select("SELECT * FROM scheme_component WHERE scheme_id = " +
-            "(SELECT scheme_id FROM item_scheme WHERE primary_id = " +
-            "(SELECT scheme_id FROM item_order WHERE order_id=#{oid})) AND supplier_id=#{storeId}")
+            "(SELECT scheme_id FROM item_order WHERE order_id=#{oid}) AND supplier_id=#{storeId}")
     List<SchemeComponent> queryOrderComponent(String oid, String storeId);
     /**
      * 查询导出订单DTO列表

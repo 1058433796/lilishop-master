@@ -51,7 +51,7 @@ public class PaymentController {
         //id是Int
         //把dona_id项目id 放在session中
         System.out.println("zhifubao zhifu");
-        session.setAttribute("dona_id",Integer.parseInt(dona_id));
+        session.setAttribute("dona_id",Integer.parseInt(dona_id.substring(10)));
 
         //生成订单号（支付宝的要求？）
         String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());

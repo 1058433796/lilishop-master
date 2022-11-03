@@ -32,13 +32,18 @@ public class ItemOrderServiceZyImpl extends ServiceImpl<ItemOrderMapperZy, ItemO
     }
 
     @Override
-    public IPage<OrderWithContractSimpleV0> queryAssociatedContractOrders(ItemOrderSearchParamsZy itemOrderSearchParams) {
+    public IPage<ItemOrder> queryAssociatedContractOrders(ItemOrderSearchParamsZy itemOrderSearchParams) {
         return this.baseMapper.queryAssociatedContractOrders(PageUtil.initPage(itemOrderSearchParams), itemOrderSearchParams.queryWrapper());
     }
 
     @Override
     public void payOrder(String oid, Date time) {
         this.baseMapper.payOrder(oid, time);
+    }
+
+    @Override
+    public void buyerLogisticSign(String oid, Date date) {
+        this.baseMapper.buyerLogisticSign(oid, date);
     }
 
 }

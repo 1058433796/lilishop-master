@@ -62,7 +62,7 @@ public class ItemOrderSearchParamsZy extends PageVO {
         }
 
         if (CharSequenceUtil.isNotEmpty(schemeId)) {
-            queryWrapper.like("o.scheme_id", schemeId);
+            queryWrapper.like("scheme_id", schemeId);
         }
 
         return queryWrapper;
