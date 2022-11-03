@@ -14,6 +14,8 @@ public class ResultUtil<T> {
      * 抽象类，存放结果
      */
     private final ResultMessage<T> resultMessage;
+
+//    private final ResultMessageG<T> resultMessageG;
     /**
      * 正常响应
      */

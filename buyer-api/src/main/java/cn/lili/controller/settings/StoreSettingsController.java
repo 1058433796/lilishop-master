@@ -49,6 +49,7 @@ public class StoreSettingsController {
         return ResultUtil.data(storeServiceZy.getStoreDetail());
     }
 
+
     @ApiOperation(value = "修改商家设置")
     @PutMapping
     public ResultMessage<Object> edit(@Valid StoreSettingDTO storeSettingDTO) {

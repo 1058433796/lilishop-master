@@ -1,8 +1,9 @@
 package cn.lili.modules.item.mapper;
 
 
-import cn.lili.modules.goods.entity.vos.GoodsVO;
 import cn.lili.modules.item.entity.Item;
+import cn.lili.modules.item.entity.ShortItem;
+import cn.lili.modules.item.entity.LoginItem;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
@@ -21,4 +22,10 @@ public interface ItemMapper extends BaseMapper<Item> {
     Long getStoreProductNum(String id);
     @Select("select g.* from item as g ")
     IPage<Item> queryByParams(IPage<Item> page, @Param(Constants.WRAPPER) Wrapper<Item> queryWrapper);
+
+    @Select("SELECT item_name,item_id FROM item WHERE buyer_name=#{name}")
+    List<ShortItem> queryBuyer(String name);
+
+    @Select("SELECT  item_name,item_id FROM item WHERE designer_name=#{name}")
+    List<ShortItem> queryDesigner(String name);
 }

@@ -101,5 +101,11 @@ public class SchemeComponentController {
 
     }
 
+    @ApiOperation(value = "根据方案ID获取到总包价格")
+    @GetMapping("/sum/{id}")
+    public String getSchemeSumById(@PathVariable("id") String schemeId) {
+        System.out.println(SchemeComponentService.getSchemeSumById(schemeId));
+        return SchemeComponentService.getSchemeSumById(schemeId);
+    }
 
 }

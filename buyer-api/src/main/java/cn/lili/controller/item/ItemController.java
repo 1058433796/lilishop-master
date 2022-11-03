@@ -2,10 +2,11 @@ package cn.lili.controller.item;
 
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.enums.ResultUtil;
-import cn.lili.common.exception.ServiceException;
+import cn.lili.common.enums.ResultUtilG;
 import cn.lili.common.security.AuthUser;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.ResultMessage;
+import cn.lili.common.vo.ResultMessageG;
 import cn.lili.modules.item.entity.*;
 import cn.lili.modules.item.service.ItemGuarantyService;
 import cn.lili.modules.item.service.ItemSchemeService;
@@ -14,10 +15,14 @@ import cn.lili.modules.scheme.entity.Scheme;
 import cn.lili.modules.scheme.service.SchemeService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import cn.lili.modules.item.entity.ItemSearchParams;
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -54,9 +59,9 @@ public class ItemController {
     @PostMapping(consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "添加项目")
     public ResultMessage<String> saveItem(@RequestBody @Validated ItemVO item) {
-        AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
-        item.setBuyerId(currentUser.getStoreId());
-        item.setBuyerName(currentUser.getStoreName());
+//        AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
+//        item.setBuyerId(currentUser.getStoreId());
+//        item.setBuyerName(currentUser.getStoreName());
         Date date = new Date();
         SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd :hh:mm:ss");
         item.setCreateTime(date);
@@ -101,7 +106,7 @@ public class ItemController {
                     ItemGuaranty itemGuaranty=new ItemGuaranty();
                     itemGuaranty.setItemId(itemId);
                     itemGuaranty.setPrimaryId(itemScheme.getPrimaryId());
-                    itemGuaranty.setBuyerId(currentUser.getStoreId());
+                    itemGuaranty.setBuyerId(item.getBuyerId());
                     itemGuaranty.setSchemeSum(schemelist.get(i).getSchemeSum());
                     itemGuaranty.setOrderContent(item.getItemName()+"内容");
                     itemGuaranty.setOrderName(item.getItemName()+"项目");
@@ -120,6 +125,15 @@ public class ItemController {
         ItemVO item = itemService.getItemVO(id);
         return ResultUtil.data(item);
     }
+    @ApiOperation(value = "要求的登录")
+    @PostMapping(value = "/login")
+    public ResultMessageG<LoginItem> login(@RequestParam String username,
+                                           @RequestParam String password) throws NoSuchAlgorithmException {
+        System.out.println("username"+username);
+        String Pass= DigestUtils.md5Hex(password);
+        return ResultUtilG.data(itemService.queryLogin(username,Pass));
 
+
+    }
 
 }

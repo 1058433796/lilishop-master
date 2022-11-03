@@ -1,23 +1,18 @@
 package cn.lili.modules.item.service.serviceImpl;
 
-import cn.hutool.core.text.CharSequenceUtil;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
-import cn.lili.modules.item.entity.Item;
-import cn.lili.modules.item.entity.ItemSearchParams;
-import cn.lili.modules.item.entity.ItemVO;
+import cn.lili.modules.item.entity.*;
 import cn.lili.modules.item.mapper.ItemMapper;
 import cn.lili.modules.item.service.ItemService;
-import cn.lili.modules.promotion.entity.dos.Pintuan;
-import cn.lili.modules.promotion.entity.dto.search.PromotionGoodsSearchParams;
-import cn.lili.modules.promotion.entity.enums.PromotionsScopeTypeEnum;
-import cn.lili.modules.promotion.entity.vos.PintuanVO;
+import cn.lili.modules.member.entity.dos.Member;
+import cn.lili.modules.member.service.MemberService;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -27,7 +22,8 @@ import java.util.List;
 public class ItemServiceImpl extends ServiceImpl<ItemMapper, Item> implements ItemService {
     @Resource
     ItemMapper itemMapper;
-
+    @Autowired
+    MemberService memberService;
     @Autowired
     private  ItemService itemService;
     @Override
@@ -67,5 +63,33 @@ public class ItemServiceImpl extends ServiceImpl<ItemMapper, Item> implements It
     @Override
     public List<Item> listFindAll(ItemSearchParams searchParams){
         return this.list(searchParams.queryWrapper());
+    }
+
+    @Override
+    public LoginItem queryLogin(String name, String pass){
+        LoginItem loginItem=new LoginItem();
+        loginItem.setName(name);
+        Member member = memberService.findByUsername(name);
+        //判断用户是否存在
+        if (member == null ) {
+            //不是业主
+             System.out.println("designer");
+            List<ShortItem> queryDesigner=this.baseMapper.queryDesigner(name);
+            loginItem.setProjectInfo(queryDesigner);
+            loginItem.setRole("designer");
+        }
+
+        else{
+            //是业主，判断密码是否输入正确
+            if (new BCryptPasswordEncoder().matches(pass, member.getPassword())) {
+                System.out.println("proprietor");
+//            throw new ServiceException(ResultCode.USER_PASSWORD_ERROR);
+                List<ShortItem> queryBuyer=this.baseMapper.queryBuyer(name);
+                System.out.println(queryBuyer);
+                loginItem.setProjectInfo(queryBuyer);
+                loginItem.setRole("proprietor");
+        }
+        }
+        return loginItem;
     }
 }
