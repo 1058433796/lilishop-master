@@ -69,7 +69,7 @@ public class StorePassportController {
     public ResultMessage<Object> userLogin(@NotNull(message = "用户名不能为空") @RequestParam String username,
                                            @NotNull(message = "密码不能为空") @RequestParam String password, @RequestHeader String uuid) {
             try {
-                Token token = this.memberService.usernameStoreLogin(username, password);
+                Token token = this.memberService.usernameLogin(username, password);
                 return ResultUtil.data(token);
             }catch (ServiceException e){
                 System.out.println(e.getResultCode());
@@ -96,8 +96,8 @@ public class StorePassportController {
     ) {
         this.memberService.register(username, password, mobile);
 //      模拟store注册
-        CompanyVo vo = new CompanyVo(username, password);
-        storeRegister(vo);
+//        CompanyVo vo = new CompanyVo(username, password);
+//        storeRegister(vo);
 
         return ResultUtil.success();
     }
@@ -112,11 +112,9 @@ public class StorePassportController {
         member.setStoreId(store.getId());
         member.setHaveStore(true);
         memberService.updateById(member);
-        System.out.println("商店不存在，已注册");
 //            创建storeDetail
         StoreDetail storeDetail = new StoreDetail(store.getId(),vo);
         storeDetailService.save(storeDetail);
-        System.out.println("storeDetail已创建");
         //  store状态直接审核通过
         store.setStoreDisable(StoreStatusEnum.OPEN.name());
         storeService.updateById(store);
@@ -143,6 +141,6 @@ public class StorePassportController {
     @ApiOperation(value = "刷新token")
     @GetMapping("/refresh/{refreshToken}")
     public ResultMessage<Object> refreshToken(@NotNull(message = "刷新token不能为空") @PathVariable String refreshToken) {
-        return ResultUtil.data(this.memberService.refreshStoreToken(refreshToken));
+        return ResultUtil.data(this.memberService.refreshToken(refreshToken));
     }
 }

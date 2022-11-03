@@ -18,7 +18,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @SpringBootApplication
 @EnableCaching
 @EnableAsync
-public class StoreApiApplication {
+public class BuyerApiApplication {
 
     @Primary
     @Bean
@@ -30,7 +30,7 @@ public class StoreApiApplication {
     public static void main(String[] args) {
         System.setProperty("rocketmq.client.logUseSlf4j","true");
         System.setProperty("es.set.netty.runtime.available.processors", "false");
-        SpringApplication.run(StoreApiApplication.class, args);
+        SpringApplication.run(BuyerApiApplication.class, args);
     }
 
 }
