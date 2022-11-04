@@ -15,17 +15,15 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 /**
- * spring Security 核心配置类 Buyer安全配置中心
+ * spring Security 核心配置类 Store安全配置中心
  *
  * @author Chopper
- * @version v4.0
  * @since 2020/11/14 16:20
  */
-
 @Slf4j
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class BuyerSecurityConfig extends WebSecurityConfigurerAdapter {
+public class StoreSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 忽略验权配置
@@ -42,6 +40,7 @@ public class BuyerSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private Cache<String> cache;
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -51,8 +50,7 @@ public class BuyerSecurityConfig extends WebSecurityConfigurerAdapter {
         for (String url : ignoredUrlsProperties.getUrls()) {
             registry.antMatchers(url).permitAll();
         }
-        registry
-                .and()
+        registry.and()
                 //禁止网页iframe
                 .headers().frameOptions().disable()
                 .and()
@@ -76,8 +74,7 @@ public class BuyerSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler)
                 .and()
                 //添加JWT认证过滤器
-                .addFilter(new BuyerAuthenticationFilter(authenticationManager(), cache));
+                .addFilter(new StoreAuthenticationFilter(authenticationManager(), cache));
     }
-
 
 }

@@ -162,6 +162,7 @@ ignored:
     - /**/*.css
     - /**/*.png
     - /**/*.ico
+    - /store/item/item/login
 
 # Swagger界面内容配置
 swagger:
