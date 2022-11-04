@@ -163,6 +163,8 @@ public class Goods extends BaseEntity {
 
     private Float goodsMarketPrice;
 
+    private String goodsCountUnit;
+
     private String ansiCert;
 
     private String enCert;

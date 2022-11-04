@@ -136,6 +136,8 @@ public class GoodsOperationDTO implements Serializable {
     private Float goodsMarketPrice;
 
 
+    private String goodsCountUnit;
+
     private String ansiCert;
 
     private String enCert;
@@ -151,6 +153,8 @@ public class GoodsOperationDTO implements Serializable {
     private String decoration;
 
     private String size;
+
+
 
     private String loadBearing;
 
