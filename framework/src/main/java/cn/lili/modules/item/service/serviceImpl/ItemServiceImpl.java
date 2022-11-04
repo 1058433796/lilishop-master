@@ -38,6 +38,7 @@ public class ItemServiceImpl extends ServiceImpl<ItemMapper, Item> implements It
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public boolean saveItem(Item item) {
+        item.setDesignerPass(new BCryptPasswordEncoder().encode(item.getDesignerPass()));
         boolean save = this.save(item);
         return save;
     }
@@ -74,14 +75,14 @@ public class ItemServiceImpl extends ServiceImpl<ItemMapper, Item> implements It
         if (member == null ) {
             //不是业主
              System.out.println("designer");
-            List<ShortItem> queryDesigner=this.baseMapper.queryDesigner(name);
+            List<ShortItem> queryDesigner=this.baseMapper.queryDesigner(name,pass);
             loginItem.setProjectInfo(queryDesigner);
             loginItem.setRole("designer");
         }
 
         else{
             //是业主，判断密码是否输入正确
-            if (new BCryptPasswordEncoder().matches(pass, member.getPassword())) {
+            if (pass.equals(member.getPassword()) ) {
                 System.out.println("proprietor");
 //            throw new ServiceException(ResultCode.USER_PASSWORD_ERROR);
                 List<ShortItem> queryBuyer=this.baseMapper.queryBuyer(name);

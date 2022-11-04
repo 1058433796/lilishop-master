@@ -129,9 +129,10 @@ public class ItemController {
     @PostMapping(value = "/login")
     public ResultMessageG<LoginItem> login(@RequestParam String username,
                                            @RequestParam String password) throws NoSuchAlgorithmException {
-        System.out.println("username"+username);
-        String Pass= DigestUtils.md5Hex(password);
-        return ResultUtilG.data(itemService.queryLogin(username,Pass));
+        System.out.println("username"+username+password);
+
+//        String Pass= DigestUtils.md5Hex(password);
+        return ResultUtilG.data(itemService.queryLogin(username,password));
 
 
     }
