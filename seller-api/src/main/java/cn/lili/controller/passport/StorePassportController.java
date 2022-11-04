@@ -89,6 +89,23 @@ public class StorePassportController {
             }
     }
 
+
+    @PostMapping("/userRole")
+    public ResultMessage<Object> getUserRole(@NotNull(message = "用户名不能为空") String username){
+        Map<String, String> map = new HashMap<>();
+        map.put("role", "unknown");
+        Member member = memberService.findByUsername(username);
+        if(member == null){
+            if(adminUserService.findByUsername(username) != null){
+                map.put("role", "admin");
+            }
+        }else{
+            if(member.getHaveStore() && storeService.getById(member.getStoreId()) != null){
+                map.put("role", "store");
+            }else{
+                map.put("role", "member");
+            }
+
     @ApiOperation(value = "用户登录接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query"),
@@ -103,6 +120,7 @@ public class StorePassportController {
             return ResultUtil.data(token);
         }catch (ServiceException e){
             return ResultUtil.error(e.getResultCode());
+
         }
     }
 
