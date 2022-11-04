@@ -62,11 +62,6 @@ public class AdminUserManagerController {
                                       @NotNull(message = "密码不能为空") @RequestParam String password,
                                       @RequestHeader String uuid) {
         return ResultUtil.data(adminUserService.login(username, password));
-//        if (verificationService.check(uuid, VerificationEnums.LOGIN)) {
-//            return ResultUtil.data(adminUserService.login(username, password));
-//        } else {
-//            throw new ServiceException(ResultCode.VERIFICATION_ERROR);
-//        }
     }
 
     @ApiOperation(value = "注销接口")
