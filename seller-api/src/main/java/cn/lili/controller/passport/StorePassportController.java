@@ -10,8 +10,7 @@ import cn.lili.common.utils.BeanUtil;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.service.MemberService;
-import cn.lili.modules.statistics.aop.PageViewPoint;
-import cn.lili.modules.statistics.aop.enums.PageViewEnum;
+import cn.lili.modules.permission.service.AdminUserService;
 import cn.lili.modules.store.entity.dos.Store;
 import cn.lili.modules.store.entity.dos.StoreDetail;
 import cn.lili.modules.store.entity.dos.StoreMaterial;
@@ -64,13 +63,14 @@ public class StorePassportController {
     private StoreService storeService;
 
     @Autowired
+    private AdminUserService adminUserService;
+
+    @Autowired
     private StoreDetailService storeDetailService;
 
     @Autowired
     private StoreMaterialService storeMaterialService;
 
-    @Autowired
-    private VerificationService verificationService;
 
     @ApiOperation(value = "商家登录接口")
     @ApiImplicitParams({
@@ -78,7 +78,6 @@ public class StorePassportController {
             @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query")
     })
     @PostMapping("/storeLogin")
-    @PageViewPoint(type = PageViewEnum.OTHER, id = "#id")
     public ResultMessage<Object> storeLogin(@NotNull(message = "用户名不能为空") @RequestParam String username,
                                            @NotNull(message = "密码不能为空") @RequestParam String password, @RequestHeader String uuid) {
             try {
@@ -89,21 +88,23 @@ public class StorePassportController {
             }
     }
 
-    @ApiOperation(value = "用户登录接口")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query")
-    })
-    @PostMapping("/userLogin")
-    @PageViewPoint(type = PageViewEnum.OTHER, id = "#id")
-    public ResultMessage<Object> userLogin(@NotNull(message = "用户名不能为空") @RequestParam String username,
-                                            @NotNull(message = "密码不能为空") @RequestParam String password, @RequestHeader String uuid) {
-        try {
-            Token token = this.memberService.usernameLogin(username, password);
-            return ResultUtil.data(token);
-        }catch (ServiceException e){
-            return ResultUtil.error(e.getResultCode());
+    @PostMapping("/userRole")
+    public ResultMessage<Object> getUserRole(@NotNull(message = "用户名不能为空") String username){
+        Map<String, String> map = new HashMap<>();
+        map.put("role", "unknown");
+        Member member = memberService.findByUsername(username);
+        if(member == null){
+            if(adminUserService.findByUsername(username) != null){
+                map.put("role", "admin");
+            }
+        }else{
+            if(member.getHaveStore() && storeService.getById(member.getStoreId()) != null){
+                map.put("role", "store");
+            }else{
+                map.put("role", "member");
+            }
         }
+        return ResultUtil.data(map);
     }
 
     @PostMapping("/userRegister")
@@ -112,9 +113,10 @@ public class StorePassportController {
                                               @NotNull(message = "手机号不能为空") @RequestParam String mobile,
                                               @RequestHeader String uuid
                                               ) {
-        this.memberService.register(username, password, mobile);
+        this.memberService.storeRegister(username, password, mobile);
         return ResultUtil.success();
     }
+
     @ApiOperation(value = "店铺注册接口，注册第一步")
     @ApiImplicitParams({
             @ApiImplicitParam(name="companyV0", value="表格数据", required = true)
@@ -219,8 +221,6 @@ public class StorePassportController {
         return ResultUtil.success();
     }
 
-
-
     @ApiOperation(value = "注销接口")
     @PostMapping("/logout")
     public ResultMessage<Object> logout() {
@@ -244,30 +244,4 @@ public class StorePassportController {
     public ResultMessage<Object> refreshToken(@NotNull(message = "刷新token不能为空") @PathVariable String refreshToken) {
         return ResultUtil.data(this.memberService.refreshStoreToken(refreshToken));
     }
-
-//    @PostMapping("/storeStatus")
-//    public ResultMessage<Object> getStoreStatus(@NotNull @RequestParam String username,
-//                                                @NotNull @RequestParam String password){
-//        Member member = memberService.findByUsername(username);
-//        if(member == null || !new BCryptPasswordEncoder().matches(password, member.getPassword())){
-//            return ResultUtil.error(ResultCode.USER_PASSWORD_ERROR);
-//        }
-//        if(!member.getHaveStore()){
-//            return ResultUtil.error(ResultCode.STORE_NOT_OPEN);
-//        }
-//            Store store = storeService.getById(member.getStoreId());
-//            String status = store.getStoreDisable();
-//            if(status.equals(StoreStatusEnum.APPLYING.name())){
-//                return ResultUtil.data(ResultCode.STORE_ON_APPLYING);
-//            }else if(status.equals(StoreStatusEnum.APPLY_FIRST_STEP.name())){
-//                return ResultUtil.data(ResultCode.STORE_FIRST_STEP);
-//            }else if(status.equals(StoreStatusEnum.APPLY_SECOND_STEP.name())){
-//                return ResultUtil.data(ResultCode.STORE_SECOND_STEP);
-//            }else if(status.equals(StoreStatusEnum.REFUSED.name())){
-//                return ResultUtil.data(ResultCode.STORE_REFUSED);
-//            }else{
-//                return ResultUtil.error(ResultCode.ERROR);
-//            }
-//    }
-
 }
