@@ -12,8 +12,8 @@ import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,41 +29,59 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
+ * 认证结果过滤器
+ *
  * @author Chopper
+ * @version v4.1
+ * @since 2020/11/17 3:37 下午
+ * @since
  */
 @Slf4j
-public class StoreAuthenticationFilter extends BasicAuthenticationFilter {
+public class BuyerAuthenticationFilter extends BasicAuthenticationFilter {
 
-    private final Cache cache;
 
-    public StoreAuthenticationFilter(AuthenticationManager authenticationManager,
+    /**
+     * 缓存
+     */
+    @Autowired
+    private Cache cache;
+
+    /**
+     * 自定义构造器
+     *
+     * @param authenticationManager
+     * @param cache
+     */
+    public BuyerAuthenticationFilter(AuthenticationManager authenticationManager,
                                      Cache cache) {
         super(authenticationManager);
         this.cache = cache;
     }
 
-    @SneakyThrows
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        String accessToken = request.getHeader(SecurityEnum.HEADER_TOKEN.getValue());
-        if (StrUtil.isBlank(accessToken)) {
-            chain.doFilter(request, response);
-            return;
-        }
+        //从header中获取jwt
+        String jwt = request.getHeader(SecurityEnum.HEADER_TOKEN.getValue());
         try {
-            UsernamePasswordAuthenticationToken authentication = getAuthentication(accessToken, response);
+            //如果没有token 则return
+            if (StrUtil.isBlank(jwt)) {
+                chain.doFilter(request, response);
+                return;
+            }
+            //获取用户信息，存入context
+            UsernamePasswordAuthenticationToken authentication = getAuthentication(jwt, response);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("BuyerAuthenticationFilter-> member authentication exception:", e);
         }
         chain.doFilter(request, response);
     }
 
-
     /**
-     * 获取token信息
+     * 解析用户
      *
      * @param jwt
      * @param response
@@ -81,11 +99,10 @@ public class StoreAuthenticationFilter extends BasicAuthenticationFilter {
             AuthUser authUser = new Gson().fromJson(json, AuthUser.class);
 
             //校验redis中是否有权限
-            if (cache.hasKey(CachePrefix.ACCESS_TOKEN.getPrefix(UserEnums.STORE) + jwt)) {
-                //用户角色
+            if (cache.hasKey(CachePrefix.ACCESS_TOKEN.getPrefix(UserEnums.MEMBER) + jwt)) {
+                //构造返回信息
                 List<GrantedAuthority> auths = new ArrayList<>();
                 auths.add(new SimpleGrantedAuthority("ROLE_" + authUser.getRole().name()));
-                //构造返回信息
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(authUser.getUsername(), null, auths);
                 authentication.setDetails(authUser);
                 return authentication;
@@ -99,5 +116,5 @@ public class StoreAuthenticationFilter extends BasicAuthenticationFilter {
         }
         return null;
     }
-}
 
+}
