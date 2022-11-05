@@ -23,6 +23,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static cn.lili.common.enums.ResultCode.GOODS_ERROR;
 
 /**
  * 店铺端,商品接口
@@ -104,8 +107,8 @@ public class GoodsStoreController {
     public ResultMessage<GoodsOperationDTO> save(@Valid @RequestBody GoodsOperationDTO goodsOperationDTO) {
 
         goodsService.addGoods(goodsOperationDTO);
-        return ResultUtil.success();
-    }
+        return ResultUtil.success();}
+
 
     @ApiOperation(value = "修改商品")
     @PutMapping(value = "/update/{goodsId}", consumes = "application/json", produces = "application/json")
@@ -138,6 +141,7 @@ public class GoodsStoreController {
         goodsService.deleteGoods(goodsId);
         return ResultUtil.success();
     }
+
 
     @ApiOperation(value = "设置商品运费模板")
     @PutMapping(value = "/freight")

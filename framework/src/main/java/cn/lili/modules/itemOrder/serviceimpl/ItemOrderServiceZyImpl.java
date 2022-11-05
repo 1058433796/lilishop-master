@@ -26,8 +26,8 @@ public class ItemOrderServiceZyImpl extends ServiceImpl<ItemOrderMapperZy, ItemO
         return this.baseMapper.queryOrderComponent(oid, storeId);
     }
     @Override
-    public List<ItemOrder> getAssociatedOrders(String oid){
-        return this.baseMapper.getAssociatedOrders(oid);
+    public List<ItemOrder> getAssociatedOrders(String itemId){
+        return this.baseMapper.getAssociatedOrders(itemId);
 
     }
 

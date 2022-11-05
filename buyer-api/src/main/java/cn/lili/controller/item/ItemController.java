@@ -7,6 +7,8 @@ import cn.lili.common.security.AuthUser;
 import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.common.vo.ResultMessageG;
+import cn.lili.modules.goods.entity.dos.Goods;
+import cn.lili.modules.goods.service.GoodsService;
 import cn.lili.modules.item.entity.*;
 import cn.lili.modules.item.service.ItemGuarantyService;
 import cn.lili.modules.item.service.ItemSchemeService;
@@ -14,8 +16,10 @@ import cn.lili.modules.item.service.ItemService;
 import cn.lili.modules.scheme.entity.Scheme;
 import cn.lili.modules.scheme.service.SchemeService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import cn.lili.modules.item.entity.ItemSearchParams;
@@ -27,6 +31,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
+import static cn.lili.common.enums.ResultCode.GOODS_ERROR;
 
 @RestController
 @RequestMapping("/store/item/item")
@@ -41,7 +47,8 @@ public class ItemController {
     private SchemeService schemeService;
     @Resource
     private ItemSchemeService itemschemeService;
-
+    @Autowired
+    private GoodsService goodsService;
     //    @ApiOperation(value = "测试获取项目列表")
 //    @GetMapping("/test")
 //    public List<Item> findAll(){
@@ -133,8 +140,30 @@ public class ItemController {
 
 //        String Pass= DigestUtils.md5Hex(password);
         return ResultUtilG.data(itemService.queryLogin(username,password));
+    }
+    @ApiOperation(value = "新增商品")
+    @PostMapping(value = "/commodity/v1/add",consumes = "application/json", produces = "application/json")
+    public ResultMessage<Goods> save1(@RequestBody Goods goods) {
+        if (goodsService.saveGoods(goods)){
+            return ResultUtil.success();
+        }
+        else {
+            return ResultUtil.error(GOODS_ERROR);
+        }
+    }
+    @ApiOperation(value = "修改商品")
+    @PutMapping(value = "/commodity/v1/update")
+    public ResultMessage<Goods> update1(@RequestBody Goods goods) {
+        goodsService.updateGoods(goods);
+        return ResultUtil.success();
+    }
 
-
+    @ApiOperation(value = "删除商品")
+    @DeleteMapping(value = "/commodity/v1/delete")
+    @ApiImplicitParam(name = "id", value = "商品ID", required = true, allowMultiple = true)
+    public ResultMessage<Object> deleteGoods1(@RequestParam String goodsId) {
+        goodsService.deleteGoods1(goodsId);
+        return ResultUtil.success();
     }
 
 }

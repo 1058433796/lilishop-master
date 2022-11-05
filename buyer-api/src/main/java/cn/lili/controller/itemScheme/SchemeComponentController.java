@@ -3,6 +3,8 @@ package cn.lili.controller.itemScheme;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.lang.Snowflake;
 import cn.lili.common.enums.ResultUtil;
+import cn.lili.common.security.AuthUser;
+import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.item.entity.ItemScheme;
 import cn.lili.modules.item.entity.ItemSchemeSearchParams;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/store/schemeComponent/schemeComponent")
@@ -58,15 +61,15 @@ public class SchemeComponentController {
         return ResultUtil.data(SchemeComponentService.queryByParams(schemeComponentSearchParams));
     }
 
-    @PostMapping(value = "/{id}/supplier")
-    @ApiOperation(value = "通过方案编号创建订单,直接根据方案和供应商创建，id是方案ID")
-    public  ResultMessage<Object> getSchemeSupplier(@PathVariable("id") String schemeId) {
-
+    @PostMapping(value = "/{id}/{itemid}/supplier")
+    @ApiOperation(value = "通过方案编号创建订单,id是方案ID,再传一个itemid")
+    public  ResultMessage<Object> getSchemeSupplier(@PathVariable("id") String schemeId,@PathVariable("itemid") String itemId) {
+            System.out.println("itemid"+itemId);
 //        ItemScheme itemScheme  = itemSchemeService.getById(schemePrimaryId);
 //        String schemeId = itemScheme.getSchemeId();
         List<IdTotal> supplierList = SchemeComponentService.getOrderBy(schemeId);
-        StoreVO buyerStore = storeServiceZy.getStoreDetail();
-        String buyerId = buyerStore.getId();
+        AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
+//        StoreVO buyerStore = storeServiceZy.getStoreDetail();
         System.out.println("建立订单");
 //        StoreAfterSaleAddressDTO storep = storeDetailService.getStoreAfterSaleAddressDTO();
         Snowflake snowflake = new Snowflake();
@@ -75,6 +78,7 @@ public class SchemeComponentController {
         for (IdTotal idTotal : supplierList) {
             try {
                 ItemOrder itemOrder = new ItemOrder();
+                itemOrder.setItemId(itemId);
                 itemOrder.setOrderId(snowflake.nextId() + "");
                 itemOrder.setOrderAmount(idTotal.getTotal());
                 Store supplierStore = storeServiceZy.getById(idTotal.getId());
@@ -87,9 +91,9 @@ public class SchemeComponentController {
                 //                System.out.println("1");
                 //                System.out.println(storep.getSalesConsigneeMobile());
                 //                itemOrder.setBuyerPhone(storep.getSalesConsigneeMobile());
-                itemOrder.setBuyerName(buyerStore.getStoreName());
-                itemOrder.setConsigneeAddress(buyerStore.getStoreAddressPath() + buyerStore.getStoreAddressDetail());
-                itemOrder.setBuyerId(buyerStore.getId());
+                itemOrder.setBuyerName(currentUser.getNickName());
+                itemOrder.setConsigneeAddress("默认收货地址");
+                itemOrder.setBuyerId(currentUser.getId());
                 itemOrderServiceZy.save(itemOrder);
                 arrayList.add(itemOrder);
             } catch (Exception e) {

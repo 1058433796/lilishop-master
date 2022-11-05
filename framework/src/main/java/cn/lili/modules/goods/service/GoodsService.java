@@ -57,7 +57,7 @@ public interface GoodsService extends IService<Goods> {
      * @param goodsOperationDTO 商品查询条件
      */
     void addGoods(GoodsOperationDTO goodsOperationDTO);
-
+    boolean saveGoods(Goods goods);
     /**
      * 修改商品
      *
@@ -65,7 +65,7 @@ public interface GoodsService extends IService<Goods> {
      * @param goodsId           商品ID
      */
     void editGoods(GoodsOperationDTO goodsOperationDTO, String goodsId);
-
+    void updateGoods(Goods goods);
     /**
      * 查询商品VO
      *
@@ -139,7 +139,7 @@ public interface GoodsService extends IService<Goods> {
      * @return 操作结果
      */
     Boolean deleteGoods(List<String> goodsIds);
-
+    void  deleteGoods1(String goodsId);
     /**
      * 设置商品运费模板
      *
