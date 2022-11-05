@@ -2,7 +2,12 @@ package cn.lili.controller.settings;
 
 
 import cn.lili.common.enums.ResultUtil;
+import cn.lili.common.security.AuthUser;
+import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.ResultMessage;
+import cn.lili.modules.member.entity.dos.Member;
+import cn.lili.modules.member.entity.vo.MemberVO;
+import cn.lili.modules.member.service.MemberService;
 import cn.lili.modules.store.entity.dto.StoreAfterSaleAddressDTO;
 import cn.lili.modules.store.entity.dto.StoreSettingDTO;
 import cn.lili.modules.store.entity.vos.StoreVO;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Objects;
 
 /**
  * 店铺端,店铺设置接口
@@ -33,8 +39,9 @@ public class StoreSettingsController {
     /**
      * 店铺
      */
+
     @Autowired
-    private StoreServiceZy storeServiceZy;
+    private MemberService memberService;
     /**
      * 店铺详情
      */
@@ -43,12 +50,12 @@ public class StoreSettingsController {
 
     @ApiOperation(value = "获取商家设置")
     @GetMapping
-    public ResultMessage<StoreVO> get() {
-        // 获取当前登录商家内容
-        StoreVO s = storeServiceZy.getStoreDetail();
-        return ResultUtil.data(storeServiceZy.getStoreDetail());
+    public ResultMessage<MemberVO> get() {
+        // 获取当前登录用户内容
+        AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
+        String id = currentUser.getId();
+        return ResultUtil.data(memberService.getMember(id));
     }
-
 
     @ApiOperation(value = "修改商家设置")
     @PutMapping
