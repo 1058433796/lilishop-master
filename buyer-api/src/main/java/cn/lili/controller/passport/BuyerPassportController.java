@@ -1,33 +1,20 @@
 package cn.lili.controller.passport;
 
 
-import cn.lili.common.enums.ResultCode;
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.common.security.enums.UserEnums;
 import cn.lili.common.security.token.Token;
-import cn.lili.common.utils.BeanUtil;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.modules.member.entity.dos.Member;
 import cn.lili.modules.member.service.MemberService;
-import cn.lili.modules.store.entity.dos.Store;
-import cn.lili.modules.store.entity.dos.StoreDetail;
-import cn.lili.modules.store.entity.enums.StoreStatusEnum;
-import cn.lili.modules.store.entity.vos.CompanySecondVo;
-import cn.lili.modules.store.entity.vos.CompanyVo;
-import cn.lili.modules.store.service.StoreDetailService;
-import cn.lili.modules.store.service.StoreService;
-import cn.lili.modules.store.service.StoreServiceZy;
-import cn.lili.modules.verification.service.VerificationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -40,7 +27,7 @@ import javax.validation.constraints.NotNull;
 @RestController
 @Api(tags = "店铺端,商家登录接口 ")
 @RequestMapping("/store/passport/login")
-public class StorePassportController {
+public class BuyerPassportController {
 
     /**
      * 会员

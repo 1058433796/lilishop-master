@@ -39,8 +39,6 @@ public class StoreSettingsController {
     /**
      * 店铺
      */
-    @Autowired
-    private StoreServiceZy storeServiceZy;
 
     @Autowired
     private MemberService memberService;
