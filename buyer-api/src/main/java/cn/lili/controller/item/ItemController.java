@@ -8,6 +8,7 @@ import cn.lili.common.security.context.UserContext;
 import cn.lili.common.vo.ResultMessage;
 import cn.lili.common.vo.ResultMessageG;
 import cn.lili.modules.goods.entity.dos.Goods;
+import cn.lili.modules.goods.entity.dos.GoodsTest;
 import cn.lili.modules.goods.service.GoodsService;
 import cn.lili.modules.item.entity.*;
 import cn.lili.modules.item.service.ItemGuarantyService;
@@ -15,16 +16,34 @@ import cn.lili.modules.item.service.ItemSchemeService;
 import cn.lili.modules.item.service.ItemService;
 import cn.lili.modules.scheme.entity.Scheme;
 import cn.lili.modules.scheme.service.SchemeService;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import cn.lili.modules.item.entity.ItemSearchParams;
+import org.springframework.web.client.RestTemplate;
+
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -142,20 +161,100 @@ public class ItemController {
         return ResultUtilG.data(itemService.queryLogin(username,password));
     }
     @ApiOperation(value = "新增商品")
-    @PostMapping(value = "/commodity/v1/add",consumes = "application/json", produces = "application/json")
-    public ResultMessage<Goods> save1(@RequestBody Goods goods) {
-        if (goodsService.saveGoods(goods)){
-            return ResultUtil.success();
+    @PostMapping(value = "/commodity/v1/add")
+    public void save1(@RequestBody GoodsTest goods) {
+        //创建请求头
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        String url = "http://112.230.202.198:8008/commodity/v1/add";
+        HttpPost post = new HttpPost(url);
+        JSONObject jsonObject = new JSONObject();;
+//            StringEntity s = new StringEntity(goods.toString());
+//            s.setContentEncoding("UTF-8");
+//            s.setContentType("application/json");
+            jsonObject.put("id",goods.getId());
+            jsonObject.put("name",goods.getName());
+            jsonObject.put("ansi",goods.getAnsi());
+            jsonObject.put("en",goods.getEn());
+            jsonObject.put("gb",goods.getGb());
+            jsonObject.put("fire_certification",goods.getFire_certification());
+            jsonObject.put("material",goods.getMaterial());
+            jsonObject.put("dimensions",goods.getDimensions());
+            jsonObject.put("load_bearing",goods.getLoad_bearing());
+            jsonObject.put("high_level",goods.getHigh_level());
+            jsonObject.put("adjustable_parameter",goods.getAdjustable_parameter());
+            jsonObject.put("auxiliary_certification",goods.getAuxiliary_certification());
+            jsonObject.put("model",goods.getModel());
+            jsonObject.put("brand",goods.getBrand());
+            jsonObject.put("unitPrice",goods.getUnitPrice());
+            jsonObject.put("finishingFace",goods.getFinishingFace());
+            post.addHeader("content-type", "application/json");
+            post.setEntity(new StringEntity(jsonObject.toString(), HTTP.UTF_8));
+        try {
+            CloseableHttpResponse response = httpClient.execute(post);
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                System.out.println("响应内容：");
+                System.out.println(EntityUtils.toString(entity));
+            }
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        else {
-            return ResultUtil.error(GOODS_ERROR);
-        }
+
+
     }
     @ApiOperation(value = "修改商品")
     @PutMapping(value = "/commodity/v1/update")
-    public ResultMessage<Goods> update1(@RequestBody Goods goods) {
-        goodsService.updateGoods(goods);
-        return ResultUtil.success();
+    public void update1(@RequestBody GoodsTest goods) {
+        //创建请求头
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        String url = "http://112.230.202.198:8008/commodity/v1/update";
+        HttpPut post = new HttpPut(url);
+        JSONObject jsonObject = new JSONObject();;
+//            StringEntity s = new StringEntity(goods.toString());
+//            s.setContentEncoding("UTF-8");
+//            s.setContentType("application/json");
+        jsonObject.put("id",goods.getId());
+        jsonObject.put("name",goods.getName());
+        jsonObject.put("ansi",goods.getAnsi());
+        jsonObject.put("en",goods.getEn());
+        jsonObject.put("gb",goods.getGb());
+        jsonObject.put("fire_certification",goods.getFire_certification());
+        jsonObject.put("material",goods.getMaterial());
+        jsonObject.put("dimensions",goods.getDimensions());
+        jsonObject.put("load_bearing",goods.getLoad_bearing());
+        jsonObject.put("high_level",goods.getHigh_level());
+        jsonObject.put("adjustable_parameter",goods.getAdjustable_parameter());
+        jsonObject.put("auxiliary_certification",goods.getAuxiliary_certification());
+        jsonObject.put("model",goods.getModel());
+        jsonObject.put("brand",goods.getBrand());
+        jsonObject.put("unitPrice",goods.getUnitPrice());
+        jsonObject.put("finishingFace",goods.getFinishingFace());
+        post.addHeader("content-type", "application/json");
+        post.setEntity(new StringEntity(jsonObject.toString(), HTTP.UTF_8));
+        try {
+            CloseableHttpResponse response = httpClient.execute(post);
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                System.out.println("响应内容：");
+                System.out.println(EntityUtils.toString(entity));
+            }
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @ApiOperation(value = "删除商品")
