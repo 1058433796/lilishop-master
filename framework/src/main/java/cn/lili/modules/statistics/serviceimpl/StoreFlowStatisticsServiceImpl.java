@@ -66,7 +66,7 @@ public class StoreFlowStatisticsServiceImpl extends ServiceImpl<StoreFlowStatist
         QueryWrapper queryWrapper = getQueryWrapper1(goodsStatisticsQueryParam);
         //根据商品分组
         queryWrapper.groupBy("component_id");
-        queryWrapper.groupBy("component_name");
+        queryWrapper.groupBy("pm");
 
         //查询前X记录
         Page page = new Page<GoodsStatisticsDataVO>(1, num);
