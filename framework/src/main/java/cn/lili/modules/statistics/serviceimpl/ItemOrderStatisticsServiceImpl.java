@@ -71,22 +71,31 @@ public class ItemOrderStatisticsServiceImpl extends ServiceImpl<ItemOrderStatist
         orderOverviewVO.setPaymentOrderNum(payment != null && payment.containsKey("num") ? (Long) payment.get("num") : 0L);
         orderOverviewVO.setPaymentAmount(payment != null && payment.containsKey("trade_amount") ? Double.parseDouble(payment.get("trade_amount").toString()) : 0D);
 
-        queryWrapper.eq("pay_status", "未付款");
-        payment = this.getMap(queryWrapper);
-        orderOverviewVO.setUnpaymentOrderNum(payment != null && payment.containsKey("num") ? (Long) payment.get("num") : 0L);
-        orderOverviewVO.setUnpaymentAmount(payment != null && payment.containsKey("trade_amount") ? Double.parseDouble(payment.get("trade_amount").toString()) : 0D);
-        //付款人数
-        queryWrapper = Wrappers.query();
-        queryWrapper.between("create_time", dates[0], dates[1]);
+
+        QueryWrapper queryWrapper1 = Wrappers.query();
+        queryWrapper1.between("create_time", dates[0], dates[1]);
         //如果有店铺id传入，则查询店铺
         if (StringUtils.isNotEmpty(statisticsQueryParam.getStoreId())) {
-            queryWrapper.eq("store_id", statisticsQueryParam.getStoreId());
+            queryWrapper1.eq("store_id", statisticsQueryParam.getStoreId());
         }
-        queryWrapper.select("COUNT(0) AS num");
-        queryWrapper.groupBy("buyer_id");
-        Map paymentMemberNum = this.getMap(queryWrapper);
+        queryWrapper1.select("SUM(order_amount) AS trade_amount , COUNT(0) AS num");
+        queryWrapper1.eq("pay_status", "未付款");
+        payment = this.getMap(queryWrapper1);
+        orderOverviewVO.setUnpaymentOrderNum(payment != null && payment.containsKey("num") ? (Long) payment.get("num") : 0L);
+        orderOverviewVO.setUnpaymentAmount(payment != null && payment.containsKey("trade_amount") ? Double.parseDouble(payment.get("trade_amount").toString()) : 0D);
 
-        orderOverviewVO.setPaymentsNum(paymentMemberNum != null && paymentMemberNum.containsKey("num") ? (Long) paymentMemberNum.get("num") : 0L);
+        //付款人数
+//        queryWrapper = Wrappers.query();
+//        queryWrapper.between("create_time", dates[0], dates[1]);
+//        //如果有店铺id传入，则查询店铺
+//        if (StringUtils.isNotEmpty(statisticsQueryParam.getStoreId())) {
+//            queryWrapper.eq("store_id", statisticsQueryParam.getStoreId());
+//        }
+//        queryWrapper.select("COUNT(0) AS num");
+//        queryWrapper.groupBy("buyer_id");
+//        Map paymentMemberNum = this.getMap(queryWrapper);
+//
+//        orderOverviewVO.setPaymentsNum(paymentMemberNum != null && paymentMemberNum.containsKey("num") ? (Long) paymentMemberNum.get("num") : 0L);
         return orderOverviewVO;
     }
 
