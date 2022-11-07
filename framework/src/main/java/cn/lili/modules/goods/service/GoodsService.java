@@ -27,7 +27,7 @@ public interface GoodsService extends IService<Goods> {
      * @param brandIds 品牌ids
      */
     List<Goods> getByBrandIds(List<String> brandIds);
-
+    Goods getByGoodsId(String goodsId);
     /**
      * 下架所有商家商品
      *

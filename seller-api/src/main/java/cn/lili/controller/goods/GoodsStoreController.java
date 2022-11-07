@@ -117,17 +117,33 @@ public class GoodsStoreController {
     @ApiOperation(value = "新增商品")
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
     public ResultMessage<GoodsOperationDTO> save(@Valid @RequestBody GoodsOperationDTO goodsOperationDTO) {
+        System.out.println("开始调用");
         goodsService.addGoods(goodsOperationDTO);
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         String url = "http://112.230.202.198:8008/commodity/v1/add";
         HttpPost post = new HttpPost(url);
         JSONObject jsonObject = new JSONObject();;
-        jsonObject.put("id",goodsOperationDTO.getGoodsId());
+        jsonObject.put("id",goodsOperationDTO.getGoodsCode());
         jsonObject.put("name",goodsOperationDTO.getGoodsName());
         jsonObject.put("ansi",goodsOperationDTO.getAnsiCert());
-        jsonObject.put("en",goodsOperationDTO.getEnCert());
-        jsonObject.put("gb",goodsOperationDTO.getGbCert());
-        jsonObject.put("fire_certification",goodsOperationDTO.getFireProofCert());
+        if(goodsOperationDTO.getEnCert().equals("有")){
+            jsonObject.put("en",true);
+        }
+        else {
+            jsonObject.put("en",false);
+        }
+        if(goodsOperationDTO.getGbCert().equals("有")){
+            jsonObject.put("gb",true);
+        }
+        else {
+            jsonObject.put("gb",false);
+        }
+        if(goodsOperationDTO.getFireProofCert().equals("有")){
+            jsonObject.put("fire_certification",true);
+        }
+        else {
+            jsonObject.put("fire_certification",false);
+        }
         jsonObject.put("material",goodsOperationDTO.getMaterial());
         jsonObject.put("dimensions",goodsOperationDTO.getSize());
         jsonObject.put("load_bearing",goodsOperationDTO.getLoadBearing());
@@ -138,11 +154,13 @@ public class GoodsStoreController {
         jsonObject.put("brand",goodsOperationDTO.getGoodsBrand());
         jsonObject.put("unitPrice",goodsOperationDTO.getGoodsDisplayPrice());
         jsonObject.put("finishingFace",goodsOperationDTO.getDecoration());
+        System.out.println("json"+jsonObject.toString());
         post.addHeader("content-type", "application/json");
         post.setEntity(new StringEntity(jsonObject.toString(), HTTP.UTF_8));
         try {
             CloseableHttpResponse response = httpClient.execute(post);
             HttpEntity entity = response.getEntity();
+            System.out.println(response);
             if (entity != null) {
                 System.out.println("响应内容：");
                 System.out.println(EntityUtils.toString(entity));
@@ -168,12 +186,27 @@ public class GoodsStoreController {
         String url = "http://112.230.202.198:8008/commodity/v1/update";
         HttpPut post = new HttpPut(url);
         JSONObject jsonObject = new JSONObject();;
-        jsonObject.put("id",goodsOperationDTO.getGoodsId());
+        jsonObject.put("id",goodsOperationDTO.getGoodsCode());
         jsonObject.put("name",goodsOperationDTO.getGoodsName());
         jsonObject.put("ansi",goodsOperationDTO.getAnsiCert());
-        jsonObject.put("en",goodsOperationDTO.getEnCert());
-        jsonObject.put("gb",goodsOperationDTO.getGbCert());
-        jsonObject.put("fire_certification",goodsOperationDTO.getFireProofCert());
+        if(goodsOperationDTO.getEnCert().equals("有")){
+            jsonObject.put("en",true);
+        }
+        else {
+            jsonObject.put("en",false);
+        }
+        if(goodsOperationDTO.getGbCert().equals("有")){
+            jsonObject.put("gb",true);
+        }
+        else {
+            jsonObject.put("gb",false);
+        }
+        if(goodsOperationDTO.getFireProofCert().equals("有")){
+            jsonObject.put("fire_certification",true);
+        }
+        else {
+            jsonObject.put("fire_certification",false);
+        }
         jsonObject.put("material",goodsOperationDTO.getMaterial());
         jsonObject.put("dimensions",goodsOperationDTO.getSize());
         jsonObject.put("load_bearing",goodsOperationDTO.getLoadBearing());
@@ -227,12 +260,15 @@ public class GoodsStoreController {
     @PutMapping(value = "/delete")
     @ApiImplicitParam(name = "goodsId", value = "商品ID", required = true, paramType = "query", allowMultiple = true)
     public ResultMessage<Object> deleteGoods(@RequestParam List<String> goodsId) {
+        Goods goods=new Goods();
+        for (String id:goodsId){
+            goods=goodsService.getByGoodsId(id);
+        }
         goodsService.deleteGoods(goodsId);
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         String url = "http://112.230.202.198:8008/commodity/v1/delete";
-        for (String id:goodsId) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id",id);
+            jsonObject.put("id",goods.getGoodsCode());
             HttpPut post = new HttpPut(url);
             post.addHeader("content-type", "application/json");
             post.setEntity(new StringEntity(jsonObject.toString(), HTTP.UTF_8));
@@ -241,6 +277,7 @@ public class GoodsStoreController {
                 HttpEntity entity = response.getEntity();
                 if (entity != null) {
                     System.out.println("响应内容：");
+                    System.out.println(jsonObject.toString());
                     System.out.println(EntityUtils.toString(entity));
                 }
                 response.close();
@@ -253,7 +290,6 @@ public class GoodsStoreController {
                     e.printStackTrace();
                 }
             }
-        }
 
         return ResultUtil.success();
     }

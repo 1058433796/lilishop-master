@@ -721,5 +721,9 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         }
         return queryWrapper;
     }
+    @Override
+    public Goods getByGoodsId(String goodsId){
+        return this.getById(goodsId);
+    }
 
 }
