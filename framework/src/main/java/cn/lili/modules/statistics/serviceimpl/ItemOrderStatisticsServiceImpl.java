@@ -71,6 +71,10 @@ public class ItemOrderStatisticsServiceImpl extends ServiceImpl<ItemOrderStatist
         orderOverviewVO.setPaymentOrderNum(payment != null && payment.containsKey("num") ? (Long) payment.get("num") : 0L);
         orderOverviewVO.setPaymentAmount(payment != null && payment.containsKey("trade_amount") ? Double.parseDouble(payment.get("trade_amount").toString()) : 0D);
 
+        queryWrapper.eq("pay_status", "未付款");
+        payment = this.getMap(queryWrapper);
+        orderOverviewVO.setUnpaymentOrderNum(payment != null && payment.containsKey("num") ? (Long) payment.get("num") : 0L);
+        orderOverviewVO.setUnpaymentAmount(payment != null && payment.containsKey("trade_amount") ? Double.parseDouble(payment.get("trade_amount").toString()) : 0D);
         //付款人数
         queryWrapper = Wrappers.query();
         queryWrapper.between("create_time", dates[0], dates[1]);

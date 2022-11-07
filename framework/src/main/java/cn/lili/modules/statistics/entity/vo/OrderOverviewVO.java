@@ -32,15 +32,18 @@ public class OrderOverviewVO {
      */
     @ApiModelProperty(value = "付款订单数量")
     private Long paymentOrderNum;
-
+    @ApiModelProperty(value = "付款金额")
+    private Double paymentAmount;
+    @ApiModelProperty(value = "未付款订单数量")
+    private Long unpaymentOrderNum;
+    @ApiModelProperty(value = "未付款金额")
+    private Double unpaymentAmount;
     @ApiModelProperty(value = "付款人数")
     private Long paymentsNum;
 
     @ApiModelProperty(value = "总订单数")
     private Long totalOrders;
 
-    @ApiModelProperty(value = "付款金额")
-    private Double paymentAmount;
 
 
     /**
