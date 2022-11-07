@@ -162,6 +162,9 @@ ignored:
     - /**/*.css
     - /**/*.png
     - /**/*.ico
+    - /store/item/item/login
+#    - /store/item/item/commodity/v1/add
+#    - /store/item/item/commodity/v1/update
 
 # Swagger界面内容配置
 swagger:

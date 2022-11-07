@@ -22,7 +22,7 @@ public interface ItemOrderServiceZy extends IService<ItemOrder> {
      */
     IPage<ItemOrder> queryByParams(ItemOrderSearchParamsZy itemOrderSearchParams);
     List<SchemeComponent> queryOrderComponent(String oid, String storeId);
-    List<ItemOrder> getAssociatedOrders(String oid);
+    List<ItemOrder> getAssociatedOrders(String itemId);
 
     IPage<ItemOrder> queryAssociatedContractOrders(ItemOrderSearchParamsZy itemOrderSearchParamsZy);
 

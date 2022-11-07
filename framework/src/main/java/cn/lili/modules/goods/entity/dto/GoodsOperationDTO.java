@@ -25,7 +25,7 @@ public class GoodsOperationDTO implements Serializable {
 
     private static final long serialVersionUID = -509667581371776913L;
 
-    @ApiModelProperty(hidden = true)
+//    @ApiModelProperty(hidden = true)
     private String goodsId;
 
     @ApiModelProperty(value = "商品价格", required = true)
@@ -136,6 +136,8 @@ public class GoodsOperationDTO implements Serializable {
     private Float goodsMarketPrice;
 
 
+    private String goodsCountUnit;
+
     private String ansiCert;
 
     private String enCert;
@@ -151,6 +153,8 @@ public class GoodsOperationDTO implements Serializable {
     private String decoration;
 
     private String size;
+
+
 
     private String loadBearing;
 

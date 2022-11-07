@@ -159,7 +159,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         queryWrapper.eq("delete_flag", false);
         return this.count(queryWrapper);
     }
-
+    @Override
+    public boolean saveGoods(Goods goods){
+        boolean save = this.save(goods);
+        return save;
+    }
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addGoods(GoodsOperationDTO goodsOperationDTO) {
@@ -190,7 +194,12 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         this.generateEs(goods);
     }
 
-
+    @Override
+    public void updateGoods(Goods goods){
+        if (goods.getId() != null) {
+            this.updateById(goods);
+        }
+    }
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void editGoods(GoodsOperationDTO goodsOperationDTO, String goodsId) {
@@ -398,8 +407,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         List<Goods> goodsList = this.list(queryWrapper);
         this.updateGoodsStatus(goodsIds, goodsStatusEnum, goodsList);
         return result;
-    }
+    }@Override
+    public void deleteGoods1(String goodsId){
+        this.baseMapper.deleteById(goodsId);
 
+    }
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean deleteGoods(List<String> goodsIds) {
@@ -708,6 +720,10 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
             queryWrapper.eq(Goods::getStoreId, authUser.getStoreId());
         }
         return queryWrapper;
+    }
+    @Override
+    public Goods getByGoodsId(String goodsId){
+        return this.getById(goodsId);
     }
 
 }

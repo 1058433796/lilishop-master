@@ -173,5 +173,7 @@ public class ItemOrder {
 
     @ApiModelProperty(value = "采购方物流签署时间")
     private Date buyerLogisticSignTime;
+
+    private String itemId;
 }
 

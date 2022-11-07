@@ -89,6 +89,9 @@ public class StoreServiceZyImpl extends ServiceImpl<StoreMapperZy, Store> implem
     public StoreVO getStoreDetail() {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
         StoreVO storeVO = this.baseMapper.getStoreDetail(currentUser.getStoreId());
+        System.out.println("?");
+        System.out.println(currentUser.getNickName());
+        System.out.println("?");
         storeVO.setNickName(currentUser.getNickName());
         return storeVO;
     }

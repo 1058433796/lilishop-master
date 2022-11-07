@@ -39,4 +39,9 @@ public class SchemeComponentServiceImpl extends ServiceImpl<SchemeComponentMappe
     public List<IdTotal> getOrderBy(String schemeId) {
         return this.baseMapper.getOrderBy(schemeId);
     }
+
+    @Override
+    public String getSchemeSumById(String schemeid){
+        return this.baseMapper.getSchemeSumById(schemeid);
+    }
 }

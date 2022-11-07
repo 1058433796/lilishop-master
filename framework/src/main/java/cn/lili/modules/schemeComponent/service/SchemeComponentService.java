@@ -30,4 +30,6 @@ public interface SchemeComponentService extends IService<SchemeComponent> {
     // 获取方案中包含每个供应商的id及其对应的总价
     @Select("SELECT supplier_id id, sum(component_unit_price*component_number) total FROM scheme_component WHERE scheme_id=#{schemeId} GROUP BY supplier_id")
     List<IdTotal> getOrderBy(@Param("schemeId") String schemeId);
+
+    String getSchemeSumById(String schemeId);
 }
