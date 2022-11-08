@@ -98,7 +98,9 @@ public class StorePassportController {
                 map.put("role", "admin");
             }
         }else{
-            if(member.getHaveStore() && storeService.getById(member.getStoreId()) != null){
+            if(member.getHaveStore()){
+                Store store= storeService.getById(member.getStoreId());
+
                 map.put("role", "store");
             }else{
                 map.put("role", "member");

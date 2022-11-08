@@ -9,8 +9,12 @@ server:
       max: 1000
 
 # 服务器ip地址 本机开发时为localhost
-server-ip: 112.230.202.198:8890
-#server-ip: 127.0.0.1:8890
+# 关于端口：
+#在common-api上配置静态资源访问 common-api是8890端口
+#所以server-ip的端口也是8890 由于服务器的nginx配置了请求转发
+#因此服务器配置端口是9091
+#server-ip: 112.230.202.198:9091
+server-ip: 127.0.0.1:8890
 
 # 与Spring Boot 2一样，默认情况下，大多数端点都不通过http公开，我们公开了所有端点。对于生产，您应该仔细选择要公开的端点。
 management:
@@ -24,8 +28,8 @@ management:
       exposure:
         include: '*'
 #        文件保存路径
-upload-path: /remoteProject/data/
-#upload-path: D:\data\
+#upload-path: /remoteProject/data/
+upload-path: D:\data\
 
 spring:
   application:
