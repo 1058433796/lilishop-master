@@ -57,6 +57,8 @@ public class Category extends BaseEntity {
     @ApiModelProperty(value = "是否支持频道")
     private Boolean supportChannel;
 
+    private Boolean common;
+
 
 
     public Category(String id, String createBy, Date createTime, String updateBy, Date updateTime, Boolean deleteFlag, String name, String parentId, Integer level, BigDecimal sortOrder, Double commissionRate, String image, Boolean supportChannel) {
@@ -68,6 +70,7 @@ public class Category extends BaseEntity {
         this.commissionRate = commissionRate;
         this.image = image;
         this.supportChannel = supportChannel;
+        this.common = true;
     }
 
     public Category(String id, String name, String parentId, Integer level, BigDecimal sortOrder, Double commissionRate, String image, Boolean supportChannel) {
@@ -78,5 +81,6 @@ public class Category extends BaseEntity {
         this.commissionRate = commissionRate;
         this.image = image;
         this.supportChannel = supportChannel;
+        this.common = true;
     }
 }
