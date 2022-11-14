@@ -65,12 +65,12 @@ public class itemOrderController {
         return ResultUtil.data(true);
     }
 
-    @ApiOperation("根据订单号寻找关联订单")
-    @GetMapping("/associated/{oid}")
-    public ResultMessage<Object> associatedOrders(@PathVariable("oid") String oid) {
-        ItemOrder itemOrder = itemOrderServiceZy.getById(oid);
-        String schemePrimaryId = itemOrder.getSchemeId();
-        List<ItemOrder> itemOrders =  itemOrderServiceZy.getAssociatedOrders(schemePrimaryId);
+    @ApiOperation("根据项目id和方案ID寻找关联订单")
+    @GetMapping("/associated/{itemid}/{schemeId}")
+    public ResultMessage<List<ItemOrder>> associatedOrders(@PathVariable("itemid") String itemId,@PathVariable("schemeId") String schemeId) {
+//        ItemOrder itemOrder = itemOrderServiceZy.getById(oid);
+//        String schemePrimaryId = itemOrder.getSchemeId();
+        List<ItemOrder> itemOrders =  itemOrderServiceZy.getAssociatedOrders(itemId,schemeId);
         return  ResultUtil.data(itemOrders);
     }
 

@@ -22,8 +22,11 @@ public class ItemOrderSearchParamsZy extends PageVO {
     private String endDate;
     private String payStatus;
     private String replyStatus;
+    private String itemId;
 
     private String schemeId;
+
+    private String contractStatus;
     public <T> QueryWrapper<T> queryWrapper() {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         if (CharSequenceUtil.isNotEmpty(buyerId)) {
@@ -64,7 +67,12 @@ public class ItemOrderSearchParamsZy extends PageVO {
         if (CharSequenceUtil.isNotEmpty(schemeId)) {
             queryWrapper.like("scheme_id", schemeId);
         }
-
+        if (CharSequenceUtil.isNotEmpty(itemId)) {
+            queryWrapper.like("item_id", itemId);
+        }
+        if (CharSequenceUtil.isNotEmpty(contractStatus)) {
+            queryWrapper.like("contract_status", contractStatus);
+        }
         return queryWrapper;
     }
 

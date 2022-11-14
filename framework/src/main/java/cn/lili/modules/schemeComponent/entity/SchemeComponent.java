@@ -14,7 +14,7 @@ public class SchemeComponent {
 
     private String componentUnitPrice;
 
-    private String componentNumber;
+    private Integer componentNumber;
 
     private String schemeId;
 
@@ -30,5 +30,6 @@ public class SchemeComponent {
 
     private String xh;
 
-
+    private String orderId;
+    private String parameter;
 }

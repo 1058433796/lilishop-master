@@ -40,11 +40,12 @@ public interface ItemOrderMapperZy extends BaseMapper<ItemOrder> {
 
 
 
+
     @Select("SELECT * FROM scheme_component WHERE scheme_id = " +
             "(SELECT scheme_id FROM item_order WHERE order_id=#{oid})AND supplier_id=#{storeId}")
     List<SchemeComponent> queryOrderComponent(String oid, String storeId);
-    @Select("SELECT * FROM item_order WHERE item_id=#{itemId}")
-    List<ItemOrder> getAssociatedOrders(String itemId);
+    @Select("SELECT * FROM item_order WHERE item_id=#{itemId} and scheme_id=#{schemeId}")
+    List<ItemOrder> getAssociatedOrders(String itemId,String schemeId);
     @Update("UPDATE item_order SET pay_status='已付款', pay_time=#{date} WHERE order_id=#{oid}")
     void payOrder(String oid, Date date);
 
@@ -56,5 +57,6 @@ public interface ItemOrderMapperZy extends BaseMapper<ItemOrder> {
             "NATURAL JOIN " +
             "(SELECT order_id, buyer_state FROM contract) AS c ${ew.customSqlSegment}")
     IPage<ItemOrder> queryAssociatedContractOrders(IPage<Contract> page, @Param(Constants.WRAPPER) Wrapper<Contract> queryWrapper);
-
+    @Select("SELECT * FROM item_order where item_id=#{itemId} and contract_status='已签署' ")
+    IPage<ItemOrder> querySignedOrder(String itemId);
 }

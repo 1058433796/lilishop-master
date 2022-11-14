@@ -28,6 +28,7 @@ public interface GoodsService extends IService<Goods> {
      */
     List<Goods> getByBrandIds(List<String> brandIds);
     Goods getByGoodsId(String goodsId);
+    List<Goods> getAll();
     /**
      * 下架所有商家商品
      *
@@ -184,4 +185,7 @@ public interface GoodsService extends IService<Goods> {
      */
     long countStoreGoodsNum(String storeId);
 
+    String getSupplyerByBrandName(String name);
+
+    String getSupplyerNameByBrandName(String name);
 }

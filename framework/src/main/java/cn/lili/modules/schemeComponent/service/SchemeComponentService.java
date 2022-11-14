@@ -32,4 +32,6 @@ public interface SchemeComponentService extends IService<SchemeComponent> {
     List<IdTotal> getOrderBy(@Param("schemeId") String schemeId);
 
     String getSchemeSumById(String schemeId);
+
+    void saveComponent(SchemeComponent schemeComponent);
 }

@@ -725,5 +725,17 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     public Goods getByGoodsId(String goodsId){
         return this.getById(goodsId);
     }
+    @Override
+    public String getSupplyerByBrandName(String name){
+        return this.baseMapper.getSupplyerByBrandName(name);
+    }
 
+    @Override
+    public String getSupplyerNameByBrandName(String name){
+        return this.baseMapper.getSupplyerNameByBrandName(name);
+    }
+    @Override
+    public List<Goods> getAll(){
+        return this.baseMapper.getAll();
+    }
 }

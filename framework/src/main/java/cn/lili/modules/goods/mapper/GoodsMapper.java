@@ -47,4 +47,12 @@ public interface GoodsMapper extends BaseMapper<Goods> {
      */
     @Select("select g.* from li_goods as g ")
     IPage<GoodsVO> queryByParams(IPage<GoodsVO> page, @Param(Constants.WRAPPER) Wrapper<GoodsVO> queryWrapper);
+
+    @Select("SELECT distinct store_id FROM li_goods WHERE goods_brand=#{name}")
+    String getSupplyerByBrandName(String name);
+
+    @Select("SELECT *FROM li_goods_copy")
+    List<Goods> getAll();
+    @Select("SELECT distinct store_name FROM li_goods WHERE goods_brand=#{name}")
+    String getSupplyerNameByBrandName(String name);
 }

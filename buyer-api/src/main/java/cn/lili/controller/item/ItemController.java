@@ -16,6 +16,7 @@ import cn.lili.modules.item.service.ItemSchemeService;
 import cn.lili.modules.item.service.ItemService;
 import cn.lili.modules.scheme.entity.Scheme;
 import cn.lili.modules.scheme.service.SchemeService;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.ApiImplicitParam;
@@ -26,6 +27,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
@@ -77,9 +79,7 @@ public class ItemController {
     @ApiOperation(value = "分页获取项目列表")
     @GetMapping("/list")
     public ResultMessage<IPage<Item>> getByPage(ItemSearchParams itemSearchParams) {
-        //获取当前登录商家账号
-//        String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
-//        itemSearchParams.setBuyerId(storeId);
+
         return ResultUtil.data(itemService.queryByParams(itemSearchParams));
     }
     @PostMapping(consumes = "application/json", produces = "application/json")

@@ -33,6 +33,8 @@ public class ContractSearchParams extends PageVO {
 
     private String schemeId;
 
+    private String itemId;
+
     public <T> QueryWrapper<T> queryWrapper() {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         if (CharSequenceUtil.isNotEmpty(buyerId)) {
@@ -68,6 +70,10 @@ public class ContractSearchParams extends PageVO {
         if (CharSequenceUtil.isNotEmpty(storeId)) {
             queryWrapper.eq("store_id", storeId);
         }
+        if (CharSequenceUtil.isNotEmpty(itemId)) {
+            queryWrapper.eq("item_id", itemId);
+        }
+
 
 
         return queryWrapper;

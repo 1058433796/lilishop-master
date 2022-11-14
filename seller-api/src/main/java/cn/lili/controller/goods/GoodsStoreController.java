@@ -114,6 +114,71 @@ public class GoodsStoreController {
         return ResultUtil.data(goods);
     }
 
+    @ApiOperation(value = "把目前数据库中的商品导入到第三方数据库")
+    @PostMapping(value = "/import")
+    public void importGoods() throws IOException {
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        String url = "http://112.230.202.198:8008/commodity/v1/add";
+        List<Goods> goods=goodsService.getAll();
+        try {
+        for (Goods good:goods) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", good.getId());
+            jsonObject.put("name", good.getGoodsName());
+            jsonObject.put("brand", good.getGoodsBrand());
+            jsonObject.put("model", good.getGoodsCode());
+            jsonObject.put("unitPrice",good.getGoodsDisplayPrice());
+            jsonObject.put("finishingFace", good.getDecoration());
+            jsonObject.put("ansi", good.getAnsiCert());
+            if (good.getEnCert() == "TRUE") {
+                jsonObject.put("en", true);
+            } else {
+                jsonObject.put("en", false);
+            }
+            if (good.getGbCert() == "TRUE") {
+                jsonObject.put("gb", true);
+            } else {
+                jsonObject.put("gb", false);
+            }
+            if (good.getFireProofCert() == "TRUE") {
+                jsonObject.put("fireCertification", true);
+            } else {
+                jsonObject.put("fireCertification", false);
+            }
+            jsonObject.put("material", good.getMaterial());
+            jsonObject.put("dimensions", good.getSize());
+            if(good.getLoadBearing().equals("-")||good.getLoadBearing()==null){
+                jsonObject.put("loadBearing",0);
+            }
+            else {
+                jsonObject.put("loadBearing", Integer.parseInt(good.getLoadBearing()));
+            }
+            jsonObject.put("high_level", good.getForceLevel());
+            jsonObject.put("adjustable_parameter", good.getAdjustParam());
+            jsonObject.put("auxiliary_certification", good.getAuxCert());
+            jsonObject.put("categoryName",good.getGoodsName());
+            System.out.println(jsonObject);
+            HttpPost post = new HttpPost(url);
+            post.addHeader("content-type", "application/json");
+            post.setEntity(new StringEntity(jsonObject.toString(), HTTP.UTF_8));
+            CloseableHttpResponse response = httpClient.execute(post);
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                System.out.println("响应内容：");
+                System.out.println(EntityUtils.toString(entity));
+            }
+            response.close();
+        }
+        }catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    httpClient.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+    }
     @ApiOperation(value = "新增商品")
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
     public ResultMessage<GoodsOperationDTO> save(@Valid @RequestBody GoodsOperationDTO goodsOperationDTO) {
@@ -123,7 +188,7 @@ public class GoodsStoreController {
         String url = "http://112.230.202.198:8008/commodity/v1/add";
         HttpPost post = new HttpPost(url);
         JSONObject jsonObject = new JSONObject();;
-        jsonObject.put("id",goodsOperationDTO.getGoodsCode());
+        jsonObject.put("id",goodsOperationDTO.getGoodsId());
         jsonObject.put("name",goodsOperationDTO.getGoodsName());
         jsonObject.put("ansi",goodsOperationDTO.getAnsiCert());
         if(goodsOperationDTO.getEnCert().equals("有")){

@@ -23,6 +23,7 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, Contract> i
     @Override
     public void buyerSign(String id, Date date) {
         this.baseMapper.buyerSign(id,date);
+        this.baseMapper.buyerSignOrder(id.substring(1));
     }
 
     @Override

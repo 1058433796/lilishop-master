@@ -46,4 +46,6 @@ public class Contract {
 
     private String schemeId;
 
+    private String itemId;
+
 }

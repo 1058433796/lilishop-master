@@ -44,4 +44,8 @@ public class SchemeComponentServiceImpl extends ServiceImpl<SchemeComponentMappe
     public String getSchemeSumById(String schemeid){
         return this.baseMapper.getSchemeSumById(schemeid);
     }
+    @Override
+    public void saveComponent(SchemeComponent schemeComponent){
+        this.save(schemeComponent);
+    }
 }

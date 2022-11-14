@@ -15,6 +15,8 @@ public interface ContractMapper extends BaseMapper<Contract> {
 
     @Update("UPDATE contract SET buyer_state='已签署', sign_time=#{date} WHERE id=#{id}" )
     void buyerSign(String id, Date date);
+    @Update("UPDATE item_order SET contract_status='已签署' WHERE order_id=#{id}" )
+    void buyerSignOrder(String id);
 
     @Select("select g.* from order as g")
     IPage<Contract> queryByParams(IPage<Contract> page, @Param(Constants.WRAPPER) Wrapper<Contract> queryWrapper);
