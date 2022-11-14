@@ -217,9 +217,11 @@ public class ItemOrderStatisticsServiceZyImpl extends ServiceImpl<ItemOrderStati
 
         QueryWrapper<OrderSimpleVO> queryWrapper = new QueryWrapper<>();
         Date[] dates = StatisticsDateUtil.getDateArray(statisticsQueryParam);
+        System.out.println("时间"+dates[0]+dates[1]);
         queryWrapper.between("o.create_time", dates[0], dates[1]);
         queryWrapper.eq(StringUtils.isNotEmpty(statisticsQueryParam.getStoreId()),
                 "o.buyer_id", statisticsQueryParam.getStoreId());
+        System.out.println("现在的ID"+statisticsQueryParam.getStoreId());
 
         queryWrapper.groupBy("o.order_id");
         queryWrapper.orderByDesc("o.order_id");

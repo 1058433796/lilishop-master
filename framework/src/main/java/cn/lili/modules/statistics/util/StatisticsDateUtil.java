@@ -37,7 +37,6 @@ public class StatisticsDateUtil {
         switch (searchTypeEnum) {
             case TODAY:
                 dateArray[0] = calendar.getTime();
-
                 calendar.set(Calendar.HOUR_OF_DAY, +24);
                 calendar.set(Calendar.MILLISECOND, -1);
                 dateArray[1] = calendar.getTime();
@@ -56,9 +55,7 @@ public class StatisticsDateUtil {
             case LAST_SEVEN:
                 calendar.set(Calendar.HOUR_OF_DAY, -24 * 7);
                 dateArray[0] = calendar.getTime();
-
-
-                calendar.set(Calendar.HOUR_OF_DAY, +24 * 7);
+                calendar.set(Calendar.HOUR_OF_DAY, +24 * 8);
                 calendar.set(Calendar.MILLISECOND, -1);
                 //获取过去七天
                 dateArray[1] = calendar.getTime();
@@ -69,7 +66,7 @@ public class StatisticsDateUtil {
                 dateArray[0] = calendar.getTime();
 
 
-                calendar.set(Calendar.HOUR_OF_DAY, +24 * 30);
+                calendar.set(Calendar.HOUR_OF_DAY, +24 * 31);
                 calendar.set(Calendar.MILLISECOND, -1);
                 //获取过去七天
                 dateArray[1] = calendar.getTime();

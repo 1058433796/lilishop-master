@@ -72,6 +72,10 @@ public class StoreSearchParams extends PageVO implements Serializable {
         if (StringUtils.isNotEmpty(storeName)) {
             queryWrapper.like("store_name", storeName);
         }
+        if (StringUtils.isNotEmpty(storeId)) {
+            queryWrapper.like("store_id", storeId);
+        }
+
         if (StringUtils.isNotEmpty(memberName)) {
             queryWrapper.like("member_name", memberName);
         }

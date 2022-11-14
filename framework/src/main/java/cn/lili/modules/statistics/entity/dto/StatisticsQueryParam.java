@@ -27,4 +27,7 @@ public class StatisticsQueryParam {
     @ApiModelProperty(value = "店铺ID")
     private String storeId;
 
+    @ApiModelProperty(value = "采购方ID")
+    private String buyerId;
+
 }

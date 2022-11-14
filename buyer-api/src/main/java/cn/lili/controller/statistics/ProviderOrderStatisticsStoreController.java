@@ -51,9 +51,9 @@ public class ProviderOrderStatisticsStoreController {
     @ApiOperation(value = "订单概览统计")
     @GetMapping("/overview")
     public ResultMessage<OrderOverviewVO> overview(StatisticsQueryParam statisticsQueryParam) {
-        String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
+//        String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         try {
-            statisticsQueryParam.setStoreId(storeId);
+//            statisticsQueryParam.setStoreId(storeId);
             return ResultUtil.data(itemOrderStatisticsServiceZy.overview(statisticsQueryParam));
         } catch (Exception e) {
             log.error("订单概览统计错误", e);
@@ -64,7 +64,7 @@ public class ProviderOrderStatisticsStoreController {
     @ApiOperation(value = "首页统计数据")
     @GetMapping("/home")
     public ResultMessage<HomeStatisticDataVO> homeStatistic() {
-        String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
+        String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getId();
         try {
             return ResultUtil.data(itemOrderStatisticsServiceZy.homeStatistic(storeId));
         } catch (Exception e) {
@@ -77,9 +77,9 @@ public class ProviderOrderStatisticsStoreController {
     @ApiOperation(value = "订单图表统计")
     @GetMapping
     public ResultMessage<List<OrderStatisticsDataVO>> statisticsChart(StatisticsQueryParam statisticsQueryParam) {
-        String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
+//        String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         try {
-            statisticsQueryParam.setStoreId(storeId);
+//            statisticsQueryParam.setStoreId(storeId);
             return ResultUtil.data(itemOrderStatisticsServiceZy.statisticsChart(statisticsQueryParam));
         } catch (Exception e) {
             log.error("订单图表统计错误", e);
@@ -88,12 +88,12 @@ public class ProviderOrderStatisticsStoreController {
     }
 
 
-    @ApiOperation(value = "订单统计")
+    @ApiOperation(value = "某一采购方的订单统计")
     @GetMapping("/order")
     public ResultMessage<IPage<ItemOrderSimpleVO>> order(StatisticsQueryParam statisticsQueryParam, PageVO pageVO) {
-        String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
+//        String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
         try {
-            statisticsQueryParam.setStoreId(storeId);
+//            statisticsQueryParam.setStoreId(storeId);
             return ResultUtil.data(itemOrderStatisticsServiceZy.getStatistics(statisticsQueryParam, pageVO));
         } catch (Exception e) {
             log.error("订单统计错误", e);
