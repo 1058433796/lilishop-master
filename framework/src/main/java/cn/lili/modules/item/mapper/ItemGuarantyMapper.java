@@ -1,6 +1,7 @@
 package cn.lili.modules.item.mapper;
 
 import cn.lili.modules.contract.entity.Contract;
+import cn.lili.modules.item.entity.Item;
 import cn.lili.modules.item.entity.ItemGuaranty;
 import cn.lili.modules.item.entity.ItemGuarantyDetail;
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
@@ -14,7 +15,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 public interface ItemGuarantyMapper extends BaseMapper<ItemGuaranty> {
-    @Update({"update item_guaranty set pay_flag=1 where id= #{id}"})
+    @Update({"update item_guaranty set pay_flag=1 where item_id= #{id}"})
     void setPay(String id);
 
     @Select("SELECT count(*) FROM item_guaranty WHERE buyer_id=#{buyerId} AND pay_flag=0")
@@ -45,5 +46,6 @@ public interface ItemGuarantyMapper extends BaseMapper<ItemGuaranty> {
             "(SELECT item_id, primary_id as scheme_id FROM item_scheme) isc " +
             "${ew.customSqlSegment}")
     IPage<Contract> queryContractByParams(IPage<ItemOrder> page, @Param(Constants.WRAPPER) Wrapper<ItemOrder> queryWrapper);
-
+    @Select("SELECT * FROM item_guaranty where item_id=#{itemId}")
+    ItemGuaranty searchByItemId(String itemId);
 }

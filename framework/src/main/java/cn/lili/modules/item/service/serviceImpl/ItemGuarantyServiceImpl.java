@@ -60,4 +60,9 @@ public class ItemGuarantyServiceImpl extends ServiceImpl<ItemGuarantyMapper, Ite
     private void setPay(String id) {
         this.baseMapper.setPay(id);
     }
+
+    @Override
+    public ItemGuaranty queryByItemId(String itemId){
+        return this.baseMapper.searchByItemId(itemId);
+    }
 }

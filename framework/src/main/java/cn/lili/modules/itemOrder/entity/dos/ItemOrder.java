@@ -129,7 +129,7 @@ public class ItemOrder {
 
     private double orderAmount;
 
-    private String storeReply = "已响应";
+    private String storeReply = "未响应";
 
     private String contractStatus = "未签署";
 

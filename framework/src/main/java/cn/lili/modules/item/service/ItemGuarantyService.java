@@ -35,5 +35,5 @@ public interface ItemGuarantyService extends IService<ItemGuaranty> {
     IPage<ItemOrderSimpleVO> queryOrderByParams(ItemGuarantySearchParam itemGuarantySearchParam);
     IPage<Contract> queryContractByParams(ItemGuarantySearchParam itemGuarantySearchParam);
 
-
+    ItemGuaranty queryByItemId(String itemId);
 }

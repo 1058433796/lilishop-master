@@ -47,7 +47,10 @@ public class ItemGuarantyController {
     public ResultMessage<IPage<ItemGuarantyDetail>> getGuaranty(ItemGuarantySearchParam itemGuarantySearchParam)  {
         return ResultUtil.data(itemGuarantyService.queryByParams(itemGuarantySearchParam));
     }
-
+    @GetMapping("/itemId/{id}")
+    public ResultMessage<ItemGuaranty> getGuarantyByItemId(@PathVariable String id)  {
+        return ResultUtil.data(itemGuarantyService.queryByItemId(id));
+    }
     @GetMapping("/order")
     public ResultMessage<IPage<ItemOrderSimpleVO>> getOrderGuaranty(ItemGuarantySearchParam itemGuarantySearchParam)  {
         return ResultUtil.data(itemGuarantyService.queryOrderByParams(itemGuarantySearchParam));
@@ -55,5 +58,11 @@ public class ItemGuarantyController {
     @GetMapping("/contract")
     public ResultMessage<IPage<Contract>> getContractGuaranty(ItemGuarantySearchParam itemGuarantySearchParam)  {
         return ResultUtil.data(itemGuarantyService.queryContractByParams(itemGuarantySearchParam));
+    }
+
+    @PostMapping("/pay/{itemId}")
+    public void setPay(@PathVariable String itemId){
+        itemGuarantyService.setPayFlag(itemId);
+        System.out.println("设置payflag");
     }
 }

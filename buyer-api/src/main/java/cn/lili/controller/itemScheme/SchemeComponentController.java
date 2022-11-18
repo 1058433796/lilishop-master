@@ -91,7 +91,9 @@ public class SchemeComponentController {
         AuthUser currentUser = Objects.requireNonNull(UserContext.getCurrentUser());
         System.out.println("建立订单");
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        HttpGet httpGet = new HttpGet("http://112.230.202.198:8008//doorandhardware/v1/order?userName=冯平&projectCode=43");
+        String url="http://112.230.202.198:8008//doorandhardware/v1/order?userName=冯平&projectCode=43";//"http://112.230.202.198:8008//doorandhardware/v1/order?userName="+currentUser.getNickName()+"&projectCode="+itemId
+        System.out.println(url);
+        HttpGet httpGet = new HttpGet(url);
         CloseableHttpResponse response = null;
         try {
             response = httpClient.execute(httpGet);

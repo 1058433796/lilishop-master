@@ -32,7 +32,7 @@ public class Contract {
 
     private String storeName;
 
-    private String providerState = "已签署";
+    private String providerState = "未签署";
 
     private String buyerId;
 
