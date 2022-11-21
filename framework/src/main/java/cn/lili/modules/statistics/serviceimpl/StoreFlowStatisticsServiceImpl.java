@@ -51,10 +51,10 @@ public class StoreFlowStatisticsServiceImpl extends ServiceImpl<StoreFlowStatist
         //获取查询条件
         QueryWrapper queryWrapper = getQueryWrapper(goodsStatisticsQueryParam);
         //根据商品分组
-        queryWrapper.groupBy("goods_id");
+//        queryWrapper.groupBy("goods_id");
         queryWrapper.groupBy("goods_name");
 
-        queryWrapper.eq(!StringUtils.isEmpty(goodsStatisticsQueryParam.getStoreId()), "store_id", goodsStatisticsQueryParam.getStoreId());
+//        queryWrapper.eq(!StringUtils.isEmpty(goodsStatisticsQueryParam.getStoreId()), "store_id", goodsStatisticsQueryParam.getStoreId());
         //查询前X记录
         Page page = new Page<GoodsStatisticsDataVO>(1, num);
         return this.baseMapper.getGoodsStatisticsData(page, queryWrapper);
@@ -253,7 +253,7 @@ public class StoreFlowStatisticsServiceImpl extends ServiceImpl<StoreFlowStatist
             queryWrapper.orderByDesc("num");
         }
         //设置为付款查询
-        queryWrapper.eq("flow_type", FlowTypeEnum.PAY.name());
+        queryWrapper.eq("pay_status", FlowTypeEnum.PAYED.description());
         return queryWrapper;
     }
     private QueryWrapper getQueryWrapper1(GoodsStatisticsQueryParam goodsStatisticsQueryParam) {

@@ -28,15 +28,16 @@ public class GoodsStatisticsManagerController {
     @Autowired
     private StoreFlowStatisticsService storeFlowStatisticsService;
 
+
     @ApiOperation(value = "获取统计列表,排行前一百的数据")
     @GetMapping
     public ResultMessage<List<GoodsStatisticsDataVO>> getByPage(GoodsStatisticsQueryParam goodsStatisticsQueryParam) {
         return ResultUtil.data(storeFlowStatisticsService.getGoodsStatisticsData(goodsStatisticsQueryParam, 100));
     }
 
-    @ApiOperation(value = "获取行业统计列表")
-    @GetMapping("/getCategoryByPage")
-    public ResultMessage<List<CategoryStatisticsDataVO>> getCategoryByPage(GoodsStatisticsQueryParam goodsStatisticsQueryParam) {
-        return ResultUtil.data(storeFlowStatisticsService.getCategoryStatisticsData(goodsStatisticsQueryParam));
-    }
+//    @ApiOperation(value = "获取行业统计列表")
+//    @GetMapping("/getCategoryByPage")
+//    public ResultMessage<List<CategoryStatisticsDataVO>> getCategoryByPage(GoodsStatisticsQueryParam goodsStatisticsQueryParam) {
+//        return ResultUtil.data(storeFlowStatisticsService.getCategoryStatisticsData(goodsStatisticsQueryParam));
+//    }
 }
