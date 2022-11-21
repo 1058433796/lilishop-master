@@ -41,8 +41,7 @@ public interface ItemOrderMapperZy extends BaseMapper<ItemOrder> {
 
 
 
-    @Select("SELECT * FROM scheme_component WHERE scheme_id = " +
-            "(SELECT scheme_id FROM item_order WHERE order_id=#{oid})AND supplier_id=#{storeId}")
+    @Select("SELECT * FROM scheme_component WHERE order_id = #{oid} AND supplier_id=#{storeId}")
     List<SchemeComponent> queryOrderComponent(String oid, String storeId);
     @Select("SELECT * FROM item_order WHERE item_id=#{itemId} and scheme_id=#{schemeId}")
     List<ItemOrder> getAssociatedOrders(String itemId,String schemeId);

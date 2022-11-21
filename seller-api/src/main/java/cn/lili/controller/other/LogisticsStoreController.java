@@ -41,11 +41,11 @@ public class LogisticsStoreController {
         return ResultUtil.data(storeLogisticsService.getStoreLogistics(storeId));
     }
 
-    @ApiOperation(value = "获取商家已选择物流公司列表")
+    @ApiOperation(value = "获取商家已选择物流公司列表,所有的公司")
     @GetMapping("/getChecked")
     public ResultMessage<List<StoreLogisticsVO>> getChecked() {
-        String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
-        return ResultUtil.data(storeLogisticsService.getStoreSelectedLogistics(storeId));
+//        String storeId = Objects.requireNonNull(UserContext.getCurrentUser()).getStoreId();
+        return ResultUtil.data(storeLogisticsService.getStoreSelectedLogistics());
     }
 
     @ApiOperation(value = "选择物流公司")

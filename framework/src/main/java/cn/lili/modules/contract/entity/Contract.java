@@ -48,4 +48,6 @@ public class Contract {
 
     private String itemId;
 
+    private String itemName;
+
 }

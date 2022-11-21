@@ -64,4 +64,6 @@ public class Item {
     private String designerName;
 
     private String designerPass;
+
+    private String rawPass;
 }

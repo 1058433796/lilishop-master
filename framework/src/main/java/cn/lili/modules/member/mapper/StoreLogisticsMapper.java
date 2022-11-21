@@ -21,8 +21,8 @@ public interface StoreLogisticsMapper extends BaseMapper<StoreLogistics> {
      * @param storeId 店铺ID
      * @return 物流公司列表
      */
-    @Select("SELECT l.* FROM li_logistics l RIGHT JOIN  li_store_logistics sl ON l.id=sl.logistics_id WHERE sl.store_id=#{storeId} AND l.disabled='OPEN'")
-    List<StoreLogisticsVO> getSelectedStoreLogistics(String storeId);
+    @Select("SELECT id,name FROM li_logistics where disabled='OPEN'")
+    List<StoreLogisticsVO> getSelectedStoreLogistics();
 
     /**
      * 店铺已选择的物流公司名称列表

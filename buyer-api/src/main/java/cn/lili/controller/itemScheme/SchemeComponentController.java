@@ -12,7 +12,9 @@ import cn.lili.modules.goods.entity.dos.Goods;
 import cn.lili.modules.goods.service.GoodsService;
 import cn.lili.modules.item.entity.ItemScheme;
 import cn.lili.modules.item.entity.ItemSchemeSearchParams;
+import cn.lili.modules.item.entity.ItemVO;
 import cn.lili.modules.item.service.ItemSchemeService;
+import cn.lili.modules.item.service.ItemService;
 import cn.lili.modules.itemOrder.entity.dos.ItemOrder;
 import cn.lili.modules.itemOrder.entity.dto.ItemOrderSearchParamsZy;
 import cn.lili.modules.itemOrder.service.ItemOrderServiceZy;
@@ -61,7 +63,8 @@ public class SchemeComponentController {
     GoodsService goodsService;
     @Autowired
     StoreServiceZy storeServiceZy;
-
+    @Resource
+    private ItemService itemService;
     @Autowired
     ItemOrderServiceZy itemOrderServiceZy;
     @Autowired
@@ -95,6 +98,7 @@ public class SchemeComponentController {
         System.out.println(url);
         HttpGet httpGet = new HttpGet(url);
         CloseableHttpResponse response = null;
+        ItemVO item = itemService.getItemVO(itemId);
         try {
             response = httpClient.execute(httpGet);
             HttpEntity entity = response.getEntity();
@@ -111,6 +115,7 @@ public class SchemeComponentController {
                     String total = order.getString("total");//总价
                     ItemOrder itemOrder = new ItemOrder();
                     itemOrder.setItemId(itemId);
+                    itemOrder.setItemName(item.getItemName());
                     itemOrder.setOrderId(snowflake.nextId() + "");//创建一个
                     itemOrder.setOrderAmount(Double.parseDouble(total));//可用total代替
                     itemOrder.setStoreName(goodsService.getSupplyerNameByBrandName(title.replace("品牌订单", "")));
@@ -159,6 +164,7 @@ public class SchemeComponentController {
                         newContract.setBuyerName(loggingBuyer.getNickName());
                         newContract.setSchemeId(itemOrder.getSchemeId());
                         newContract.setItemId(itemId);
+                        newContract.setItemName(item.getItemName());
                         contractService.save(newContract);
                         System.out.println("create contract:" + prefix + itemOrder.getOrderId());
                     }

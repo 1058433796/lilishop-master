@@ -175,5 +175,6 @@ public class ItemOrder {
     private Date buyerLogisticSignTime;
 
     private String itemId;
+    private String itemName;
 }
 

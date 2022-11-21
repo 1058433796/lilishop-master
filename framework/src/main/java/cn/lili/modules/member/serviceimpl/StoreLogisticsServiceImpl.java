@@ -26,8 +26,8 @@ public class StoreLogisticsServiceImpl extends ServiceImpl<StoreLogisticsMapper,
     }
 
     @Override
-    public List<StoreLogisticsVO> getStoreSelectedLogistics(String storeId) {
-        return this.baseMapper.getSelectedStoreLogistics(storeId);
+    public List<StoreLogisticsVO> getStoreSelectedLogistics() {
+        return this.baseMapper.getSelectedStoreLogistics();
 
     }
 

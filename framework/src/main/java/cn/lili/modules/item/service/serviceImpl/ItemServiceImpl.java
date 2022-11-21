@@ -75,14 +75,18 @@ public class ItemServiceImpl extends ServiceImpl<ItemMapper, Item> implements It
         if (member == null ) {
             //不是业主
              System.out.println("designer");
-            List<ShortItem> queryDesigner=this.baseMapper.queryDesigner(name,pass);
-            loginItem.setProjectInfo(queryDesigner);
-            loginItem.setRole("designer");
+             String Dpass=this.baseMapper.queryDesignerPass(name);
+             System.out.println(Dpass);
+             if(new BCryptPasswordEncoder().matches(pass, Dpass)){
+                 List<ShortItem> queryDesigner=this.baseMapper.queryDesigner(name,Dpass);
+                 loginItem.setProjectInfo(queryDesigner);
+                 loginItem.setRole("designer");}
+
         }
 
         else{
             //是业主，判断密码是否输入正确
-            if (pass.equals(member.getPassword()) ) {
+            if (new BCryptPasswordEncoder().matches(pass, member.getPassword())) {
                 System.out.println("proprietor");
 //            throw new ServiceException(ResultCode.USER_PASSWORD_ERROR);
                 List<ShortItem> queryBuyer=this.baseMapper.queryBuyer(name);

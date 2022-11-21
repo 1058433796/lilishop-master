@@ -91,64 +91,67 @@ public class ItemController {
         Date date = new Date();
         SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd :hh:mm:ss");
         item.setCreateTime(date);
+        itemService.saveItem(item);
+        return ResultUtil.success(ResultCode.PINTUAN_ADD_SUCCESS);
         //创建项目
-        if (itemService.saveItem(item)) {
-            //创建项目之后,为项目创建对应方案
-        }
-            String itemId=item.getItemId();//添加之后的新项目ID
-            List<Scheme> schemelist=schemeService.getSchemeList();
-            int finish=0;
-            for (int i=0;i<schemelist.size();i++){
-                //按照每一条方案进行添加
-                ItemSchemeVO itemScheme=new ItemSchemeVO();
-                String schemeid= schemelist.get(i).getSchemeId();
-                itemScheme.setSchemeId(schemeid);
-                itemScheme.setItemId(itemId);
-                itemScheme.setDoorId(schemelist.get(i).getDoorId());
-                itemScheme.setOpenMethod(schemelist.get(i).getOpenMethod());
-                itemScheme.setOpenDirection(schemelist.get(i).getOpenDirection());
-                itemScheme.setHeight(schemelist.get(i).getHeight());
-                itemScheme.setWidth(schemelist.get(i).getWidth());
-                itemScheme.setThickness(schemelist.get(i).getThickness());
-                itemScheme.setGuard(schemelist.get(i).getGuard());
-                itemScheme.setTexture(schemelist.get(i).getTexture());
-                itemScheme.setHandle(schemelist.get(i).getHandle());
-                itemScheme.setFirerating(schemelist.get(i).getFirerating());
-                itemScheme.setWjgroup(schemelist.get(i).getWjgroup());
-                itemScheme.setDoorShape(schemelist.get(i).getDoorShape());
-                itemScheme.setRoomFunction(schemelist.get(i).getRoomFunction());
-                itemScheme.setWeight(schemelist.get(i).getWeight());
-                itemScheme.setGroupType(schemelist.get(i).getGroupType());
-                itemScheme.setQkType(schemelist.get(i).getQkType());
-                if (itemschemeService.saveItemScheme(itemScheme)) {
-                    finish++;
-                    System.out.println(finish);
-                    //保存一条项目方案后生成对应保证单
-                    String itemName=item.getItemName();
-//                    String primaryId=itemScheme.getPrimaryId();
-//                    String schemeSum=schemelist.get(i).getSchemeSum();
-//                    String orderName=itemName+"项目";
-//                    String orderContent=itemName+"内容";
-                    ItemGuaranty itemGuaranty=new ItemGuaranty();
-                    itemGuaranty.setItemId(itemId);
-                    itemGuaranty.setPrimaryId(itemScheme.getPrimaryId());
-                    itemGuaranty.setBuyerId(item.getBuyerId());
-                    itemGuaranty.setSchemeSum(schemelist.get(i).getSchemeSum());
-                    itemGuaranty.setOrderContent(item.getItemName()+"内容");
-                    itemGuaranty.setOrderName(item.getItemName()+"项目");
-                    itemGuarantyService.createGuaranty(itemGuaranty);
-                }
-            }
-        if (finish==schemelist.size()){
-            return ResultUtil.success(ResultCode.PINTUAN_ADD_SUCCESS);
-        }
-            return ResultUtil.success(ResultCode.PINTUAN_ADD_SUCCESS);
+//        if (itemService.saveItem(item)) {
+//            //创建项目之后,为项目创建对应方案
+//        }
+//            String itemId=item.getItemId();//添加之后的新项目ID
+//            List<Scheme> schemelist=schemeService.getSchemeList();
+//            int finish=0;
+//            for (int i=0;i<schemelist.size();i++){
+//                //按照每一条方案进行添加
+//                ItemSchemeVO itemScheme=new ItemSchemeVO();
+//                String schemeid= schemelist.get(i).getSchemeId();
+//                itemScheme.setSchemeId(schemeid);
+//                itemScheme.setItemId(itemId);
+//                itemScheme.setDoorId(schemelist.get(i).getDoorId());
+//                itemScheme.setOpenMethod(schemelist.get(i).getOpenMethod());
+//                itemScheme.setOpenDirection(schemelist.get(i).getOpenDirection());
+//                itemScheme.setHeight(schemelist.get(i).getHeight());
+//                itemScheme.setWidth(schemelist.get(i).getWidth());
+//                itemScheme.setThickness(schemelist.get(i).getThickness());
+//                itemScheme.setGuard(schemelist.get(i).getGuard());
+//                itemScheme.setTexture(schemelist.get(i).getTexture());
+//                itemScheme.setHandle(schemelist.get(i).getHandle());
+//                itemScheme.setFirerating(schemelist.get(i).getFirerating());
+//                itemScheme.setWjgroup(schemelist.get(i).getWjgroup());
+//                itemScheme.setDoorShape(schemelist.get(i).getDoorShape());
+//                itemScheme.setRoomFunction(schemelist.get(i).getRoomFunction());
+//                itemScheme.setWeight(schemelist.get(i).getWeight());
+//                itemScheme.setGroupType(schemelist.get(i).getGroupType());
+//                itemScheme.setQkType(schemelist.get(i).getQkType());
+//                if (itemschemeService.saveItemScheme(itemScheme)) {
+//                    finish++;
+//                    System.out.println(finish);
+//                    //保存一条项目方案后生成对应保证单
+//                    String itemName=item.getItemName();
+////                    String primaryId=itemScheme.getPrimaryId();
+////                    String schemeSum=schemelist.get(i).getSchemeSum();
+////                    String orderName=itemName+"项目";
+////                    String orderContent=itemName+"内容";
+//                    ItemGuaranty itemGuaranty=new ItemGuaranty();
+//                    itemGuaranty.setItemId(itemId);
+//                    itemGuaranty.setPrimaryId(itemScheme.getPrimaryId());
+//                    itemGuaranty.setBuyerId(item.getBuyerId());
+//                    itemGuaranty.setSchemeSum(schemelist.get(i).getSchemeSum());
+//                    itemGuaranty.setOrderContent(item.getItemName()+"内容");
+//                    itemGuaranty.setOrderName(item.getItemName()+"项目");
+//                    itemGuarantyService.createGuaranty(itemGuaranty);
+//                }
+//            }
+//        if (finish==schemelist.size()){
+//            return ResultUtil.success(ResultCode.PINTUAN_ADD_SUCCESS);
+//        }
+
 
     }
     @GetMapping(value = "/{id}")
     @ApiOperation(value = "通过id获取")
     public ResultMessage<ItemVO> get(@PathVariable String id) {
         ItemVO item = itemService.getItemVO(id);
+
         return ResultUtil.data(item);
     }
     @ApiOperation(value = "要求的登录")

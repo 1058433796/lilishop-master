@@ -28,4 +28,6 @@ public interface ItemMapper extends BaseMapper<Item> {
 
     @Select("SELECT  item_name,item_id FROM item WHERE designer_name=#{name} and designer_pass=#{pass}")
     List<ShortItem> queryDesigner(String name,String pass);
+    @Select("select designer_pass from item where designer_name=#{name}")
+    String queryDesignerPass(String name);
 }
