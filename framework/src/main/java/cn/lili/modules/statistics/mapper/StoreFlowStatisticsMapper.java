@@ -20,7 +20,6 @@ import java.util.List;
  * @since 2020/11/17 7:34 下午
  */
 public interface StoreFlowStatisticsMapper extends BaseMapper<StoreFlow> {
-
     /**
      * 商品统计
      *
@@ -28,7 +27,8 @@ public interface StoreFlowStatisticsMapper extends BaseMapper<StoreFlow> {
      * @param queryWrapper 查询条件
      * @return 商品统计列表
      */
-    @Select("SELECT goods_id,goods_name,SUM(final_price) AS price,SUM(num) AS num FROM li_store_flow ${ew.customSqlSegment}")
+    @Select("select pm as goods_name, SUM(component_unit_price * component_number) as price, SUM(component_number) as num\n" +
+            "from item_order io inner join scheme_component sc  on io.order_id = sc.order_id ${ew.customSqlSegment}")
     List<GoodsStatisticsDataVO> getGoodsStatisticsData(IPage<GoodsStatisticsDataVO> page, @Param(Constants.WRAPPER) Wrapper<GoodsStatisticsDataVO> queryWrapper);
     /**
      * 产品统计

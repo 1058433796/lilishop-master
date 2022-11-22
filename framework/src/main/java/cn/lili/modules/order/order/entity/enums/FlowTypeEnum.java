@@ -13,7 +13,9 @@ public enum FlowTypeEnum {
      * 流水类型
      */
     PAY("支付"),
-    REFUND("退款");
+    REFUND("退款"),
+    PAYED("已付款"),
+    TO_BE_PAYED("未付款");
 
     private final String description;
 
