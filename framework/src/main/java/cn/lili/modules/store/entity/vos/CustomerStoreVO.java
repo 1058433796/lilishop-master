@@ -14,7 +14,7 @@ import java.util.Date;
 public class CustomerStoreVO {
 
     @ApiModelProperty("客户编号")
-    private String Id;
+    private String id;
 
     @ApiModelProperty(value = "客户名称")
     private String buyerName;

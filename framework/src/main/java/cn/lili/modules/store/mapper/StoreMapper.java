@@ -54,10 +54,16 @@ public interface StoreMapper extends BaseMapper<Store> {
     @Update("update li_store set collection_num = collection_num + #{num} where id = #{storeId}")
     void updateCollection(String storeId, Integer num);
 
-    @Select("SELECT * FROM " +
-            "(SELECT id,store_name as buyer_name,store_address_detail,store_address_id_path,store_address_path FROM li_store)AS s " +
+
+//    @Select("select sum(component_unit_price* component_number)as tradeAmount,buyer_id as id ,mobile as buyerPhone,MAX(create_time) AS latestTime from" +
+//            " ((select order_id,component_unit_price,component_number from scheme_component )as a " +
+//            "NATURAL JOIN (select order_id ,buyer_id,create_time from item_order) as b " +
+//            "NATURAL JOIN (select mobile,id as buyer_id from li_member) as c )where id  in " +
+//            "(select buyer_id from item_order )as o group by id ${ew.customSqlSegment}")
+            @Select("SELECT * FROM " +
+            "(SELECT id,nick_name as buyer_name,region as storeAddressDetail,mobile as buyerPhone FROM li_member)AS s " +
               "NATURAL JOIN " +
-            "(SELECT buyer_id AS id,store_id,buyer_phone,MAX(create_time) AS latestTime,SUM(order_amount) AS tradeAmount FROM item_order GROUP BY buyer_id,store_id,buyer_phone) AS o ${ew.customSqlSegment}"
+            "(SELECT buyer_id AS id,store_id,MAX(create_time) AS latestTime,SUM(order_amount) AS tradeAmount FROM item_order GROUP BY buyer_id,store_id) AS o ${ew.customSqlSegment}"
     )
     IPage<CustomerStoreVO> queryByParams(IPage<CustomerStoreVO> page, @Param(Constants.WRAPPER) Wrapper<CustomerStoreVO> queryWrapper);
 }

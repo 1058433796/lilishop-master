@@ -72,7 +72,7 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
     public IPage<CustomerStoreVO> queryByParams(StoreSearchParams storeSearchParams) {
         QueryWrapper queryWrapper = storeSearchParams.queryWrapper();
 //        queryWrapper.groupBy("o.id");
-        queryWrapper.orderByDesc("o.id");
+//        queryWrapper.orderByDesc("o.id");
         return this.baseMapper.queryByParams(PageUtil.initPage(storeSearchParams), queryWrapper);
     }
 
