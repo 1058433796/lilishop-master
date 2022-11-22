@@ -25,7 +25,7 @@ public interface StoreLogisticsService extends IService<StoreLogistics> {
     /**
      * 获取当前店铺已选择的物流公司列表
      *
-     * @param storeId 店铺id
+//     * @param storeId 店铺id
      * @return 物流公司列表
      */
     List<StoreLogisticsVO> getStoreSelectedLogistics();
